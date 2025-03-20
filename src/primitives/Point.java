@@ -8,8 +8,15 @@ package primitives;
  */
 public class Point {
 
-    protected Double3 xyz;
-    static Point ZERO = new Point(0,0,0);
+    /**
+     * Represents the origin point (0,0,0) in 3D space.
+     */
+    public final static Point ZERO = new Point(0, 0, 0);
+
+    /**
+     * Immutable 3D coordinates of the point represented using {@link Double3}.
+     */
+    final protected Double3 xyz;
 
     /**
      * Constructs a new 3D point with the specified x, y, and z coordinates.
@@ -31,24 +38,13 @@ public class Point {
         this.xyz = xyz;
     }
 
-    @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            return (obj instanceof Point other)
-                    && this.xyz.equals(other.xyz);
-        }
-
-    @Override
-    public String toString() {
-        return "xyz=" + xyz ;
-    }
-
     /**
      * Subtracts the provided {@link Point} from the current point to create a new {@link Vector}.
      *
      * @param otherPoint the point to subtract from the current point
      * @return a {@link Vector} representing the difference between the two points
      */
+
     public Vector subtract(Point otherPoint) {
         return new Vector(this.xyz.subtract(otherPoint.xyz));
     }
@@ -88,4 +84,15 @@ public class Point {
         return Math.sqrt(distanceSquared(other));
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        return (obj instanceof Point other)
+                && this.xyz.equals(other.xyz);
+    }
+
+    @Override
+    public String toString() {
+        return "xyz=" + xyz;
+    }
 }
