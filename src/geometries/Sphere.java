@@ -10,17 +10,17 @@ public class Sphere extends RadicalGeometry {
     /**
      * A point which is the center of the sphere
      */
-    Point centerPoint;
+    Point point;
 
     /**
      * Constructor
      *
      * @param radius the radius
-     * @param centerPoint the center
+     * @param point the center
      */
-    public Sphere(double radius, Point centerPoint) {
+    public Sphere(double radius, Point point) {
         super(radius);
-        this.centerPoint = centerPoint;
+        this.point = point;
     }
 
     @Override

@@ -19,12 +19,12 @@ public class Plane extends Geometry {
     /**
      * Constructor
      *
-     * @param p1 point number 1
-     * @param p2 point number 2
-     * @param p3 point number 3
+     * @param point1 point number 1
+     * @param point2 point number 2
+     * @param point3 point number 3
      */
-    public Plane(Point p1, Point p2, Point p3) {
-        this.q = p1;
+    public Plane(Point point1, Point point2, Point point3) {
+        this.q = point1;
         this.normal = null;
     }
 

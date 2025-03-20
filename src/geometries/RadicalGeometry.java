@@ -15,6 +15,8 @@ public abstract class RadicalGeometry extends Geometry {
      * @param radius The radius to set for the object
      */
     public RadicalGeometry(double radius) {
+        if (radius <=0)
+            throw new  IllegalArgumentException ("radius must be greater than zero");
         this.radius = radius;
     }
 }

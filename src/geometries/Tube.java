@@ -11,21 +11,21 @@ public class Tube extends RadicalGeometry {
     /**
      * The axis ray
      */
-    final protected Ray axisRay;
+    final protected Ray ray;
 
     /**
      * Constructor
      *
      * @param radius the radius of the tube
-     * @param axisRay the axis ray of the tube
+     * @param ray the axis ray of the tube
      */
-    public Tube(double radius, Ray axisRay) {
+    public Tube(double radius, Ray ray) {
         super(radius);
-        this.axisRay = axisRay;
+        this.ray = ray;
     }
 
     @Override
-    public Vector getNormal(Point p) {
+    public Vector getNormal(Point point) {
         return null;
     }
 }
