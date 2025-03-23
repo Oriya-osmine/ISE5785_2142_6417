@@ -8,8 +8,10 @@ import primitives.Vector;
  */
 public abstract class Geometry {
     /**
-     * @param point The point to normalize the vector on
-     * @return Normalized Vector based on point
+     * Calculates the normal vector to the surface at the given point.
+     *
+     * @param point The point on the surface for which to compute the normal.
+     * @return A normalized vector perpendicular to the surface at the given point.
      */
     public abstract Vector getNormal(Point point);
 }

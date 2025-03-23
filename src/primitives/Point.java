@@ -1,15 +1,13 @@
 package primitives;
 
 /**
- * Represents a point in 3D space.
- * Each point is defined by an immutable coordinate represented as a {@link Double3} object.
- * Utility methods are provided for geometric calculations, such as vector subtraction, point addition,
- * and distance computation between points.
+ * Represents a point in 3D space, defined by three fixed numbers (x, y, z).
+ * This class includes methods to calculate distances, add vectors, and subtract other points.
  */
 public class Point {
 
     /**
-     * Represents the origin point (0,0,0) in 3D space.
+     * A constant point at the origin (0, 0, 0) in 3D space.
      */
     public final static Point ZERO = new Point(0, 0, 0);
 
@@ -19,30 +17,30 @@ public class Point {
     final protected Double3 xyz;
 
     /**
-     * Constructs a new 3D point with the specified x, y, and z coordinates.
+     * Creates a point in 3D space with given x, y, z coordinates.
      *
-     * @param x the x-coordinate of the point
-     * @param y the y-coordinate of the point
-     * @param z the z-coordinate of the point
+     * @param x X-coordinate of the point.
+     * @param y Y-coordinate of the point.
+     * @param z Z-coordinate of the point.
      */
     public Point(double x, double y, double z) {
         this.xyz = new Double3(x, y, z);
     }
 
     /**
-     * Constructs a new 3D point using a {@link Double3} object.
+     * Creates a point in 3D space using a Double3 object for the coordinates.
      *
-     * @param xyz the {@link Double3} object representing the coordinates of the point
+     * @param xyz A Double3 object that holds x, y, z values of the point.
      */
     public Point(Double3 xyz) {
         this.xyz = xyz;
     }
 
     /**
-     * Subtracts the provided {@link Point} from the current point to create a new {@link Vector}.
+     * Subtracts another point from this point, returning the resulting vector.
      *
-     * @param otherPoint the point to subtract from the current point
-     * @return a {@link Vector} representing the difference between the two points
+     * @param otherPoint The point to subtract from this point.
+     * @return A vector showing the direction and distance between the two points.
      */
 
     public Vector subtract(Point otherPoint) {
@@ -50,21 +48,21 @@ public class Point {
     }
 
     /**
-     * Adds the specified {@link Vector} to the current point to create a new {@link Point}.
+     * Adds a vector to this point, resulting in a new point.
      *
-     * @param vectorAdd the vector to add to the current point
-     * @return a new {@link Point} calculated by adding the vector to the current point
+     * @param vectorAdd The vector to add to this point.
+     * @return A new point shifted by the vector.
      */
     public Point add(Vector vectorAdd) {
         return new Point(this.xyz.add(vectorAdd.xyz));
     }
 
     /**
-     * Calculates the square of the distance between the current point and another {@link Point}.
-     * This method avoids the overhead of computing the square root.
+     * Finds the squared distance between this point and another point.
+     * Faster than calculating the actual distance because it skips the square root step.
      *
-     * @param other the other point to calculate the squared distance to
-     * @return the squared distance between the two points
+     * @param other Another point to measure the squared distance to.
+     * @return The squared distance as a double.
      */
     public double distanceSquared(Point other) {
         double dx = this.xyz.d1() - other.xyz.d1();
@@ -74,11 +72,10 @@ public class Point {
     }
 
     /**
-     * Calculates the distance between the current point and another {@link Point}.
-     * This method computes the square root of the squared distance.
+     * Calculates the distance between this point and another point in space.
      *
-     * @param other the other point to calculate the distance to
-     * @return the distance between the two points
+     * @param other Another point to measure the distance to.
+     * @return The direct distance as a double.
      */
     public double distance(Point other) {
         return Math.sqrt(distanceSquared(other));
@@ -87,12 +84,11 @@ public class Point {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        return (obj instanceof Point other)
-                && this.xyz.equals(other.xyz);
+        return obj instanceof Point other && xyz.equals(other.xyz);
     }
 
     @Override
     public String toString() {
-        return "xyz=" + xyz;
+        return "" + xyz;
     }
 }

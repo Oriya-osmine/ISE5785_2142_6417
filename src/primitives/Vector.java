@@ -1,16 +1,17 @@
 package primitives;
 
 /**
- * Represents a vector in a 3D space
+ * Represents a vector in 3D space, defined by (x, y, z) coordinates.
+ * Provides operations like scaling, dot/cross products, and normalization.
  */
 public class Vector extends Point {
     /**
-     * Constructor
+     * Creates a Vector using (x, y, z) coordinates.
      *
-     * @param x Coordinate 1
-     * @param y Coordinate 2
-     * @param z Coordinate 3
-     * @throws IllegalArgumentException if the vector is the zero vector
+     * @param x X-coordinate.
+     * @param y Y-coordinate.
+     * @param z Z-coordinate.
+     * @throws IllegalArgumentException if the vector is (0, 0, 0).
      */
     public Vector(double x, double y, double z) {
         super(x, y, z);
@@ -20,10 +21,10 @@ public class Vector extends Point {
     }
 
     /**
-     * Constructor
+     * Creates a Vector from a Double3 object.
      *
-     * @param xyz The coordinates of the vector
-     * @throws IllegalArgumentException If the vector is the zero vector
+     * @param xyz A Double3 of the (x, y, z) coordinates.
+     * @throws IllegalArgumentException if xyz is (0, 0, 0).
      */
     public Vector(Double3 xyz) {
         super(xyz);
@@ -33,20 +34,20 @@ public class Vector extends Point {
     }
 
     /**
-     * Multiply the vector with scalar
+     * Multiplies this vector by a scalar.
      *
-     * @param scalar The number to multiply with
-     * @return The scalared vector
+     * @param scalar The multiplier.
+     * @return A new scaled Vector.
      */
     public Vector scale(Double scalar) {
         return new Vector(this.xyz.scale(scalar));
     }
 
     /**
-     * Calculates the dot products of this vector wth another one
+     * Computes the dot product with another vector.
      *
-     * @param multi The vector to perform the dot product on
-     * @return The dot product of their "multiplication"
+     * @param multi The other vector.
+     * @return The dot product result as a scalar.
      */
     public double dotProduct(Vector multi) {
         return xyz.d1() * multi.xyz.d1() +
@@ -55,10 +56,10 @@ public class Vector extends Point {
     }
 
     /**
-     * Calculates the cross product of this vector with another one
+     * Computes the cross product with another vector.
      *
-     * @param Vmulti The vector to perform the cross product on
-     * @return The cross product of their "multiplication"
+     * @param Vmulti The other vector.
+     * @return A Vector perpendicular to both vectors.
      */
     public Vector crossProduct(Vector Vmulti) {
         return new Vector(xyz.d2() * Vmulti.xyz.d3() - xyz.d3() * Vmulti.xyz.d2(),
@@ -67,41 +68,49 @@ public class Vector extends Point {
     }
 
     /**
-     * Calculates the length squared of the vector
+     * Calculates the squared length of the vector.
      *
-     * @return The length squared of th vector
+     * @return The squared magnitude.
      */
     public double lengthSquared() {
         return this.dotProduct(this);
     }
 
     /**
-     * Calculates the length of the vector
+     * Computes the vector's magnitude (length).
      *
-     * @return The length of the vector
+     * @return The length.
      */
     public double length() {
         return Math.sqrt(lengthSquared());
     }
 
     /**
-     * Normalized the vector
+     * Normalizes the vector to a length of 1.
      *
-     * @return A new Normalized version of the vector
+     * @return A normalized Vector.
+     * @throws ArithmeticException if the length is zero.
      */
     public Vector normalize() {
         return new Vector(xyz.scale(1 / length()));
     }
+
 
     @Override
     public Vector add(Vector Add) {
         return new Vector(this.xyz.add(Add.xyz));
     }
 
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        return (obj instanceof Vector ComapareVec)
-                && super.equals(ComapareVec);
+        return obj instanceof Vector other && super.equals(other);
+    }
+
+
+    @Override
+    public String toString() {
+        return "->" + super.toString();
     }
 }

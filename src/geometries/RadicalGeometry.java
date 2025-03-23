@@ -1,22 +1,23 @@
 package geometries;
 
 /**
- * Represents Radical Objects in 3D space
+ * Represents a 3D object with a defined radius, like spheres or tubes.
  */
 public abstract class RadicalGeometry extends Geometry {
     /**
-     * The radius of the Radical object
+     * Defines the size of the object as its radius.
      */
     final protected double radius;
 
     /**
-     * Constructs the object
+     * Creates a 3D object with a given radius.
      *
-     * @param radius The radius to set for the object
+     * @param radius The size of the object (must be positive).
+     * @throws IllegalArgumentException if the radius is zero or negative.
      */
     public RadicalGeometry(double radius) {
-        if (radius <=0)
-            throw new  IllegalArgumentException ("radius must be greater than zero");
+        if (radius <= 0)
+            throw new IllegalArgumentException("radius must be greater than zero");
         this.radius = radius;
     }
 }

@@ -4,24 +4,25 @@ import primitives.Point;
 import primitives.Vector;
 
 /**
- * Represents a 2D plane in 3D space
+ * Represents a flat infinite surface in 3D space.
  */
 public class Plane extends Geometry {
     /**
-     * A point on the plane(out main point)
+     * A fixed point on the plane.
      */
     final protected Point q;
     /**
-     * The normal of the plane
+     * The perpendicular vector to the plane.
      */
     final protected Vector normal;
 
     /**
-     * Constructor
+     * Creates a plane by three points in space.
      *
-     * @param point1 point number 1
-     * @param point2 point number 2
-     * @param point3 point number 3
+     * @param point1 First point on the plane.
+     * @param point2 Second point on the plane.
+     * @param point3 Third point on the plane.
+     * @throws IllegalArgumentException if the points are collinear.
      */
     public Plane(Point point1, Point point2, Point point3) {
         this.q = point1;
@@ -29,10 +30,10 @@ public class Plane extends Geometry {
     }
 
     /**
-     * Constructor
+     * Creates a plane using a point and a normal vector.
      *
-     * @param p The main point
-     * @param n The vector of the main point according to the plane
+     * @param p A point on the plane.
+     * @param n A vector perpendicular to the plane.
      */
     public Plane(Point p, Vector n) {
         this.q = p;
@@ -45,9 +46,9 @@ public class Plane extends Geometry {
     }
 
     /**
-     * gets the normal of our main point
+     * Returns the normal vector to the plane.
      *
-     * @return normalized vector of out main point
+     * @return The normalized normal vector.
      */
     public Vector getNormal() {
         return normal;
