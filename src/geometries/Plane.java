@@ -10,11 +10,11 @@ public class Plane extends Geometry {
     /**
      * A fixed point on the plane.
      */
-    final protected Point q;
+    final private Point q;
     /**
      * The perpendicular vector to the plane.
      */
-    final protected Vector normal;
+    final private Vector normal;
 
     /**
      * Creates a plane by three points in space.

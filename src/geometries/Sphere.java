@@ -12,18 +12,18 @@ public class Sphere extends RadicalGeometry {
      * The center point of the sphere.
      * This defines the sphere's position in 3D space.
      */
-    Point point;
+   final private Point center;
 
     /**
      * Creates a new sphere with a given radius and center point.
      *
      * @param radius The radius of the sphere (must be greater than zero).
-     * @param point  The center of the sphere in 3D space.
+     * @param center  The center of the sphere in 3D space.
      * @throws IllegalArgumentException if the radius is zero or negative.
      */
-    public Sphere(double radius, Point point) {
+    public Sphere(double radius, Point center) {
         super(radius);
-        this.point = point;
+        this.center = center;
     }
 
 
