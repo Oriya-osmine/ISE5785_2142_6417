@@ -10,11 +10,11 @@ public class Plane extends Geometry {
     /**
      * A point on the plane(out main point)
      */
-    final protected Point q;
+    final private Point q;
     /**
      * The normal of the plane
      */
-    final protected Vector normal;
+    final private Vector normal;
 
     /**
      * Constructor
