@@ -19,12 +19,14 @@ public class Plane extends Geometry {
     /**
      * Constructor
      *
-     * @param point1 point number 1
-     * @param point2 point number 2
-     * @param point3 point number 3
+     * @param p1 point number 1
+     * @param p2 point number 2
+     * @param p3 point number 3
      */
-    public Plane(Point point1, Point point2, Point point3) {
-        this.q = point1;
+    public Plane(Point p1, Point p2, Point p3) {
+        if (p1.equals(p2) || p1.equals(p3) || p2.equals(p3))
+            throw new IllegalArgumentException("Cannot construct a plane from 2 or less points");
+        this.q = p1;
         this.normal = null;
     }
 

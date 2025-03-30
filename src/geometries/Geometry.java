@@ -8,6 +8,8 @@ import primitives.Vector;
  */
 public abstract class Geometry {
     /**
+     * Get the normal to the plane based on the point
+     *
      * @param point The point to normalize the vector on
      * @return Normalized Vector based on point
      */
