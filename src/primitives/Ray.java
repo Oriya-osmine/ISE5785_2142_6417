@@ -5,7 +5,7 @@ package primitives;
  * The direction vector is always normalized to ensure consistent mathematical operations.
  */
 public class Ray {
-    
+
     /**
      * The starting point of the ray, representing its origin in 3D space.
      */
@@ -20,11 +20,25 @@ public class Ray {
      * Constructs a new Ray with the specified head and direction.
      * The direction vector is normalized upon construction.
      *
-     * @param startPoint the starting point (head) of the ray
+     * @param startPoint      the starting point (head) of the ray
      * @param directionVector the direction vector of the ray
      */
     public Ray(Point startPoint, Vector directionVector) {
         this.head = startPoint;
         this.direction = directionVector.normalize();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        return (obj instanceof Ray ComapareRay)
+                && this.head == ComapareRay.head
+                && this.direction.equals(ComapareRay.direction);
+    }
+
+    @Override
+    public String toString() {
+        return "Ray head: " + head + "\nRay direction: " + direction;
+    }
+
 }
