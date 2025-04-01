@@ -26,6 +26,16 @@ public class Tube extends RadicalGeometry {
 
     @Override
     public Vector getNormal(Point point) {
-        return null;
+        Point p0 = ray.getHead();
+        Vector v = ray.getDirection();
+        //t=V*(P0-p)
+        Vector p0ToPoint = point.subtract(ray.getHead());
+        double t = v.dotProduct(p0ToPoint);
+        //o=p0+t*v
+        Point o = p0.add(v.scale(t));
+
+
+        // (p-o)/|p-o|
+        return point.subtract(o).normalize();
     }
 }

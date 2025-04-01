@@ -23,21 +23,18 @@ class PointTest {
     @Test
     void add() {
         // ============ Equivalence Partitions Tests ==============
-        assertEquals(p4,p2.add(v1),
-                "add() for points 2 and vector 1 does not work correctly");
+        assertEquals(p4,p2.add(v1));
         // =============== Boundary Values Tests ==================
-        assertThrows(IllegalArgumentException.class, () -> p1.add(v1),
-                "add() for point 0 does not throw an exception");
+
     }
 
     @Test
     void distanceSquared() {
         // ============ Equivalence Partitions Tests ==============
-        assertEquals(27,p1.distanceSquared(p2),
-                "distanceSquared() for points 1 and 2 does not work correctly");
+        assertEquals(27,p1.distanceSquared(p2));
+        assertEquals(0,p1.distanceSquared(p1));
         // =============== Boundary Values Tests ==================
-        assertThrows(IllegalArgumentException.class, () -> p1.distanceSquared(p1),
-                "distanceSquared() for point 0 does not throw an exception");
+
     }
 
     @Test
@@ -46,7 +43,6 @@ class PointTest {
         assertEquals(Math.sqrt(27),p1.distance(p2),
                 "distance() for points 1 and 2 does not work correctly");
         // =============== Boundary Values Tests ==================
-        assertThrows(IllegalArgumentException.class, () -> p1.distance(p1),
-                "distance() for point 0 does not throw an exception");
+
     }
 }

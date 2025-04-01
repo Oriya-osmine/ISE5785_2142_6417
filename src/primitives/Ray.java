@@ -6,6 +6,7 @@ package primitives;
  */
 public class Ray {
 
+
     /**
      * The starting point of the ray, representing its origin in 3D space.
      */
@@ -27,7 +28,13 @@ public class Ray {
         this.head = startPoint;
         this.direction = directionVector.normalize();
     }
+    public Point getHead() {
+        return head;
+    }
 
+    public Vector getDirection() {
+        return direction;
+    }
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

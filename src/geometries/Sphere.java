@@ -29,6 +29,6 @@ public class Sphere extends RadicalGeometry {
 
     @Override
     public Vector getNormal(Point p) {
-        return null;
+        return p.subtract(center).normalize();
     }
 }
