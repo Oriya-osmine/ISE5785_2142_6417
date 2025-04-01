@@ -27,7 +27,7 @@ public class Plane extends Geometry {
         if (p1.equals(p2) || p1.equals(p3) || p2.equals(p3))
             throw new IllegalArgumentException("Cannot construct a plane from 2 or less points");
         this.q = p1;
-        this.normal  = p2.subtract(p1).crossProduct(p3.subtract(p1)).normalize();;
+        this.normal = p2.subtract(p1).crossProduct(p3.subtract(p1)).normalize();
     }
 
     /**

@@ -8,16 +8,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class VectorTests {
 
     private final Vector v111 = new Vector(1, 1, 1);
+    private final Vector v121 = new Vector(1, 2, 1);
     private final Vector v122 = new Vector(1, 2, 2);
     private final Vector v123 = new Vector(1, 2, 3);
-    private final Vector v11n3 = new Vector(1, 1, -1);
+    private final Vector v340 = new Vector(3, 4, 0);
+    private final Vector v11n3 = new Vector(1, 1, -3);
     private final Vector v246 = new Vector(2, 4, 6);
-    private final double d28 = 28;
-    private final double d0 = 0;
-    private final double d3 = 3;
-    private final double d9 = 9;
-    private final double dn1 = -1;
-    private final double dn12 = -12;
+
+    @Test
+    void testConstructor() {
+        // ============ Equivalence Partitions Tests ==============
+        assertEquals(new Vector(1, 2, 3), v123);
+        assertEquals(new Vector(new Double3(1, 2, 3)), v123);
+        // =============== Boundary Values Tests ==================
+        assertThrows(IllegalArgumentException.class, () -> new Vector(0, 0, 0),
+                "scale() for vector 0 does not throw an exception");
+        assertThrows(IllegalArgumentException.class, () -> new Vector(new Double3(0, 0, 0)),
+                "scale() for vector 0 does not throw an exception");
+    }
 
     @Test
     void testScale() {
@@ -31,13 +39,12 @@ class VectorTests {
     @Test
     void testDotProduct() {
         // ============ Equivalence Partitions Tests ==============
-
-        assertEquals(dn12, v11n3.dotProduct(v246));
+        assertEquals(-12, v11n3.dotProduct(v246));
         // =============== Boundary Values Tests ==================
-        assertEquals(d28, v123.dotProduct(v246));
-        assertEquals(d0, v123.dotProduct(v11n3));
-        assertEquals(dn1, v111.dotProduct(v11n3));
-        assertEquals(dn1, v111.dotProduct(v111));
+        assertEquals(28, v123.dotProduct(v246));
+        assertEquals(0, v121.dotProduct(v11n3));
+        assertEquals(-1, v111.dotProduct(v11n3));
+        assertEquals(v111.lengthSquared(), v111.dotProduct(v111));
     }
 
     @Test
@@ -47,24 +54,25 @@ class VectorTests {
     @Test
     void testLengthSquared() {
         // ============ Equivalence Partitions Tests ==============
-        assertEquals(v111.length(), d3);
+        assertEquals(3, v111.lengthSquared());
     }
 
     @Test
     void testLength() {
         // ============ Equivalence Partitions Tests ==============
-        assertEquals(v122.length(), d9);
+        assertEquals(3, v122.length());
     }
 
     @Test
     void testNormalize() {
+        // ============ Equivalence Partitions Tests ==============
+        assertEquals(new Vector(0.6, 0.8, 0), v340.normalize());
     }
 
     @Test
     void testAdd() {
         // ============ Equivalence Partitions Tests ==============
-        assertEquals(v123.add(v123), v246.scale(0.5));
-
+        assertEquals(v123.add(v123), v246);
     }
 
     @Test
