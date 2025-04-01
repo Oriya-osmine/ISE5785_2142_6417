@@ -6,9 +6,15 @@ import primitives.Ray;
 import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Unit tests for the Tube class.
+ */
 class TubeTest {
-
+    /**
+     * Test method for {@link geometries.Tube#getNormal(primitives.Point)}.
+     * This test checks the normal vector to the tube at a given point.
+     * It includes equivalence partition tests and boundary value tests.
+     */
     @Test
     void getNormal() {
         // ============ Equivalence Partitions Tests ==============
