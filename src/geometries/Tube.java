@@ -33,8 +33,6 @@ public class Tube extends RadicalGeometry {
         double t = v.dotProduct(p0ToPoint);
         //o=p0+t*v
         Point o = p0.add(v.scale(t));
-
-
         // (p-o)/|p-o|
         return point.subtract(o).normalize();
     }

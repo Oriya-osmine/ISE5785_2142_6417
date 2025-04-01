@@ -38,7 +38,7 @@ public class Cylinder extends Tube {
         double t = v.dotProduct(p0ToPoint);
 
         // Check if the point is on one of the bases
-        //1) on buton base
+        //1) on bottom base
         if (t <= 0) {
             return v.scale(-1.0).normalize();
         }

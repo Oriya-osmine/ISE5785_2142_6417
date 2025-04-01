@@ -22,6 +22,7 @@ public class Plane extends Geometry {
      * @param p1 point number 1
      * @param p2 point number 2
      * @param p3 point number 3
+     * @throws IllegalArgumentException if one or more point are equals
      */
     public Plane(Point p1, Point p2, Point p3) {
         if (p1.equals(p2) || p1.equals(p3) || p2.equals(p3))

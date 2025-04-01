@@ -10,10 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class VectorTests {
 
     private final Vector v111 = new Vector(1, 1, 1);
-    private final Vector v121 = new Vector(1, 2, 1);
-    private final Vector v122 = new Vector(1, 2, 2);
     private final Vector v123 = new Vector(1, 2, 3);
-    private final Vector v340 = new Vector(3, 4, 0);
     private final Vector v11n3 = new Vector(1, 1, -3);
     private final Vector v246 = new Vector(2, 4, 6);
     /**
@@ -56,7 +53,7 @@ class VectorTests {
         assertEquals(-12, v11n3.dotProduct(v246));
         // =============== Boundary Values Tests ==================
         assertEquals(28, v123.dotProduct(v246));
-        assertEquals(0, v121.dotProduct(v11n3));
+        assertEquals(0, new Vector(1, 2, 1).dotProduct(v11n3));
         assertEquals(-1, v111.dotProduct(v11n3));
         assertEquals(v111.lengthSquared(), v111.dotProduct(v111));
     }
@@ -96,7 +93,7 @@ class VectorTests {
     @Test
     void testLength() {
         // ============ Equivalence Partitions Tests ==============
-        assertEquals(3, v122.length());
+        assertEquals(3, new Vector(1, 2, 2).length());
     }
     /**
      * Test method for {@link primitives.Vector#normalize()}.
@@ -106,7 +103,7 @@ class VectorTests {
     @Test
     void testNormalize() {
         // ============ Equivalence Partitions Tests ==============
-        assertEquals(new Vector(0.6, 0.8, 0), v340.normalize());
+        assertEquals(new Vector(0.6, 0.8, 0), new Vector(3, 4, 0).normalize());
     }
     /**
      * Test method for {@link primitives.Vector#add(primitives.Vector)}.
