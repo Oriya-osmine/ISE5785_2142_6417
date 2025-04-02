@@ -3,18 +3,38 @@ package geometries;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Vector;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * Unit tests for the Plane class.
  */
-class PlaneTest {
+class PlaneTests {
+    /**
+     * make the precision after . more accurate
+     */
     private static final double DELTA = 0.000001;
-
+    /**
+     * Used in multiple math and test operations
+     */
     Point p1 = new Point(1, 1, 1);
+    /**
+     * Used in multiple math and test operations
+     */
     Point p2 = new Point(2, 2, 2);
+    /**
+     * Used in multiple math and test operations
+     */
     Point p1B = new Point(1, 1, 1);
+    /**
+     * Used in multiple math and test operations
+     */
     Point p2B = new Point(2, 2, 2);
+    /**
+     * Used in multiple math and test operations
+     */
     Point p3 = new Point(3, 3, 3);
+
     /**
      * Test method for {@link geometries.Plane#Plane(primitives.Point, primitives.Point, primitives.Point)}.
      * This test checks the constructor of the Plane class.
@@ -52,6 +72,5 @@ class PlaneTest {
         assertThrows(IllegalArgumentException.class, () -> new Plane(p1, p2, p3),
                 "Constructed a plane with 3 points that are not in the same plane");
     }
-
 
 }

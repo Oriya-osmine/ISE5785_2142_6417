@@ -4,17 +4,31 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Unit tests for the Vector class.
  */
 class VectorTests {
-
-    private final Vector v111 = new Vector(1, 1, 1);
+    /**
+     * Used in multiple math and test operations
+     */
+    private final Vector v1 = new Vector(1, 1, 1);
+    /**
+     * Used in multiple math and test operations
+     */
     private final Vector v123 = new Vector(1, 2, 3);
+    /**
+     * Used in multiple math and test operations
+     */
     private final Vector v11n3 = new Vector(1, 1, -3);
+    /**
+     * Used in multiple math and test operations
+     */
     private final Vector v246 = new Vector(2, 4, 6);
+
     /**
      * Test method for {@link primitives.Vector#Vector(double, double, double)}.
+     * Test method for {@link primitives.Vector#Vector(Double3)}.
      * This test checks the constructor of the Vector class.
      * It includes equivalence partition tests and boundary value tests.
      */
@@ -29,6 +43,7 @@ class VectorTests {
         assertThrows(IllegalArgumentException.class, () -> new Vector(new Double3(0, 0, 0)),
                 "scale() for vector 0 does not throw an exception");
     }
+
     /**
      * Test method for {@link primitives.Vector#scale(Double)}.
      * This test checks the scaling of a vector.
@@ -42,6 +57,7 @@ class VectorTests {
         assertThrows(IllegalArgumentException.class, () -> v123.scale(0.0),
                 "scale() for vector 0 does not throw an exception");
     }
+
     /**
      * Test method for {@link primitives.Vector#dotProduct(primitives.Vector)}.
      * This test checks the dot product of two vectors.
@@ -54,9 +70,10 @@ class VectorTests {
         // =============== Boundary Values Tests ==================
         assertEquals(28, v123.dotProduct(v246));
         assertEquals(0, new Vector(1, 2, 1).dotProduct(v11n3));
-        assertEquals(-1, v111.dotProduct(v11n3));
-        assertEquals(v111.lengthSquared(), v111.dotProduct(v111));
+        assertEquals(-1, v1.dotProduct(v11n3));
+        assertEquals(v1.lengthSquared(), v1.dotProduct(v1));
     }
+
     /**
      * Test method for {@link primitives.Vector#crossProduct(primitives.Vector)}.
      * This test checks the cross product of two vectors.
@@ -73,8 +90,8 @@ class VectorTests {
         // =============== Boundary Values Tests ==================
         assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v1),
                 "crossProduct() with itself does not throw an exception");
-
     }
+
     /**
      * Test method for {@link primitives.Vector#lengthSquared()}.
      * This test checks the squared length of a vector.
@@ -83,8 +100,9 @@ class VectorTests {
     @Test
     void testLengthSquared() {
         // ============ Equivalence Partitions Tests ==============
-        assertEquals(3, v111.lengthSquared());
+        assertEquals(3, v1.lengthSquared());
     }
+
     /**
      * Test method for {@link primitives.Vector#length()}.
      * This test checks the length of a vector.
@@ -95,6 +113,7 @@ class VectorTests {
         // ============ Equivalence Partitions Tests ==============
         assertEquals(3, new Vector(1, 2, 2).length());
     }
+
     /**
      * Test method for {@link primitives.Vector#normalize()}.
      * This test checks the normalization of a vector.
@@ -105,6 +124,7 @@ class VectorTests {
         // ============ Equivalence Partitions Tests ==============
         assertEquals(new Vector(0.6, 0.8, 0), new Vector(3, 4, 0).normalize());
     }
+
     /**
      * Test method for {@link primitives.Vector#add(primitives.Vector)}.
      * This test checks the addition of two vectors.
@@ -122,12 +142,11 @@ class VectorTests {
      * It includes equivalence partition tests and boundary value tests.
      */
     @Test
-    void testSubVector()  {
+    void testSubVector() {
         // ============ Equivalence Partitions Tests ==============
         assertEquals(new Vector(-1, -2, -3), v123.subtract(v246));
         // =============== Boundary Values Tests ==================
         assertThrows(IllegalArgumentException.class, () -> v123.subtract(v123),
                 "subtract() for vector 0 does not throw an exception");
-
     }
 }

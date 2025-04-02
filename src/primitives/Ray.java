@@ -28,13 +28,25 @@ public class Ray {
         this.head = startPoint;
         this.direction = directionVector.normalize();
     }
+
+    /**
+     * Gets the head point of the ray
+     *
+     * @return head point
+     */
     public Point getHead() {
         return head;
     }
 
+    /**
+     * Gets the direction vector of the ray
+     *
+     * @return direction vector
+     */
     public Vector getDirection() {
         return direction;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
