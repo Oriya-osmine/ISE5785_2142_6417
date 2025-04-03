@@ -34,16 +34,17 @@ public class Plane extends Geometry {
     /**
      * Constructor
      *
-     * @param p The main point
-     * @param n The vector of the main point according to the plane
+     * @param anchorPoint  The main point
+     * @param normalVector The vector of the main point according to the plane
      */
-    public Plane(Point p, Vector n) {
-        this.q = p;
-        this.normal = n.normalize();
+    public Plane(Point anchorPoint, Vector normalVector) {
+        this.q = anchorPoint;
+        this.normal = normalVector.normalize();
     }
 
+
     @Override
-    public Vector getNormal(Point p) {
+    public Vector getNormal(Point surfacePoint) {
         return normal;
     }
 

@@ -10,8 +10,8 @@ public abstract class Geometry {
     /**
      * Get the normal to the plane based on the point
      *
-     * @param point The point to normalize the vector on
+     * @param surfacePoint The point to normalize the vector on
      * @return Normalized Vector based on point
      */
-    public abstract Vector getNormal(Point point);
+    public abstract Vector getNormal(Point surfacePoint);
 }

@@ -29,26 +29,23 @@ public class Cylinder extends Tube {
     }
 
     @Override
-    public Vector getNormal(Point point) {
-        Point p0 = ray.getHead();
-        Vector v = ray.getDirection();
+    public Vector getNormal(Point surfacePoint) {
+        Point axisOrigin = ray.getHead();
+        Vector axisDirection = ray.getDirection();
 
-        // Calculate the projection of the point onto the ray
-        Vector p0ToPoint = point.subtract(p0);
-        double t = v.dotProduct(p0ToPoint);
-
+        // Compute the projection of the surface point onto the cylinder's axis
+        double projectionLength = axisDirection.dotProduct(surfacePoint.subtract(axisOrigin));
         // Check if the point is on one of the bases
-        //1) on bottom base
-        if (t <= 0) {
-            return v.scale(-1.0).normalize();
+        if (projectionLength <= 0) {
+            return axisDirection.scale(-1.0); // Bottom base normal
         }
-        //2) on top base
-        else if (t >= height) {
-            return v.normalize();
+        if (projectionLength >= height) {
+            return axisDirection; // Top base normal
         }
 
         // Point is on the curved surface
-        Point o = p0.add(v.scale(t));
-        return point.subtract(o).normalize();
+        Point projectedPoint = axisOrigin.add(axisDirection.scale(projectionLength));
+        return surfacePoint.subtract(projectedPoint).normalize();
     }
+
 }

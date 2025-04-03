@@ -17,7 +17,7 @@ public class Tube extends RadicalGeometry {
      * Constructor
      *
      * @param radius the radius of the tube
-     * @param ray the axis ray of the tube
+     * @param ray    the axis ray of the tube
      */
     public Tube(double radius, Ray ray) {
         super(radius);
@@ -25,15 +25,13 @@ public class Tube extends RadicalGeometry {
     }
 
     @Override
-    public Vector getNormal(Point point) {
-        Point p0 = ray.getHead();
-        Vector v = ray.getDirection();
-        //t=V*(P0-p)
-        Vector p0ToPoint = point.subtract(ray.getHead());
-        double t = v.dotProduct(p0ToPoint);
-        //o=p0+t*v
-        Point o = p0.add(v.scale(t));
-        // (p-o)/|p-o|
-        return point.subtract(o).normalize();
+    public Vector getNormal(Point surfacePoint) {
+        Vector axisDirection = ray.getDirection();
+        Point axisOrigin = ray.getHead();
+
+        double projectionLength = axisDirection.dotProduct(surfacePoint.subtract(axisOrigin));
+        Point projectedPoint = axisOrigin.add(axisDirection.scale(projectionLength));
+
+        return surfacePoint.subtract(projectedPoint).normalize();
     }
 }
