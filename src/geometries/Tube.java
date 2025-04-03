@@ -30,7 +30,12 @@ public class Tube extends RadicalGeometry {
         Point axisOrigin = ray.getHead();
         //projectionLength = axisDirection * (P0 - surfacePoint)
         Vector p0ToPoint = surfacePoint.subtract(ray.getHead());
+
         double projectionLength = axisDirection.dotProduct(p0ToPoint);
+        if (projectionLength== 0) {
+            return axisOrigin.subtract(surfacePoint);
+        }
+
         //projectedPoint = axisOrigin + projectionLength * axisDirection
         Point projectedPoint = axisOrigin.add(axisDirection.scale(projectionLength));
         // (surfacePoint - projectedPoint)/|surfacePoint - projectedPoint|

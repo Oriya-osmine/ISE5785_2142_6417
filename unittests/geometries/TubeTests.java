@@ -6,6 +6,7 @@ import primitives.Ray;
 import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit tests for the Tube class.
@@ -19,10 +20,12 @@ class TubeTests {
     @Test
     void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
+        //TC01
         Tube tube = new Tube(1, new Ray(new Point(0, 0, 0)
                 , new Vector(1, 0, 0)));
         assertEquals(new Vector(0, 1, 0), tube.getNormal(new Point(3, 1, 0)));
         // =============== Boundary Values Tests ==================
-        assertThrows(IllegalArgumentException.class, () -> tube.getNormal(new Point(0, 1, 0)));
+        //TC11
+        assertEquals(new Point(0,-1,0),tube.getNormal(new Point(0, 1, 0)));
     }
 }
