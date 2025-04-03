@@ -189,7 +189,7 @@ class VectorTests {
     void testSubVector() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: simple subtraction with two positive vector
-        assertEquals(new Vector(-1, -2, -3), v123.subtract(v246));
+        assertEquals(v123.scale(-1.0), v123.subtract(v246));
         // TC02: simple subtraction with one negative one positive
         assertEquals(v246.scale(2.0), v123.subtract(v123.scale(-3.0)));
         // =============== Boundary Values Tests ==================

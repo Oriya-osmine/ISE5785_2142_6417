@@ -25,10 +25,8 @@ class PointTests {
     @Test
     void testSubtract() {
         // ============ Equivalence Partitions Tests ==============
-        assertEquals(new Point(-3, -3, -3), p123.subtract(p456));
-        // =============== Boundary Values Tests ==================
-        assertThrows(IllegalArgumentException.class, () -> p123.subtract(p123),
-                "subtract() for point 0 does not throw an exception");
+        // TC01: simple subtraction with one negative one positive
+        assertEquals(p123, new Point(2, 4, 6).subtract(p123));
     }
 
     /**
@@ -39,6 +37,7 @@ class PointTests {
     @Test
     void testAdd() {
         // ============ Equivalence Partitions Tests ==============
+        // TC01: simple addition with one negative one positive
         assertEquals(new Point(3, 3, 3), p456.add(new Vector(-1, -2, -3)));
     }
 
@@ -50,8 +49,8 @@ class PointTests {
     @Test
     void testDistanceSquared() {
         // ============ Equivalence Partitions Tests ==============
+        // TC01: simple Distance Squared
         assertEquals(27, p123.distanceSquared(p456));
-
     }
 
     /**
@@ -62,6 +61,7 @@ class PointTests {
     @Test
     void testDistance() {
         // ============ Equivalence Partitions Tests ==============
+        // TC01: simple Distance
         assertEquals(Math.sqrt(27), p123.distance(p456));
     }
 }

@@ -20,12 +20,12 @@ class TubeTests {
     @Test
     void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
-        //TC01
+        //TC01 get normal vector
         Tube tube = new Tube(1, new Ray(new Point(0, 0, 0)
                 , new Vector(1, 0, 0)));
         assertEquals(new Vector(0, 1, 0), tube.getNormal(new Point(3, 1, 0)));
         // =============== Boundary Values Tests ==================
-        //TC11
+        //TC11 get normal vector on edge
         assertEquals(new Point(0,-1,0),tube.getNormal(new Point(0, 1, 0)));
     }
 }
