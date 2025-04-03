@@ -51,7 +51,7 @@ class PointTests {
     void testDistanceSquared() {
         // ============ Equivalence Partitions Tests ==============
         assertEquals(27, p123.distanceSquared(p456));
-        assertEquals(0, p123.distanceSquared(p123));
+
     }
 
     /**

@@ -43,7 +43,7 @@ class PlaneTests {
     @Test
     void testConstructor() {
         // ============ Equivalence Partitions Tests ==============
-
+        //TC01
         Plane plane = new Plane(new Point(0, 0, 1), new Point(1, 0, 0), new Point(0, 1, 0));
         Vector normal = plane.getNormal(new Point(0, 0, 1));
 
@@ -51,24 +51,26 @@ class PlaneTests {
         Vector v1 = new Point(1, 0, 0).subtract(new Point(0, 0, 1));
         Vector v2 = new Point(0, 1, 0).subtract(new Point(0, 0, 1));
         assertEquals(0, normal.dotProduct(v1), DELTA);
+        //TC02
         assertEquals(0, normal.dotProduct(v2), DELTA);
 
-        // Ensure the normal is a unit vector
+        //TC03 Ensure the normal is a unit vector
         assertEquals(1, normal.length(), DELTA);
 
         // =============== Boundary Values Tests ==================
+        //TC11
         assertThrows(IllegalArgumentException.class, () -> new Plane(p1, p1B, p2),
                 "Constructed a plane with 2 equal points");
-
+        //TC12
         assertThrows(IllegalArgumentException.class, () -> new Plane(p1, p2, p1B),
                 "Constructed a plane with 2 equal points");
-
+        //TC13
         assertThrows(IllegalArgumentException.class, () -> new Plane(p1, p2, p2B),
                 "Constructed a plane with 2 equal points");
-
+        //TC14
         assertThrows(IllegalArgumentException.class, () -> new Plane(p1, p1, p1),
                 "Constructed a plane with 3 equal points");
-
+        //TC15
         assertThrows(IllegalArgumentException.class, () -> new Plane(p1, p2, p3),
                 "Constructed a plane with 3 points that are not in the same plane");
     }
