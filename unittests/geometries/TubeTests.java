@@ -17,7 +17,7 @@ class TubeTests {
      * It includes equivalence partition tests and boundary value tests.
      */
     @Test
-    void getNormal() {
+    void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
         Tube tube = new Tube(1, new Ray(new Point(0, 0, 0)
                 , new Vector(1, 0, 0)));

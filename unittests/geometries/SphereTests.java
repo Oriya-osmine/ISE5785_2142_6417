@@ -17,7 +17,7 @@ class SphereTests {
      * It includes equivalence partition tests.
      */
     @Test
-    void getNormal() {
+    void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
         Sphere sphere = new Sphere(1, new Point(0, 0, 0));
         assertEquals(new Vector(1, 0, 0), sphere.getNormal(new Point(1, 0, 0)));

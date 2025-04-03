@@ -45,6 +45,7 @@ public class Cylinder extends Tube {
 
         // Point is on the curved surface
         Point projectedPoint = axisOrigin.add(axisDirection.scale(projectionLength));
+        // Duplicate code but faster than calling super
         return surfacePoint.subtract(projectedPoint).normalize();
     }
 
