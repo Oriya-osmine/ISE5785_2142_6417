@@ -28,10 +28,12 @@ public class Tube extends RadicalGeometry {
     public Vector getNormal(Point surfacePoint) {
         Vector axisDirection = ray.getDirection();
         Point axisOrigin = ray.getHead();
-
-        double projectionLength = axisDirection.dotProduct(surfacePoint.subtract(axisOrigin));
+        //projectionLength = axisDirection * (P0 - surfacePoint)
+        Vector p0ToPoint = surfacePoint.subtract(ray.getHead());
+        double projectionLength = axisDirection.dotProduct(p0ToPoint);
+        //projectedPoint = axisOrigin + projectionLength * axisDirection
         Point projectedPoint = axisOrigin.add(axisDirection.scale(projectionLength));
-
+        // (surfacePoint - projectedPoint)/|surfacePoint - projectedPoint|
         return surfacePoint.subtract(projectedPoint).normalize();
     }
 }
