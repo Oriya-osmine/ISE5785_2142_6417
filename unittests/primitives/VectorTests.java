@@ -85,11 +85,22 @@ class VectorTests {
         Vector v1 = new Vector(1, 2, 3);
         Vector v2 = new Vector(4, 5, 6);
         Vector expected = new Vector(-3, 6, -3);
+        // TC01: two vectors, 
         assertEquals(expected, v1.crossProduct(v2));
 
         // =============== Boundary Values Tests ==================
+        // TC11: vector with itself
         assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v1),
                 "crossProduct() with itself does not throw an exception");
+        // TC12: two vector with the same direction
+        assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v1.scale(2.0)),
+                "crossProduct() with same direction does not throw an exception");
+        // TC13: two vector against each other direction, same length
+        assertThrows(IllegalArgumentException.class, () -> v123.crossProduct(v123.scale(-1.0)),
+                "crossProduct() with same direction does not throw an exception");
+        // TC14: two vector against each other direction, different length
+        assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v1.scale(-2.0)),
+                "crossProduct() with same direction does not throw an exception");
     }
 
     /**
@@ -100,6 +111,7 @@ class VectorTests {
     @Test
     void testLengthSquared() {
         // ============ Equivalence Partitions Tests ==============
+        // TC01: simple length Squared of a vector
         assertEquals(3, v1.lengthSquared());
     }
 
@@ -111,6 +123,7 @@ class VectorTests {
     @Test
     void testLength() {
         // ============ Equivalence Partitions Tests ==============
+        // TC01: simple length of a vector
         assertEquals(3, new Vector(1, 2, 2).length());
     }
 
@@ -122,6 +135,7 @@ class VectorTests {
     @Test
     void testNormalize() {
         // ============ Equivalence Partitions Tests ==============
+        // TC01: simple normalization of a vector
         assertEquals(new Vector(0.6, 0.8, 0), new Vector(3, 4, 0).normalize());
     }
 
@@ -133,7 +147,12 @@ class VectorTests {
     @Test
     void testAdd() {
         // ============ Equivalence Partitions Tests ==============
+        // TC01: simple subtraction with two vector
         assertEquals(v123.add(v123), v246);
+        // =============== Boundary Values Tests ==================
+        // TC12: add vector with negative itself
+        assertThrows(IllegalArgumentException.class, () -> v1.scale(-1.0).add(v1),
+                "Add() for vector 0 does not throw an exception");
     }
 
     /**
@@ -144,8 +163,10 @@ class VectorTests {
     @Test
     void testSubVector() {
         // ============ Equivalence Partitions Tests ==============
+        // TC01: simple subtraction with two vector
         assertEquals(new Vector(-1, -2, -3), v123.subtract(v246));
         // =============== Boundary Values Tests ==================
+        // TC12: subtract vector with itself
         assertThrows(IllegalArgumentException.class, () -> v123.subtract(v123),
                 "subtract() for vector 0 does not throw an exception");
     }
