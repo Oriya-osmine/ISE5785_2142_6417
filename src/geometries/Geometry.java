@@ -6,7 +6,7 @@ import primitives.Vector;
 /**
  * Represents Geometry in 3D space.
  */
-public abstract class Geometry {
+public abstract class Geometry extends Intersectable {
     /**
      * Get the normal to the plane based on the point
      *

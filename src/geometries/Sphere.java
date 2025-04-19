@@ -1,7 +1,11 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+import static primitives.Util.*;
+
+import java.util.List;
 
 /**
  * Represents a sphere in 3D space defined by a center point and a radius.
@@ -33,4 +37,38 @@ public class Sphere extends RadicalGeometry {
         return surfacePoint.subtract(center).normalize();
     }
 
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+
+        Vector u=center.subtract(ray.getHead());
+        double tm=ray.getDirection().dotProduct(u);
+        if (isZero(tm))
+//TO DO what if tm =0
+        double d =Math.sqrt(u.dotProduct(u)-tm*tm);
+
+
+        if (d>=radius)
+            return null;
+
+        double th =Math.sqrt(radius*radius-d*d);
+        double t1=alignZero(tm+th);
+        double t2=alignZero(tm-th);
+
+        if (t1>0&&t2>0)
+            return List.of(ray.getHead().add(ray.getDirection().scale(t1))
+            ,ray.getHead().add(ray.getDirection().scale(t2)));
+        else if (t1>0&&t2<=0)
+            List.of(ray.getHead().add(ray.getDirection().scale(t1)));
+        else
+            List.of(ray.getHead().add(ray.getDirection().scale(t2)));
+
+
+
+
+
+
+
+        return List.of();
+    }
 }
