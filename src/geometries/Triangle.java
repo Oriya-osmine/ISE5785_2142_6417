@@ -25,6 +25,7 @@ public class Triangle extends Polygon {
         if (p1.equals(p2) || p1.equals(p3) || p2.equals(p3))
             throw new IllegalArgumentException("Cannot construct a plane from 2 or less points");
     }
+
     @Override
     public List<Point> findIntersections(Ray ray) {
         // Uses Möller–Trumbore algorithm from https://cadxfem.org/inf/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
