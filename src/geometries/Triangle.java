@@ -1,6 +1,12 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
+import primitives.Vector;
+
+import java.util.List;
+
+import static primitives.Util.alignZero;
 
 /**
  * Represents a triangle in a 3D space
@@ -19,4 +25,56 @@ public class Triangle extends Polygon {
         if (p1.equals(p2) || p1.equals(p3) || p2.equals(p3))
             throw new IllegalArgumentException("Cannot construct a plane from 2 or less points");
     }
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        // Uses Möller–Trumbore algorithm from https://cadxfem.org/inf/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
+        Point rayOrigin = ray.getHead();
+        Vector rayDirection = ray.getDirection();
+
+        Point vertex0 = vertices.getFirst();
+        Point vertex1 = vertices.get(1);
+        Point vertex2 = vertices.get(2);
+
+        Vector edge1 = vertex1.subtract(vertex0);
+        Vector edge2 = vertex2.subtract(vertex0);
+
+        // Calculate the determinant
+        Vector pVec = rayDirection.crossProduct(edge2);
+        double determinant = edge1.dotProduct(pVec);
+
+        // If determinant is close to zero, ray is parallel to triangle plane
+        if (alignZero(determinant) == 0.0) {
+            return null;
+        }
+
+        // Inverse of determinant for later calculations
+        double inverseDet = 1.0 / determinant;
+
+        // Calculate u parameter and test bounds
+        Vector tVec = rayOrigin.subtract(vertex0);
+        double u = inverseDet * tVec.dotProduct(pVec);
+        if (alignZero(u) <= 0.0 || u > 1.0) {
+            return null;
+        }
+
+        // Calculate v parameter and test bounds
+        Vector qVec = tVec.crossProduct(edge1);
+        double v = inverseDet * rayDirection.dotProduct(qVec);
+        if (alignZero(v) < 0.0 || alignZero(u + v - 1.0) > 0) {
+            return null;
+        }
+
+        // Calculate distance t from ray origin to intersection point
+        double t = inverseDet * edge2.dotProduct(qVec);
+
+        // Use alignZero to check if t is close to zero, ensuring precision handling
+        if (alignZero(t) > 0.0) { // Intersection is in front of the ray
+            Point intersection = rayOrigin.add(rayDirection.scale(t));
+            return List.of(intersection);
+        }
+
+        // Intersection is behind the ray (or too small to be considered valid)
+        return null;
+    }
+
 }
