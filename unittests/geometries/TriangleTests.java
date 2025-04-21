@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -15,11 +18,11 @@ class TriangleTests {
      */
     @Test
     void testFindIntersections() {
-        
+
         // TODO: make sure the tests are correct
         Triangle triangle = new Triangle(new Point(0, 0, 1), new Point(1, 0, 0), new Point(0, 1, 0));
         Ray ray;
-        java.util.List<Point> result;
+        List<Point> result;
 
         // ============ Equivalence Partitions Tests ==============
         // TC01 Ray intersects plane inside triangle (not on edge/vertex)
