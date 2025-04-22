@@ -42,6 +42,10 @@ public class Sphere extends RadicalGeometry {
     @Override
     public List<Point> findIntersections(Ray ray) {
 
+        if (  ray.getPoint(0).equals(center)) {
+            return List.of(ray.getPoint(radius));
+        }
+
         Vector u = center.subtract(ray.getPoint(0));
         double tm = ray.getDirection().dotProduct(u);
 
@@ -71,11 +75,13 @@ public class Sphere extends RadicalGeometry {
         double t2 = alignZero(tm - th);
 
         if (t1 > 0 && t2 > 0)
-            return List.of((ray.getPoint(t1)), ray.getPoint(t2));
-        else if (t1 > 0 && t2 <= 0)
+            return List.of(ray.getPoint(t1), ray.getPoint(t2));
+        else if (t1 > 0)
             return List.of(ray.getPoint(t1));
-        else
+        else if (t2 > 0)
             return List.of(ray.getPoint(t2));
+        else
+            return null;
 
     }
 }

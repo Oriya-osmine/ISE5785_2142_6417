@@ -43,61 +43,63 @@ class SphereTests {
                 "Ray outside sphere10 should not intersect");
 
         // TC02: Ray starts before and goes through the sphere10 (2 points)
-        List<Point> result = sphere10.findIntersections(new Ray(new Point(0, 0, 3), new Vector(0, 0, -1)));
+        List<Point> result = sphere10.findIntersections(new Ray(new Point(0, 0, 3), new Vector(0, 0, -2)));
         assertNotNull(result, "Ray should intersect the sphere10");
-        assertEquals(2, result.size(), "Ray should intersect in 2 points");
+        assertEquals(new Point(0,0,-1), result.get(0), "Ray should intersect in  z=-1");
+        assertEquals(new Point(0,0,1), result.get(1), "Ray should intersect in z=1");
 
         // TC03: Ray starts inside the sphere10 and exits (1 point)
-        result = sphere10.findIntersections(new Ray(new Point(0, 0, 0.5), new Vector(0, 0, 1)));
+        result = sphere10.findIntersections(new Ray(new Point(0, 0, 0.5), new Vector(0, 0, 2)));
         assertNotNull(result, "Ray from inside sphere10 should intersect");
-        assertEquals(1, result.size(), "Ray should intersect in 1 point");
+        assertEquals(new Point(0,0,1), result.get(0), "Ray should intersect in z=1 ");
 
         // TC04: Ray starts after the sphere10 and goes away (no intersection)
-        assertNull(sphere10.findIntersections(new Ray(new Point(0, 0, 3), new Vector(0, 0, 1))),
+        assertNull(sphere10.findIntersections(new Ray(new Point(0, 0, 1), new Vector(0, 0, 1))),
                 "Ray after the sphere10 and going away should not intersect");
 
         // ============ Boundary Value Tests ============
 
         // Group 1: Ray is on the line intersecting the sphere10 but not through the center
 
-        // TC05: Ray starts before and intersects (2 points)
-        result = sphere10.findIntersections(new Ray(new Point(-2, 0.5, 0), new Vector(1, 0, 0)));
-        assertNotNull(result, "Ray should intersect in 2 points");
-        assertEquals(2, result.size());
-
-        // TC06: Ray starts inside and intersects once
-        result = sphere10.findIntersections(new Ray(new Point(0.5, 0.5, 0), new Vector(1, 0, 0)));
+        // TC05: Ray starts inside and intersects once
+        result = sphere10.findIntersections(new Ray(new Point(1, 0, 0), new Vector(-1, 0, 0)));
         assertNotNull(result, "Ray from inside should intersect once");
-        assertEquals(1, result.size());
+        assertEquals(new Point(-1,0,0), result.get(0));
 
-        // TC07: Ray starts after the sphere10 on the same line
-        assertNull(sphere10.findIntersections(new Ray(new Point(2, 0.5, 0), new Vector(1, 0, 0))),
+        // TC06: Ray starts after the sphere10 on the same line
+        assertNull(sphere10.findIntersections(new Ray(new Point(1, 0, 0), new Vector(1, 0, 0))),
                 "Ray after the sphere10 should not intersect");
 
         // Group 2: Ray goes through the center
 
-        // TC08: Ray starts before and goes through center (2 points)
-        result = sphere10.findIntersections(new Ray(new Point(-2, 0, 0), new Vector(1, 0, 0)));
+        // TC07: Ray starts before and goes through center (2 points)
+        result = sphere10.findIntersections(new Ray(new Point(2, 0, 0), new Vector(-1, 0, 0)));
         assertNotNull(result, "Ray through center should intersect in 2 points");
-        assertEquals(2, result.size());
+        assertEquals(new Point(-1,0,0), result.get(0));
+        assertEquals(new Point(1,0,0), result.get(1));
 
-        // TC09: Ray starts at sphere10 and goes through center (1 point)
+        // TC08: Ray starts at sphere10 and goes through center (1 point)
         result = sphere10.findIntersections(new Ray(new Point(-1, 0, 0), new Vector(1, 0, 0)));
         assertNotNull(result, "Ray from surface toward center should intersect once");
-        assertEquals(1, result.size());
+        assertEquals(new Point(1,0,0), result.get(0));
 
-        // TC10: Ray starts at center (1 point)
+        // TC09: Ray starts at center (1 point)
         result = sphere10.findIntersections(new Ray(new Point(0, 0, 0), new Vector(1, 0, 0)));
         assertNotNull(result, "Ray from center should intersect once");
-        assertEquals(1, result.size());
+        assertEquals(new Point(1,0,0), result.get(0));
 
-        // TC11: Ray starts at surface and goes away from center (no intersection)
+        // TC10: Ray starts at surface and goes away from center (no intersection)
         assertNull(sphere10.findIntersections(new Ray(new Point(1, 0, 0), new Vector(1, 0, 0))),
                 "Ray from surface going outward should not intersect");
 
-        // TC12: Ray starts after the sphere10 on same line (no intersection)
+        // TC11: Ray starts after the sphere10 on same line (no intersection)
         assertNull(sphere10.findIntersections(new Ray(new Point(2, 0, 0), new Vector(1, 0, 0))),
                 "Ray after sphere10 going away should not intersect");
+
+        // TC12: Ray starts in the sphere10 on same line (1 intersection)
+        result = sphere10.findIntersections(new Ray(new Point(0.5, 0, 0), new Vector(1, 0, 0)));
+        assertNotNull(result, "Ray from center should intersect once");
+        assertEquals(new Point(1,0,0), result.get(0));
 
         // Group 3: Ray is tangent to the sphere10
 
