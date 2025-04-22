@@ -4,6 +4,8 @@ import primitives.Ray;
 import primitives.Vector;
 import primitives.Point;
 
+import java.util.List;
+
 /**
  * Represents a Tube in a 3D space
  */
@@ -27,12 +29,12 @@ public class Tube extends RadicalGeometry {
     @Override
     public Vector getNormal(Point surfacePoint) {
         Vector axisDirection = ray.getDirection();
-        Point axisOrigin = ray.getHead();
+        Point axisOrigin = ray.getPoint(0);
         //projectionLength = axisDirection * (P0 - surfacePoint)
-        Vector p0ToPoint = surfacePoint.subtract(ray.getHead());
+        Vector p0ToPoint = surfacePoint.subtract(ray.getPoint(0));
 
         double projectionLength = axisDirection.dotProduct(p0ToPoint);
-        if (projectionLength== 0) {
+        if (projectionLength == 0) {
             return axisOrigin.subtract(surfacePoint);
         }
 
@@ -41,4 +43,10 @@ public class Tube extends RadicalGeometry {
         // (surfacePoint - projectedPoint)/|surfacePoint - projectedPoint|
         return surfacePoint.subtract(projectedPoint).normalize();
     }
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return List.of();
+    }
+
 }

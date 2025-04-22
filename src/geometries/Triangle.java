@@ -29,7 +29,7 @@ public class Triangle extends Polygon {
     @Override
     public List<Point> findIntersections(Ray ray) {
         // Uses Möller–Trumbore algorithm from https://cadxfem.org/inf/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
-        Point rayOrigin = ray.getHead();
+        Point rayOrigin = ray.getPoint(0);
         Vector rayDirection = ray.getDirection();
 
         Point vertex0 = vertices.getFirst();
@@ -70,10 +70,8 @@ public class Triangle extends Polygon {
 
         // Use alignZero to check if t is close to zero, ensuring precision handling
         if (alignZero(t) > 0.0) { // Intersection is in front of the ray
-            Point intersection = rayOrigin.add(rayDirection.scale(t));
-            return List.of(intersection);
+            return List.of(ray.getPoint(t));
         }
-
         // Intersection is behind the ray (or too small to be considered valid)
         return null;
     }

@@ -3,8 +3,11 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
 import java.util.List;
+
 import static primitives.Util.*;
+
 /**
  * Represents a 2D plane in 3D space
  */
@@ -50,6 +53,22 @@ public class Plane extends Geometry {
         return normal;
     }
 
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        double nv = normal.dotProduct(ray.getDirection());
+        if (isZero(nv))
+            return null;
+        //t=N*(Q-P0)/N*V
+        double t = alignZero(normal.dotProduct(q.subtract(ray.getPoint(0))) / nv);
+        if (t > 0) {
+            //p=p0+t*v
+            return List.of(ray.getPoint(t));
+
+        }
+        return null;
+
+    }
+
     /**
      * gets the normal of our main point
      *
@@ -57,22 +76,6 @@ public class Plane extends Geometry {
      */
     public Vector getNormal() {
         return normal;
-    }
-
-    @Override
-    public List<Point> findIntersections(Ray ray){
-        double nv=normal.dotProduct(ray.getDirection());
-        if (isZero(nv))
-            return null;
-       //t=N*(Q-P0)/N*V
-      double t=alignZero( normal.dotProduct(q.subtract(ray.getHead()))/nv);
-      if (t>0) {
-          //p=p0+t*v
-          return List.of(ray.getHead().add(ray.getDirection().scale(t)));
-
-      }
-     return null;
-
     }
 
 }

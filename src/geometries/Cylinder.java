@@ -30,7 +30,7 @@ public class Cylinder extends Tube {
 
     @Override
     public Vector getNormal(Point surfacePoint) {
-        Point axisOrigin = ray.getHead();
+        Point axisOrigin = ray.getPoint(0);
         Vector axisDirection = ray.getDirection();
 
         // Compute the projection of the surface point onto the cylinder's axis

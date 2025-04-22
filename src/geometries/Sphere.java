@@ -3,6 +3,7 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
 import static primitives.Util.*;
 
 import java.util.List;
@@ -41,18 +42,18 @@ public class Sphere extends RadicalGeometry {
     @Override
     public List<Point> findIntersections(Ray ray) {
 
-        Vector u=center.subtract(ray.getHead());
-        double tm=ray.getDirection().dotProduct(u);
+        Vector u = center.subtract(ray.getPoint(0));
+        double tm = ray.getDirection().dotProduct(u);
 
         //if the ray 90 maalot from the center of sphere
-        if (isZero(tm)){
-            double d =ray.getHead().distance(this.center);
+        if (isZero(tm)) {
+            double d = ray.getPoint(0).distance(this.center);
             //check if the head of ray in the sphere
-            if(d<radius){
-                double th =Math.sqrt(radius*radius-d*d);
+            if (d < radius) {
+                double th = Math.sqrt(radius * radius - d * d);
                 double t = alignZero(th);
                 if (t > 0)
-                    return List.of(ray.getHead().add(ray.getDirection().scale(t)));
+                    return List.of(ray.getPoint(t));
             }
             //case1: the ray not in the sphere
             //case2:the head near or on the end of sphere
@@ -61,22 +62,20 @@ public class Sphere extends RadicalGeometry {
         }
 
 
-        double d =Math.sqrt(u.dotProduct(u)-tm*tm);
-        if (d>=radius) //head of the ray out from sphere
+        double d = Math.sqrt(u.dotProduct(u) - tm * tm);
+        if (d >= radius) //head of the ray out from sphere
             return null;
 
-        double th =Math.sqrt(radius*radius-d*d);
-        double t1=alignZero(tm+th);
-        double t2=alignZero(tm-th);
+        double th = Math.sqrt(radius * radius - d * d);
+        double t1 = alignZero(tm + th);
+        double t2 = alignZero(tm - th);
 
-        if (t1>0&&t2>0)
-            return List.of(ray.getHead().add(ray.getDirection().scale(t1))
-            ,ray.getHead().add(ray.getDirection().scale(t2)));
-        else if (t1>0&&t2<=0)
-             return List.of(ray.getHead().add(ray.getDirection().scale(t1)));
+        if (t1 > 0 && t2 > 0)
+            return List.of((ray.getPoint(t1)), ray.getPoint(t2));
+        else if (t1 > 0 && t2 <= 0)
+            return List.of(ray.getPoint(t1));
         else
-            return  List.of(ray.getHead().add(ray.getDirection().scale(t2)));
-
+            return List.of(ray.getPoint(t2));
 
     }
 }
