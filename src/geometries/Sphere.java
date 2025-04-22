@@ -43,12 +43,26 @@ public class Sphere extends RadicalGeometry {
 
         Vector u=center.subtract(ray.getHead());
         double tm=ray.getDirection().dotProduct(u);
-        if (isZero(tm))
-//TO DO what if tm =0
+
+        //if the ray 90 maalot from the center of sphere
+        if (isZero(tm)){
+            double d =ray.getHead().distance(this.center);
+            //check if the head of ray in the sphere
+            if(d<radius){
+                double th =Math.sqrt(radius*radius-d*d);
+                double t = alignZero(th);
+                if (t > 0)
+                    return List.of(ray.getHead().add(ray.getDirection().scale(t)));
+            }
+            //case1: the ray not in the sphere
+            //case2:the head near or on the end of sphere
+            return null;
+
+        }
+
+
         double d =Math.sqrt(u.dotProduct(u)-tm*tm);
-
-
-        if (d>=radius)
+        if (d>=radius) //head of the ray out from sphere
             return null;
 
         double th =Math.sqrt(radius*radius-d*d);
@@ -59,16 +73,10 @@ public class Sphere extends RadicalGeometry {
             return List.of(ray.getHead().add(ray.getDirection().scale(t1))
             ,ray.getHead().add(ray.getDirection().scale(t2)));
         else if (t1>0&&t2<=0)
-            List.of(ray.getHead().add(ray.getDirection().scale(t1)));
+             return List.of(ray.getHead().add(ray.getDirection().scale(t1)));
         else
-            List.of(ray.getHead().add(ray.getDirection().scale(t2)));
+            return  List.of(ray.getHead().add(ray.getDirection().scale(t2)));
 
 
-
-
-
-
-
-        return List.of();
     }
 }
