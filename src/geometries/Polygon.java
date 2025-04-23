@@ -95,7 +95,27 @@ public class Polygon extends Geometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return List.of();
+        List<Point> intersections = plane.findIntersections(ray);
+        if (intersections == null)
+            return null;
+
+        Point h = ray.getPoint(0);
+        Vector dir = ray.getDirection();
+
+        // Determine if the ray direction is consistently on one side of all the polygon's edges
+        boolean allPositive = dir.dotProduct((vertices.getFirst().subtract(h)).crossProduct(vertices.get(1).subtract(h)).normalize()) > 0;
+        int vSize = vertices.size();
+        for (int i = 0; i < vSize; i++) {
+            Vector v1 = vertices.get(i).subtract(h);
+            Vector v2 = vertices.get((i + 1)%vSize).subtract(h);
+            Vector edgeN = v1.crossProduct(v2).normalize();
+            double s = dir.dotProduct(edgeN);
+            // If the dot product is zero or if it changes sign, the ray does not intersect the polygon's base
+            if (isZero(s) || (s > 0 != allPositive)) {
+                return null;
+            }
+        }
+        return intersections;
     }
 
 }
