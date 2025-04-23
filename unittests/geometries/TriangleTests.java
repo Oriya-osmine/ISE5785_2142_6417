@@ -37,13 +37,13 @@ class TriangleTests {
         assertNull(result, "TC02: Should not intersect against a side");
 
         // TC03 Ray intersects plane against a triangle point (no intersection)
-        ray = new Ray(new Point(1.5, 0, -1), new Vector(0, 0, 1));
+        ray = new Ray(new Point(0, 0, -1), new Vector(0, 0, 1));
         result = triangle.findIntersections(ray);
         assertNull(result, "TC03: Should not intersect against a point");
 
         // =============== Boundary Values Tests ==================
         // TC11 Ray intersects plane on continuation of an edge (no intersection)
-        ray = new Ray(new Point(-0.5, 0.5, -1), new Vector(0, 0, 1));
+        ray = new Ray(new Point(0, -2, 0), new Vector(0, 0, 1));
         result = triangle.findIntersections(ray);
         assertNull(result, "TC11: Should not intersect on continuation of an edge");
 

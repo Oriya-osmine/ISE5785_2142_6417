@@ -46,7 +46,7 @@ class GeometriesTests {
                 "TC02: Expected null when ray misses all shapes");
 
         // TC03: One shape intersected (Sphere)
-        Ray rayHitsSphere = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+        Ray rayHitsSphere = new Ray(new Point(0,-5,2.5), new Vector(0, 1, 0));
         List<Point> intersections = geometries.findIntersections(rayHitsSphere);
         assertNotNull(intersections, "TC03: Expected intersections with one shape");
         assertEquals(2, intersections.size(), "TC03: Expected 2 points (Sphere)");
@@ -54,16 +54,14 @@ class GeometriesTests {
         // ============ Equivalence Partitions Tests ==============
 
         // TC04: Some but not all shapes intersected (Sphere + Triangle)
-        Ray rayHitsSome = new Ray(new Point(0, 0, -1), new Vector(0, 0, 1));
+        Ray rayHitsSome = new Ray(new Point(0, 0, 4.5), new Vector(0, 0, -1));
         intersections = geometries.findIntersections(rayHitsSome);
         assertNotNull(intersections, "TC04: Expected intersections with some shapes");
         assertEquals(3, intersections.size(), "TC04: Expected 3 points (Sphere + Triangle)");
 
         // TC05: All shapes intersected
         Ray rayHitsAll = new Ray(new Point(0, 0, -1), new Vector(0, 0, 1));
-        Plane planeCloser = new Plane(new Point(0, 0, 2), new Vector(0, 0, 1));
-        Geometries allGeometries = new Geometries(sphere, planeCloser, triangle);
-        intersections = allGeometries.findIntersections(rayHitsAll);
+        intersections = geometries.findIntersections(rayHitsAll);
         assertNotNull(intersections, "TC05: Expected intersections with all shapes");
         assertEquals(4, intersections.size(), "TC05: Expected 4 points (Sphere:2, Triangle:1, Plane:1)");
     }

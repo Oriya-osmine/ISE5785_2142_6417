@@ -85,21 +85,20 @@ class PlaneTests {
      */
     @Test
     void testFindIntersections() {
-        // TODO: make sure these test are correct
         // Plane: z = 1
         Plane plane = new Plane(new Point(0, 0, 1), new Vector(0, 0, 1));
 
         // ============ Equivalence Partitions Tests ==============
 
-        // TC01: Ray intersects the plane
-        Ray ray1 = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+        // TC01: Ray intersects the plane and not orthogonal nor parallel
+        Ray ray1 = new Ray(new Point(0, 0, 0), new Vector(0, 0.5, 1));
         List<Point> result1 = plane.findIntersections(ray1);
         assertNotNull(result1, "TC01: Expected intersection point");
         assertEquals(1, result1.size(), "TC01: Should be one intersection point");
-        assertEquals(new Point(0, 0, 1), result1.get(0), "TC01: Wrong intersection point");
+        assertEquals(new Point(0, 0.5, 1), result1.get(0), "TC01: Wrong intersection point");
 
-        // TC02: Ray does not intersect the plane
-        Ray ray2 = new Ray(new Point(0, 0, 2), new Vector(0, 0, 1));
+        // TC02: Ray does not intersect the plane and not orthogonal nor parallel
+        Ray ray2 = new Ray(new Point(0, 0, 2), new Vector(0, 0.5, 1));
         assertNull(plane.findIntersections(ray2), "TC02: Expected no intersection");
 
         // =============== Boundary Value Tests ==================
@@ -128,7 +127,7 @@ class PlaneTests {
         assertNull(plane.findIntersections(ray6), "TC14: Expected no intersection (starts after plane)");
 
         // TC15: Ray is neither orthogonal nor parallel, starts in the plane (no intersection)
-        Ray ray7 = new Ray(new Point(0, 0, 1), new Vector(1, 1, 1));
+        Ray ray7 = new Ray(new Point(0, 0.5, 1), new Vector(1, 1, 1));
         assertNull(plane.findIntersections(ray7), "TC15: No intersection - ray starts in the plane");
 
         // TC16: Ray is neither orthogonal nor parallel and starts at reference point on the plane
