@@ -7,6 +7,7 @@ import primitives.Vector;
 import java.util.List;
 
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Represents a triangle in a 3D space
@@ -28,7 +29,8 @@ public class Triangle extends Polygon {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        // Uses Möller–Trumbore algorithm from https://cadxfem.org/inf/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
+        // Uses Möller–Trumbore algorithm and Cramer's rule
+        // https://cadxfem.org/inf/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
         Point rayOrigin = ray.getPoint(0);
         Vector rayDirection = ray.getDirection();
 
@@ -44,7 +46,8 @@ public class Triangle extends Polygon {
         double determinant = edge1.dotProduct(pVec);
 
         // If determinant is close to zero, ray is parallel to triangle plane
-        if (alignZero(determinant) == 0.0) {
+        // (no solutions or infinite solution)
+        if (isZero(alignZero(determinant))) {
             return null;
         }
 
@@ -61,7 +64,7 @@ public class Triangle extends Polygon {
         // Calculate v parameter and test bounds
         Vector qVec = tVec.crossProduct(edge1);
         double v = inverseDet * rayDirection.dotProduct(qVec);
-        if (alignZero(v) < 0.0 || alignZero(u + v - 1.0) > 0) {
+        if (alignZero(v) <= 0.0 || u + v >= 1) {
             return null;
         }
 
