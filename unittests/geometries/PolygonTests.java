@@ -100,7 +100,7 @@ class PolygonTests {
     @Test
     void testFindIntersections() {
         Polygon polygon = new Polygon(
-                new Point(0, 0, 0),
+                new Point(-1, -1, 0),
                 new Point(2, 0, 0),
                 new Point(3, 1, 0),
                 new Point(1.5, 3, 0),
@@ -118,17 +118,17 @@ class PolygonTests {
         assertNull(polygon.findIntersections(rayOutsideEdge), "Ray intersects outside the polygon (against edge)");
 
         // TC03: Intersection outside, against a vertex
-        Ray rayOutsideVertex = new Ray(new Point(2.1, 0.1, 1), new Vector(0.1, 0, -1));  // Fixed: Non-zero vector
+        Ray rayOutsideVertex = new Ray(new Point(-2,-2,1), new Vector(1,0,-1));
         assertNull(polygon.findIntersections(rayOutsideVertex), "Ray intersects outside the polygon (against vertex)");
 
         // =============== Boundary Values Tests ==================
 
         // TC10: Intersection exactly on an edge
-        Ray rayOnEdge = new Ray(new Point(1, 0, 1), new Vector(0, 0, -1));
+        Ray rayOnEdge = new Ray(new Point(0, -2.0 / 3.0, 1), new Vector(0, 0, -1));
         assertNull(polygon.findIntersections(rayOnEdge), "Ray intersects exactly on a polygon edge");
 
         // TC11: Intersection exactly on a vertex
-        Ray rayOnVertex = new Ray(new Point(0, 0, 1), new Vector(0, 0, -1));
+        Ray rayOnVertex = new Ray(new Point(2, 0, 1), new Vector(0, 0, -1));
         assertNull(polygon.findIntersections(rayOnVertex),"Ray intersects exactly on a polygon vertex");
 
         // TC12: Intersection on the extension of an edge
