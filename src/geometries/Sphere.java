@@ -65,7 +65,6 @@ public class Sphere extends RadicalGeometry {
 
         }
 
-
         double d = Math.sqrt(u.dotProduct(u) - tm * tm);
         if (d >= radius) //head of the ray out from sphere
             return null;

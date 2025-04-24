@@ -46,7 +46,7 @@ public class Tube extends RadicalGeometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return List.of();
+        return null;
     }
 
 }
