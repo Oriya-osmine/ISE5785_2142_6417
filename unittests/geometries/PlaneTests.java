@@ -103,6 +103,8 @@ class PlaneTests {
 
         // =============== Boundary Value Tests ==================
 
+        // Group 1: Ray is parallel to the plane
+
         // TC10: Ray is parallel to the plane and outside
         Ray ray3a = new Ray(new Point(0, 0, 2), new Vector(1, 0, 0));
         assertNull(plane.findIntersections(ray3a), "TC010: Expected no intersection (parallel & outside)");
@@ -110,6 +112,8 @@ class PlaneTests {
         // TC11: Ray is parallel to the plane and inside
         Ray ray3b = new Ray(new Point(1, 0, 1), new Vector(1, 0, 0));
         assertNull(plane.findIntersections(ray3b), "TC11: Expected no intersection (ray in plane)");
+
+        // Group 2: Ray is orthogonal to the plane
 
         // TC12: Ray is orthogonal to the plane and starts before
         Ray ray4 = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
@@ -125,6 +129,8 @@ class PlaneTests {
         // TC14: Ray is orthogonal to the plane and starts after
         Ray ray6 = new Ray(new Point(0, 0, 2), new Vector(0, 0, 1));
         assertNull(plane.findIntersections(ray6), "TC14: Expected no intersection (starts after plane)");
+
+        // Group 3: Ray is neither orthogonal nor parallel
 
         // TC15: Ray is neither orthogonal nor parallel, starts in the plane (no intersection)
         Ray ray7 = new Ray(new Point(0, 0.5, 1), new Vector(1, 1, 1));

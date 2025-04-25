@@ -6,7 +6,8 @@ import primitives.Vector;
 
 import java.util.List;
 
-import static primitives.Util.*;
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Represents a 2D plane in 3D space
@@ -55,6 +56,8 @@ public class Plane extends Geometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
+        // checks that it is not parallel and the head it not the plane head then
+        // uses plane and ray equation to = between them
         double nv = normal.dotProduct(ray.getDirection());
         Point head = ray.getPoint(0);
         if (isZero(nv) || q.equals(head))
@@ -62,9 +65,7 @@ public class Plane extends Geometry {
         //t=N*(Q-P0)/N*V
         double t = alignZero(normal.dotProduct(q.subtract(head)) / nv);
         if (t > 0) {
-            //p=p0+t*v
             return List.of(ray.getPoint(t));
-
         }
         return null;
     }

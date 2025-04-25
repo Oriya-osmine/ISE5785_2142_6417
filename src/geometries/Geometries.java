@@ -7,17 +7,36 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Represents a collection of shapes in 3D space
+ */
 public class Geometries implements Intersectable {
+    /**
+     * list of shapes in 3D space
+     */
     private final List<Intersectable> geometries = new LinkedList<>();
 
+    /**
+     * Empty constructor
+     */
     public Geometries() {
 
     }
 
+    /**
+     * Constructor
+     *
+     * @param geometries the geometries to add to the space
+     */
     public Geometries(Intersectable... geometries) {
         add(geometries);
     }
 
+    /**
+     * adds the geometries to the space
+     *
+     * @param geometries the geometries to add to the space
+     */
     public void add(Intersectable... geometries) {
         Collections.addAll(this.geometries, geometries);
     }

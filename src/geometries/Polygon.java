@@ -102,12 +102,14 @@ public class Polygon extends Geometry {
         Point h = ray.getPoint(0);
         Vector dir = ray.getDirection();
 
-        // Determine if the ray direction is consistently on one side of all the polygon's edges
+        // Determine if the ray direction is always on the inside of all the polygon's edges
+        // If it is then it must be inside it
+        // Creates a triangle and check the relation between the ray direction and it
         boolean allPositive = dir.dotProduct((vertices.getFirst().subtract(h)).crossProduct(vertices.get(1).subtract(h)).normalize()) > 0;
         int vSize = vertices.size();
         for (int i = 0; i < vSize; i++) {
             Vector v1 = vertices.get(i).subtract(h);
-            Vector v2 = vertices.get((i + 1)%vSize).subtract(h);
+            Vector v2 = vertices.get((i + 1) % vSize).subtract(h);
             Vector edgeN = v1.crossProduct(v2).normalize();
             double s = dir.dotProduct(edgeN);
             // If the dot product is zero or if it changes sign, the ray does not intersect the polygon's base

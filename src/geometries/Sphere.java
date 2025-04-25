@@ -42,7 +42,10 @@ public class Sphere extends RadicalGeometry {
     @Override
     public List<Point> findIntersections(Ray ray) {
 
-        if (  ray.getPoint(0).equals(center)) {
+        // Creates a 90 degree triangle with vector from head to center
+        // and from direction, then calculates the last edge using dor product
+        // If this is greater than r then not inside, if it is less than r, it is inside
+        if (ray.getPoint(0).equals(center)) {
             return List.of(ray.getPoint(radius));
         }
 

@@ -34,6 +34,7 @@ public class Ray {
     /**
      * Gets the t times the vector + the head of ray
      *
+     * @param t the variable to multiply the direction vector with
      * @return t times the vector + the head of ray
      */
     public Point getPoint(double t) {

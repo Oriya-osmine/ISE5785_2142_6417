@@ -4,11 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the Ray class.
+ */
 class RayTests {
 
     /**
      * Test method for {@link primitives.Ray#getPoint(double)}.
-     * 
      */
     @Test
     void testGetPoint() {

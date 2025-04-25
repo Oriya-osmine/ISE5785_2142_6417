@@ -29,8 +29,27 @@ public class Triangle extends Polygon {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        // Uses Möller–Trumbore algorithm and Cramer's rule
+        // Uses Möller–Trumbore algorithm and Cramer’s rule
         // https://cadxfem.org/inf/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
+        // H + t * D = (1 - u - v)*p0 + u*p1 + v*p2
+        // ⇔ -D * t + (p1 - p0) * u + (p2 - p0) * v = H - p0
+        // This gives three equations in the unknowns (t, u, v), one per x,y,z component.
+        // We write it in matrix form A·X = B, where:
+        //
+        //   [ -D.x,  (p1-p0).x,  (p2-p0).x ]   [ t ]   [ H.x - p0.x ]
+        //   [ -D.y,  (p1-p0).y,  (p2-p0).y ] · [ u ] = [ H.y - p0.y ]
+        //   [ -D.z,  (p1-p0).z,  (p2-p0).z ]   [ v ]   [ H.z - p0.z ]
+        //
+        // Let A be the 3×3 coefficient matrix, X = [t, u, v]^T, and B the RHS vector.
+        // Using Cramer’s Rule:
+        //
+        //   detA = det( A )
+        //
+        //   t = det( A_t ) / detA
+        //   u = det( A_u ) / detA
+        //   v = det( A_v ) / detA
+        //
+
         Point rayOrigin = ray.getPoint(0);
         Vector rayDirection = ray.getDirection();
 
