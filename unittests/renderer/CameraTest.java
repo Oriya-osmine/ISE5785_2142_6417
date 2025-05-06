@@ -6,12 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import primitives.*;
+import renderer.Camera;
 
 /**
  * Testing Camera Class
  * @author Dan
  */
-class CameraTests {
+class CameraTest {
    /** Camera builder for the tests */
    private final Camera.Builder cameraBuilder = Camera.getBuilder()
       .setLocation(Point.ZERO)
@@ -21,7 +22,7 @@ class CameraTests {
 
    /**
     * Test method for
-    * {@link renderer.Camera#constructRay(int, int, int, int)}.
+    * {@link Camera#constructRay(int, int, int, int)}.
     */
    @Test
    void testConstructRay() {
