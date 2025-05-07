@@ -16,8 +16,17 @@ import java.util.List;
  */
 public class CameraIntersectionsIntegrationTests {
 
+    /**
+     * For 3x3 matrix
+     */
     private static final int NX = 3;
+    /**
+     * For 3x3 matrix
+     */
     private static final int NY = 3;
+    /**
+     * Camera at 0,0,0 points to z -1 and has distance 1, used for testing
+     */
     private static final Camera camera0Zn1D1 = Camera.getBuilder().setLocation(new Point(0, 0, 0))
             .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
             .setVpSize(3, 3).setVpDistance(1.0).build();
