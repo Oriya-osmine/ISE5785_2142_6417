@@ -94,8 +94,8 @@ public class Camera {
         double rY = height / nY;
         double rX = width / nX;
 
-        double yI = -(i - (nY - 1) / 2.0) * rY;
-        double xJ = (j - (nX - 1) / 2.0) * rX;
+        double yI = -(i - (nY - 1) * 0.5) * rY;
+        double xJ = (j - (nX - 1) * 0.5) * rX;
 
         Point pij = pc;
         if (!isZero(xJ)) pij = pij.add(vRight.scale(xJ));
@@ -149,8 +149,7 @@ public class Camera {
         public Builder setDirection(Point target) {
             Vector dir = target.subtract(camera.p0).normalize();
             camera.vTo = dir;
-            Vector worldUp = new Vector(0, 1, 0);
-            camera.vRight = dir.crossProduct(worldUp).normalize();
+            camera.vRight = dir.crossProduct(new Vector(0, 1, 0)).normalize();
             camera.vUp = camera.vRight.crossProduct(dir).normalize();
             return this;
         }
