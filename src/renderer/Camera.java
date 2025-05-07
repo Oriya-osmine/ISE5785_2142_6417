@@ -3,7 +3,9 @@ package renderer;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
 import java.util.MissingResourceException;
+
 import static primitives.Util.isZero;
 
 /**
@@ -19,11 +21,11 @@ public class Camera {
      */
     private Vector vTo;
     /**
-     *  90 degrees Up from p0
+     * 90 degrees Up from p0
      */
     private Vector vUp;
     /**
-     *  90 degrees Right to p0
+     * 90 degrees Right to p0
      */
     private Vector vRight;
     /**
@@ -45,34 +47,70 @@ public class Camera {
     private Camera() {
     }
 
-    public Point getP0(){
+    public static Builder getBuilder() {
+        return new Builder();
+    }
+
+    public Point getP0() {
         return p0;
     }
+
     public Vector getvTo() {
         return vTo;
     }
+
     public Vector getvUp() {
         return vUp;
     }
+
     public Vector getvRight() {
         return vRight;
     }
+
     public double getWidth() {
         return width;
     }
+
     public double getHeight() {
         return height;
     }
+
     public double getDistance() {
         return distance;
     }
 
+    /**
+     * Constructs the ray of view plane
+     *
+     * @param nX the x of view plane
+     * @param nY the y of view plane
+     * @param j  the
+     * @param i
+     * @return
+     */
+    public Ray constructRay(int nX, int nY, int j, int i) {
+        Point pc = p0.add(vTo.scale(distance));
 
-    public static class Builder{
+        double rY = height / nY;
+        double rX = width / nX;
+
+        double yI = -(i - (nY - 1) / 2.0) * rY;
+        double xJ = (j - (nX - 1) / 2.0) * rX;
+
+        Point pij = pc;
+        if (!isZero(xJ)) pij = pij.add(vRight.scale(xJ));
+        if (!isZero(yI)) pij = pij.add(vUp.scale(yI));
+
+        Vector dir = pij.subtract(p0);
+        return new Ray(p0, dir);
+    }
+
+    public static class Builder {
         /**
          * The camera
          */
         final private Camera camera = new Camera();
+
         /**
          * @param p the location to set for the camera.
          * @return the Builder instance.
@@ -81,6 +119,7 @@ public class Camera {
             camera.p0 = p;
             return this;
         }
+
         /**
          * @param vUp the "up" vector to set for the camera.
          * @param vTo the "to" vector to set for the camera.
@@ -92,9 +131,10 @@ public class Camera {
                 throw new IllegalArgumentException("the vectors vTo and vUp are not perpendicular");
             camera.vUp = vUp.normalize();
             camera.vTo = vTo.normalize();
-            camera.vRight=(vTo.crossProduct(vUp)).normalize();
+            camera.vRight = (vTo.crossProduct(vUp)).normalize();
             return this;
         }
+
         public Builder setDirection(Point target) {
             Vector dir = target.subtract(camera.p0).normalize();
             camera.vTo = dir;
@@ -104,47 +144,52 @@ public class Camera {
                 worldUp = new Vector(0, 0, 1);
             }
             camera.vRight = dir.crossProduct(worldUp).normalize();
-            camera.vUp    = camera.vRight.crossProduct(dir).normalize();
-            return this;
-        }
-        public Builder setDirection(Point target, Vector up) {
-            Vector dir = target.subtract(camera.p0).normalize();
-            if (!isZero(up.dotProduct(dir)))
-                throw new IllegalArgumentException("the vectors vTo and vUp are not perpendicular");
-            camera.vTo    = dir;
-            camera.vUp    = up.normalize();
-            camera.vRight = dir.crossProduct(camera.vUp).normalize();
+            camera.vUp = camera.vRight.crossProduct(dir).normalize();
             return this;
         }
 
-        public  Builder setVpSize(double width,double height )throws IllegalArgumentException{
-            if (width <=0 || height <=0)
-                throw new IllegalArgumentException("the width and height can't be zero or less");
-            camera.width=width;
-            camera.height=height;
+        public Builder setDirection(Point target, Vector up) {
+            Vector dir = target.subtract(camera.p0).normalize(); // vTo
+            Vector vRight = dir.crossProduct(up).normalize();    // vTo × up
+            Vector vUp = vRight.crossProduct(dir).normalize();   // vRight × vTo
+            camera.vTo = dir;
+            camera.vRight = vRight;
+            camera.vUp = vUp;
             return this;
         }
+
+
+        public Builder setVpSize(double width, double height) throws IllegalArgumentException {
+            if (width <= 0 || height <= 0)
+                throw new IllegalArgumentException("the width and height can't be zero or less");
+            camera.width = width;
+            camera.height = height;
+            return this;
+        }
+
         public Builder setVpDistance(double distance) {
             if (distance <= 0)
                 throw new IllegalArgumentException("Distance must be greater than zero");
             camera.distance = distance;
             return this;
         }
+
         public Builder setResolution(int nX, int nY) {
             if (nX <= 0 || nY <= 0)
                 throw new IllegalArgumentException("Resolution must be positive");
             return this;
         }
+
         public Camera build() {
             final String MSG = "Missing rendering parameter";
             final String CLASS = Camera.class.getName();
 
-            if (camera.p0       == null) throw new MissingResourceException(MSG, CLASS, "p0");
-            if (camera.vTo      == null) throw new MissingResourceException(MSG, CLASS, "vTo");
-            if (camera.vUp      == null) throw new MissingResourceException(MSG, CLASS, "vUp");
-            if (camera.width    <= 0)    throw new MissingResourceException(MSG, CLASS, "width");
-            if (camera.height   <= 0)    throw new MissingResourceException(MSG, CLASS, "height");
-            if (camera.distance <= 0)    throw new MissingResourceException(MSG, CLASS, "distance");
+            if (camera.p0 == null) throw new MissingResourceException(MSG, CLASS, "p0");
+            if (camera.vTo == null) throw new MissingResourceException(MSG, CLASS, "vTo");
+            if (camera.vUp == null) throw new MissingResourceException(MSG, CLASS, "vUp");
+            if (camera.width <= 0) throw new MissingResourceException(MSG, CLASS, "width");
+            if (camera.height <= 0) throw new MissingResourceException(MSG, CLASS, "height");
+            if (camera.distance <= 0) throw new MissingResourceException(MSG, CLASS, "distance");
 
             if (camera.vRight == null) {
                 camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
@@ -154,42 +199,17 @@ public class Camera {
                 return (Camera) camera.clone();
             } catch (CloneNotSupportedException e) {
                 Camera c = new Camera();
-                c.p0 = camera.p0; c.vTo = camera.vTo; c.vUp = camera.vUp; c.vRight = camera.vRight;
-                c.width = camera.width; c.height = camera.height; c.distance = camera.distance;
+                c.p0 = camera.p0;
+                c.vTo = camera.vTo;
+                c.vUp = camera.vUp;
+                c.vRight = camera.vRight;
+                c.width = camera.width;
+                c.height = camera.height;
+                c.distance = camera.distance;
                 return c;
             }
         }
 
-    }
-    public static Builder getBuilder(){
-        return new Builder();
-    }
-    /**
-     * Constructs the ray of view plane
-     * @param nX the x of view plane
-     * @param nY the y of view plane
-     * @param j the
-     * @param i
-     * @return
-     */
-    public Ray constructRay(int nX, int nY, int j, int i){
-        Point pc = p0.add(vTo.scale(distance));
-
-        double rY = height / nY;
-        double rX = width / nX;
-
-        double yI = -(i - (nY - 1) / 2.0) * rY;
-        double xJ =  (j - (nX - 1) / 2.0) * rX;
-
-        Vector deltaX = vRight.scale(xJ);
-        Vector deltaY = vUp.scale(yI);
-
-        Point pij = pc;
-        if (!isZero(xJ)) pij = pij.add(deltaX);
-        if (!isZero(yI)) pij = pij.add(deltaY);
-
-        Vector dir = pij.subtract(p0);
-        return new Ray(p0, dir);
     }
 
 }
