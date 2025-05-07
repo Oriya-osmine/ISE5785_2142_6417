@@ -84,9 +84,9 @@ public class Camera {
      *
      * @param nX the x of view plane
      * @param nY the y of view plane
-     * @param j  the
-     * @param i
-     * @return
+     * @param j  the matrix column
+     * @param i  the matrix row
+     * @return the constructed ray
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
         Point pc = p0.add(vTo.scale(distance));
@@ -105,6 +105,9 @@ public class Camera {
         return new Ray(p0, dir);
     }
 
+    /**
+     * Builds the Camera
+     */
     public static class Builder {
         /**
          * The camera
@@ -121,6 +124,8 @@ public class Camera {
         }
 
         /**
+         * Sets the camera direction based on vector up and to
+         *
          * @param vUp the "up" vector to set for the camera.
          * @param vTo the "to" vector to set for the camera.
          * @return the Builder instance.
@@ -135,6 +140,12 @@ public class Camera {
             return this;
         }
 
+        /**
+         * Sets the camera direction based on a target point
+         *
+         * @param target the point to target
+         * @return the Builder instance.
+         */
         public Builder setDirection(Point target) {
             Vector dir = target.subtract(camera.p0).normalize();
             camera.vTo = dir;
@@ -144,6 +155,13 @@ public class Camera {
             return this;
         }
 
+        /**
+         * Sets the camera direction based on a target point and an up vector
+         *
+         * @param target the point to target
+         * @param up     the up vector
+         * @return the Builder instance.
+         */
         public Builder setDirection(Point target, Vector up) {
             Vector dir = target.subtract(camera.p0).normalize(); // vTo
             Vector vRight = dir.crossProduct(up).normalize();    // vTo × up
@@ -154,7 +172,14 @@ public class Camera {
             return this;
         }
 
-
+        /**
+         * Sets the height and width of the matrix
+         *
+         * @param width  the width
+         * @param height the height
+         * @return the Builder instance.
+         * @throws IllegalArgumentException if one of them is less than 0
+         */
         public Builder setVpSize(double width, double height) throws IllegalArgumentException {
             if (width <= 0 || height <= 0)
                 throw new IllegalArgumentException("the width and height can't be zero or less");
@@ -163,6 +188,13 @@ public class Camera {
             return this;
         }
 
+        /**
+         * Sets the distance between the camera and the matrix
+         *
+         * @param distance the distance
+         * @return the Builder instance.
+         * @throws IllegalArgumentException if distance is lss than 0
+         */
         public Builder setVpDistance(double distance) {
             if (distance <= 0)
                 throw new IllegalArgumentException("Distance must be greater than zero");
@@ -170,12 +202,26 @@ public class Camera {
             return this;
         }
 
+        /**
+         * Sets the resolution of the camera
+         *
+         * @param nX the X axis
+         * @param nY the Y axis
+         * @return the Builder instance.
+         * @throws IllegalArgumentException if one of them is less than 0
+         */
         public Builder setResolution(int nX, int nY) {
             if (nX <= 0 || nY <= 0)
                 throw new IllegalArgumentException("Resolution must be positive");
             return this;
         }
 
+        /**
+         * Builds the camera
+         *
+         * @return the built camera
+         * @throws MissingResourceException if one of the camera values are invalid
+         */
         public Camera build() {
             final String MSG = "Missing rendering parameter";
             final String CLASS = Camera.class.getName();
