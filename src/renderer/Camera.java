@@ -139,10 +139,6 @@ public class Camera {
             Vector dir = target.subtract(camera.p0).normalize();
             camera.vTo = dir;
             Vector worldUp = new Vector(0, 1, 0);
-
-            if (isZero(Math.abs(dir.dotProduct(worldUp)) - 1)) {
-                worldUp = new Vector(0, 0, 1);
-            }
             camera.vRight = dir.crossProduct(worldUp).normalize();
             camera.vUp = camera.vRight.crossProduct(dir).normalize();
             return this;
