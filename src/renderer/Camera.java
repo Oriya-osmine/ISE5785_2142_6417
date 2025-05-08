@@ -11,7 +11,7 @@ import static primitives.Util.isZero;
 /**
  * Represents a camera in a 3d space
  */
-public class Camera {
+public class Camera implements Cloneable {
     /**
      * The camera point
      */
@@ -119,6 +119,7 @@ public class Camera {
          * @return the Builder instance.
          */
         public Builder setLocation(Point p) {
+            if (p==null) throw new IllegalArgumentException("location cannot be null");
             camera.p0 = p;
             return this;
         }
