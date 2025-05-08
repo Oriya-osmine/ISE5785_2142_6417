@@ -47,36 +47,13 @@ public class Camera implements Cloneable {
     private Camera() {
     }
 
+    /**
+     * Creates a new camera builder instance
+     *
+     * @return new builder fo camera
+     */
     public static Builder getBuilder() {
         return new Builder();
-    }
-
-    public Point getP0() {
-        return p0;
-    }
-
-    public Vector getvTo() {
-        return vTo;
-    }
-
-    public Vector getvUp() {
-        return vUp;
-    }
-
-    public Vector getvRight() {
-        return vRight;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public double getDistance() {
-        return distance;
     }
 
     /**
@@ -115,11 +92,13 @@ public class Camera implements Cloneable {
         final private Camera camera = new Camera();
 
         /**
+         * Sets the camera location
+         *
          * @param p the location to set for the camera.
          * @return the Builder instance.
          */
         public Builder setLocation(Point p) {
-            if (p==null) throw new IllegalArgumentException("location cannot be null");
+            if (p == null) throw new IllegalArgumentException("location cannot be null");
             camera.p0 = p;
             return this;
         }

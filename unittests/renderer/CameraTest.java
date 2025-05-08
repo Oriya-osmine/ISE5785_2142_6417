@@ -67,6 +67,9 @@ class CameraTest {
 
     }
 
+    /**
+     * Test the builder of camera
+     */
     @Test
     void testBuilder() {
         cameraBuilder.setVpSize(4, 4).setResolution(2, 2);
