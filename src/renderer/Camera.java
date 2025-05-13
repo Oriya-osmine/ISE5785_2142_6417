@@ -40,6 +40,7 @@ public class Camera implements Cloneable {
      * Distance of the view plane from p0
      */
     private double distance;
+    private Point VP_Center;
 
     /**
      * Private constructor to avoid accidental construction.
@@ -66,7 +67,7 @@ public class Camera implements Cloneable {
      * @return the constructed ray
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
-        Point pc = p0.add(vTo.scale(distance));
+        Point pc = this.VP_Center;
 
         double rY = height / nY;
         double rX = width / nX;
@@ -217,6 +218,7 @@ public class Camera implements Cloneable {
             }
 
             try {
+                camera.VP_Center = camera.p0.add(camera.vTo.scale(camera.distance));
                 return (Camera) camera.clone();
             } catch (CloneNotSupportedException e) {
                 Camera c = new Camera();
