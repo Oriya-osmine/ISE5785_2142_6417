@@ -27,8 +27,13 @@ import primitives.Vector;
  * Class to parse xml file into a scene
  */
 public class XMLParser {
-
-    public static Scene SceneConstructor(String filePath, Scene scene) {
+    /**
+     * Constructs a scene using xml
+     *
+     * @param filePath the path to xml
+     * @param scene    the scene
+     */
+    public static void SceneConstructor(String filePath, Scene scene) {
 
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -133,8 +138,6 @@ public class XMLParser {
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
-
-        return scene;
     }
 
     /**
