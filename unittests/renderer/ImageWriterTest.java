@@ -1,14 +1,24 @@
 package renderer;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
 import primitives.*;
 import renderer.Camera;
 import renderer.ImageWriter;
 import primitives.Color;
+
+import java.util.List;
+
+/**
+ * Tests for {@link renderer.ImageWriter}
+ */
 public class ImageWriterTest {
 
+    /**
+     * Test method for {@link renderer.ImageWriter} building and writing an image.
+     */
     @Test
     void testImageWriter() {
         //TC01:

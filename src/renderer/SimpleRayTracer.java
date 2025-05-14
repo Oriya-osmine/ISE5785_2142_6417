@@ -7,9 +7,16 @@ import scene.Scene;
 
 import java.util.List;
 
-public class SimpleRayTracer extends RayTracerBase{
-
-    public SimpleRayTracer(Scene scene){
+/**
+ * Represents a simple ray tracer
+ */
+public class SimpleRayTracer extends RayTracerBase {
+    /**
+     * Constructor, uses super
+     *
+     * @param scene the scene to use
+     */
+    public SimpleRayTracer(Scene scene) {
         super(scene);
     }
 
@@ -22,7 +29,14 @@ public class SimpleRayTracer extends RayTracerBase{
         Point closestPoint = ray.findClosetPoint(intersections);
         return calcColor(closestPoint);
     }
-    private Color calcColor (Point point){
+
+    /**
+     * Gets the AmbientLight color intensity
+     *
+     * @param point the point to use
+     * @return the AmbientLight color intensity
+     */
+    private Color calcColor(Point point) {
         return scene.ambientlight.getIntensity();
     }
 }
