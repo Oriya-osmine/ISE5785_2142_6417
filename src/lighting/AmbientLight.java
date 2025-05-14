@@ -4,21 +4,21 @@ import primitives.Color;
 /**
  * Represents ambient light in a scene.
  */
-public class Ambientlight {
+public class AmbientLight {
 
     /** The intensity of the ambient light. */
     private final Color intenstiy;
 
     /** A constant representing no ambient light. */
-    static public Ambientlight NONE = new Ambientlight(Color.BLACK);
+    static public AmbientLight NONE = new AmbientLight(Color.BLACK);
 
     /**
-     * Constructs an Ambientlight with the specified color intensity.
+     * Constructs an AmbientLight with the specified color intensity.
      *
      * @param myColor the color intensity of the ambient light
      */
-    public Ambientlight(Color myColor) {
-        intenstiy = myColor;
+    public AmbientLight(Color myColor) {
+       this.intenstiy = myColor;
     }
 
     /**

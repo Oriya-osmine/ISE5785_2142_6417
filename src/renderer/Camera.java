@@ -1,9 +1,10 @@
 package renderer;
 
+import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
-
+import scene.Scene;
 import java.util.MissingResourceException;
 
 import static primitives.Util.isZero;
@@ -40,8 +41,31 @@ public class Camera implements Cloneable {
      * Distance of the view plane from p0
      */
     private double distance;
+
+    /**
+     * The center point of the view plane.
+     */
     private Point VP_Center;
 
+    /**
+     * The image writer used for rendering the image.
+     */
+    private ImageWriter imageWriter;
+
+    /**
+     * The ray tracer used for tracing rays in the scene.
+     */
+    private RayTracerBase rayTracer;
+
+    /**
+     * The horizontal resolution of the view plane (number of pixels in the X direction).
+     */
+    private int nX = 1;
+
+    /**
+     * The vertical resolution of the view plane (number of pixels in the Y direction).
+     */
+    private int nY = 1;
     /**
      * Private constructor to avoid accidental construction.
      */
@@ -81,6 +105,46 @@ public class Camera implements Cloneable {
 
         Vector dir = pij.subtract(p0);
         return new Ray(p0, dir);
+    }
+    private void castRay(int nX,int nY,int column,int row){
+        Color color = rayTracer.traceRay(constructRay(nX, nY, column, row));
+        imageWriter.writePixel(column, row, color);
+
+    }
+
+    public Camera renderImage(){
+        for (int x = 0; x < this.nX; x++) {
+            for (int y = 0; y < this.nY; y++) {
+                castRay(this.nX,this.nY,x,y);
+            }
+        }
+        return this;
+    }
+/**
+     * Prints a grid on the image with the specified color and interval.
+     *
+     * @param color    the color of the grid lines
+     * @param interval the interval between grid lines
+     * @return the Camera instance
+     */
+    public Camera printGrid( int interval,Color color) {
+        if (color == null || interval <= 0) {
+            throw new IllegalArgumentException("Color cannot be null and interval must be greater than 0");
+        }
+
+        for (int i = 0; i < nY; i++) {
+            for (int j = 0; j < nX; j++) {
+                if (i % interval == 0 || j % interval == 0) {
+                    imageWriter.writePixel(j, i, color);
+                }
+            }
+        }
+        return this;
+    }
+
+    public Camera writeToImage(String name){
+        this.imageWriter.writeToImage(name);
+        return this;
     }
 
     /**
@@ -193,8 +257,27 @@ public class Camera implements Cloneable {
         public Builder setResolution(int nX, int nY) {
             if (nX <= 0 || nY <= 0)
                 throw new IllegalArgumentException("Resolution must be positive");
+            camera.nX=nX;
+            camera.nY=nY;
             return this;
         }
+        /**
+         * Sets the ray tracer for the camera
+         *
+         * @param scene the scene to be rendered
+         * @param type  the type of ray tracer to use
+         * @return the Builder instance.
+         */
+        public Builder setRayTracer (Scene scene,RayTracerType type){
+            if (type== RayTracerType.SIMPLE){
+            camera.rayTracer=new SimpleRayTracer(scene);
+            }
+            else {
+                camera.rayTracer = null;
+            }
+            return this;
+        }
+
 
         /**
          * Builds the camera
@@ -215,6 +298,10 @@ public class Camera implements Cloneable {
 
             if (camera.vRight == null) {
                 camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
+            }
+            camera.imageWriter=new ImageWriter(camera.nX,camera.nY);
+            if (camera.rayTracer==null){
+                camera.rayTracer= new SimpleRayTracer(null);
             }
 
             try {

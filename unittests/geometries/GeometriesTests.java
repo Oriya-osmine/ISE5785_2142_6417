@@ -27,7 +27,7 @@ class GeometriesTests {
      */
     @Test
     void testFindIntersections() {
-        Sphere sphere = new Sphere(1, new Point(0, 0, 3));
+        Sphere sphere = new Sphere( new Point(0, 0, 3),1);
         Plane plane = new Plane(new Point(0, 0, 5), new Vector(0, 0, 1));
         Triangle triangle = new Triangle(
                 new Point(-1, -1, 3),

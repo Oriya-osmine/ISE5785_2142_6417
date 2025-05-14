@@ -26,7 +26,7 @@ public class Sphere extends RadicalGeometry {
      * @param center The center of the sphere in 3D space.
      * @throws IllegalArgumentException if the radius is zero or negative.
      */
-    public Sphere(double radius, Point center) {
+    public Sphere(Point center,double radius) {
         super(radius);
         this.center = center;
     }

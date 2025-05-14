@@ -1,15 +1,15 @@
 package scene;
 import primitives.Color;
-import lighting.Ambientlight;
+import lighting.AmbientLight;
 import geometries.Geometries;
 public class Scene {
     public String name;
     public Color background;
-    public Ambientlight ambientlight =Ambientlight.NONE;
+    public AmbientLight ambientlight =AmbientLight.NONE;
     public Geometries geometries = new Geometries();
 
     public Scene(String nameScene){
-        name=nameScene;
+        this.name=nameScene;
     }
 
     public Scene setName(String name) {
@@ -23,7 +23,7 @@ public class Scene {
 
     }
 
-    public Scene setAmbientlight(Ambientlight ambientlight) {
+    public Scene setAmbientLight(AmbientLight ambientlight) {
         this.ambientlight = ambientlight;
         return this;
 

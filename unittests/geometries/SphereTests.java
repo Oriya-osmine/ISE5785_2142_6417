@@ -17,7 +17,7 @@ class SphereTests {
     /**
      * Sphere with origin at (0, 1, 0) and radius of 1
      */
-    final Sphere sphere10 = new Sphere(1.0, new Point(0, 1, 0)); // Sphere centered at origin with radius 1
+    final Sphere sphere10 = new Sphere(new Point(0, 1, 0),1.0); // Sphere centered at origin with radius 1
 
     /**
      * Test method for {@link geometries.Sphere#getNormal(primitives.Point)}.
@@ -28,7 +28,7 @@ class SphereTests {
     void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
         // TC01 get normal vector
-        Sphere sphere10 = new Sphere(1, new Point(0, 0, 0));
+        Sphere sphere10 = new Sphere( new Point(0, 0, 0),1);
         assertEquals(new Vector(1, 0, 0), sphere10.getNormal(new Point(1, 0, 0)));
     }
 
