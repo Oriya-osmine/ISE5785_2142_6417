@@ -1,5 +1,6 @@
 package scene;
 
+import Parser.XMLParser;
 import primitives.Color;
 import lighting.AmbientLight;
 import geometries.Geometries;
@@ -31,7 +32,12 @@ public class Scene {
      * @param nameScene name of the scene
      */
     public Scene(String nameScene) {
-        this.name = nameScene;
+        if (nameScene.endsWith(".xml")) {
+            this.name = nameScene.substring(0, nameScene.length() - 4); // Remove ".xml"
+            XMLParser.SceneConstructor(nameScene, this);
+        } else {
+            this.name = nameScene;
+        }
     }
 
     /**
@@ -67,6 +73,5 @@ public class Scene {
     public Scene setGeometries(Geometries geometries) {
         this.geometries = geometries;
         return this;
-
     }
 }
