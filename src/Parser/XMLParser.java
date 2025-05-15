@@ -129,6 +129,9 @@ public class XMLParser {
                                     geometries.add(new Polygon(polygonVerticesList.toArray(new Point[0])));
                                 }
                                 break;
+                            case "cylinder":
+                            case "tube":
+                                throw new IllegalArgumentException("Not supported");
                         }
                     }
                 }
