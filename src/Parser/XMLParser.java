@@ -85,6 +85,8 @@ public class XMLParser {
                                     Point center = parsePoint(centerStr);
                                     double radius = Double.parseDouble(radiusStr);
                                     geometries.add(new Sphere(center, radius));
+                                } else {
+                                    throw new IllegalArgumentException("Cannot find center or radius for sphere");
                                 }
                                 break;
                             case "triangle":
@@ -96,6 +98,8 @@ public class XMLParser {
                                     Point p1 = parsePoint(p1Str);
                                     Point p2 = parsePoint(p2Str);
                                     geometries.add(new Triangle(p0, p1, p2));
+                                } else {
+                                    throw new IllegalArgumentException("Cannot find all points for triangle");
                                 }
                                 break;
                             case "plane":
@@ -113,8 +117,12 @@ public class XMLParser {
                                             Point p1 = parsePoint(p1StrPlane);
                                             Point p2 = parsePoint(p2StrPlane);
                                             geometries.add(new Plane(p0, p1, p2));
+                                        } else {
+                                            throw new IllegalArgumentException("Cannot find all points for plane or normal is empty");
                                         }
                                     }
+                                } else {
+                                    throw new IllegalArgumentException("Cannot find p0 for plane");
                                 }
                                 break;
                             case "polygon":
