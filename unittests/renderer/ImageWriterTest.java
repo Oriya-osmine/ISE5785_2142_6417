@@ -1,15 +1,10 @@
 package renderer;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import primitives.*;
-import renderer.Camera;
-import renderer.ImageWriter;
 import primitives.Color;
 
-import java.util.List;
 
 /**
  * Tests for {@link renderer.ImageWriter}
@@ -21,10 +16,10 @@ public class ImageWriterTest {
      */
     @Test
     void testImageWriter() {
-        //TC01:
+        // TC01: create an image
         ImageWriter imageWriter = new ImageWriter(800, 500);
 
-        Color backgroundColor = new Color(0, 0, 0);//black
+        Color backgroundColor = new Color(15, 155, 78);//black
         Color gridColor = new Color(255, 255, 255);//white
 
         int gridRows = 10;

@@ -1,5 +1,7 @@
 package primitives;
+
 import java.util.List;
+
 import static primitives.Util.*;
 
 /**
@@ -7,8 +9,6 @@ import static primitives.Util.*;
  * The direction vector is always normalized to ensure consistent mathematical operations.
  */
 public class Ray {
-
-
     /**
      * The starting point of the ray, representing its origin in 3D space.
      */
@@ -65,28 +65,26 @@ public class Ray {
         return "Ray head: " + head + "\nRay direction: " + direction;
     }
 
-
-
     /**
      * Finds the closest point to the ray's head from a given list of points.
      *
      * @param pointList the list of points to search for the closest point
      * @return the closest point to the ray's head, or null if the list is null
      */
-    public Point findClosetPoint(List<Point> pointList){
-        double minDistance,nowDistance;
-        int index=0;
-        if (pointList==null) {
+    public Point findClosetPoint(List<Point> pointList) {
+        double minDistance, nowDistance;
+        int index = 0;
+        if (pointList == null) {
             return null;
         }
 
-        minDistance =this.head.distance(pointList.get(0));
+        minDistance = this.head.distance(pointList.getFirst());
 
-        for (int i=1;i<pointList.size();i++){
-            nowDistance=this.head.distance(pointList.get(i));
-            if (minDistance>nowDistance) {
+        for (int i = 1; i < pointList.size(); i++) {
+            nowDistance = this.head.distance(pointList.get(i));
+            if (minDistance > nowDistance) {
                 minDistance = nowDistance;
-                index=i;
+                index = i;
             }
         }
         return pointList.get(index);
