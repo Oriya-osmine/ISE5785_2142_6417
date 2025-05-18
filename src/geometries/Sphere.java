@@ -26,7 +26,7 @@ public class Sphere extends RadicalGeometry {
      * @param center The center of the sphere in 3D space.
      * @throws IllegalArgumentException if the radius is zero or negative.
      */
-    public Sphere(Point center,double radius) {
+    public Sphere(Point center, double radius) {
         super(radius);
         this.center = center;
     }
@@ -40,13 +40,13 @@ public class Sphere extends RadicalGeometry {
 
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
 
         // Creates a 90 degree triangle with vector from head to center
         // and from direction, then calculates the last edge using dor product
         // If this is greater than r then not inside, if it is less than r, it is inside
         if (ray.getPoint(0).equals(center)) {
-            return List.of(ray.getPoint(radius));
+            return List.of(new Intersection(this, ray.getPoint(radius)));
         }
 
         Vector u = center.subtract(ray.getPoint(0));
@@ -60,7 +60,7 @@ public class Sphere extends RadicalGeometry {
                 double th = Math.sqrt(radius * radius - d * d);
                 double t = alignZero(th);
                 if (t > 0)
-                    return List.of(ray.getPoint(t));
+                    return List.of(new Intersection(this, ray.getPoint(t)));
             }
             //case1: the ray not in the sphere
             //case2:the head near or on the end of sphere
@@ -77,11 +77,11 @@ public class Sphere extends RadicalGeometry {
         double t2 = alignZero(tm - th);
 
         if (t1 > 0 && t2 > 0)
-            return List.of(ray.getPoint(t1), ray.getPoint(t2));
+            return List.of(new Intersection(this, ray.getPoint(t1)), new Intersection(this, ray.getPoint(t2)));
         else if (t1 > 0)
-            return List.of(ray.getPoint(t1));
+            return List.of(new Intersection(this, ray.getPoint(t1)));
         else if (t2 > 0)
-            return List.of(ray.getPoint(t2));
+            return List.of(new Intersection(this, ray.getPoint(t2)));
         else
             return null;
 

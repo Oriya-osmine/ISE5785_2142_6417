@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Represents a collection of shapes in 3D space
  */
-public class Geometries implements Intersectable {
+public class Geometries extends Intersectable {
     /**
      * list of shapes in 3D space
      */
@@ -42,11 +42,11 @@ public class Geometries implements Intersectable {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        List<Point> intersections = null;
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
+        List<Intersection> intersections = null;
 
         for (Intersectable geometry : geometries) {
-            List<Point> geometryIntersections = geometry.findIntersections(ray);
+            List<Intersection> geometryIntersections = geometry.calculateIntersectionsHelper(ray);
             if (geometryIntersections != null) {
                 if (intersections == null)
                     intersections = new LinkedList<>();

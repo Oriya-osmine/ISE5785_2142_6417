@@ -1,5 +1,7 @@
 package primitives;
 
+import geometries.Intersectable.Intersection;
+
 import java.util.List;
 
 import static primitives.Util.*;
@@ -68,25 +70,30 @@ public class Ray {
     /**
      * Finds the closest point to the ray's head from a given list of points.
      *
-     * @param pointList the list of points to search for the closest point
+     * @param IntersectionList the list of intersections to search for the closest point
      * @return the closest point to the ray's head, or null if the list is null
      */
-    public Point findClosetPoint(List<Point> pointList) {
+    public Intersection findClosestIntersection(List<Intersection> IntersectionList) {
         double minDistance, nowDistance;
         int index = 0;
-        if (pointList == null) {
+        if (IntersectionList == null) {
             return null;
         }
 
-        minDistance = this.head.distance(pointList.getFirst());
+        minDistance = this.head.distance(IntersectionList.getFirst().point);
 
-        for (int i = 1; i < pointList.size(); i++) {
-            nowDistance = this.head.distance(pointList.get(i));
+        for (int i = 1; i < IntersectionList.size(); i++) {
+            nowDistance = this.head.distance(IntersectionList.get(i).point);
             if (minDistance > nowDistance) {
                 minDistance = nowDistance;
                 index = i;
             }
         }
-        return pointList.get(index);
+        return IntersectionList.get(index);
+    }
+
+    public Point findClosetPoint(List<Point> points) {
+        return points == null ? null
+                : findClosestIntersection(points.stream().map(p -> new Intersection(null, p)).toList()).point;
     }
 }

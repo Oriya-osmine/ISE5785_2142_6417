@@ -1,12 +1,12 @@
 package renderer;
 
 import static java.awt.Color.*;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import geometries.*;
+import geometries.Sphere;
+import geometries.Triangle;
 import lighting.AmbientLight;
 import primitives.*;
 import scene.Scene;
@@ -16,7 +16,7 @@ import scene.Scene;
  *
  * @author Dan
  */
-public class RenderTests {
+class RenderTests {
     /**
      * Camera builder of the tests
      */
@@ -28,14 +28,14 @@ public class RenderTests {
     /**
      * Default constructor to satisfy JavaDoc generator
      */
-    public RenderTests() { /* to satisfy JavaDoc generator */ }
+    RenderTests() { /* to satisfy JavaDoc generator */ }
 
     /**
      * Produce a scene with basic 3D model and render it into a png image with a
      * grid
      */
     @Test
-    public void renderTwoColorTest() {
+    void renderTwoColorTest() {
         Scene scene = new Scene("Two color").setBackground(new Color(75, 127, 90))
                 .setAmbientLight(new AmbientLight(new Color(255, 191, 191)));
         scene.geometries //
@@ -63,30 +63,30 @@ public class RenderTests {
      * Produce a scene with basic 3D model - including individual lights of the
      * bodies and render it into a png image with a grid
      */
-   /*@Test
-   public void renderMultiColorTest() {
-      Scene scene = new Scene("Multi color").setAmbientLight(new AmbientLight(new Color(51, 51, 51)));
-      scene.geometries //
-         .add(// center
-              new Sphere(new Point(0, 0, -100), 50),
-              // up left
-              new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)) //
-                 .setEmission(new Color(GREEN)),
-              // down left
-              new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100)) //
-                 .setEmission(new Color(RED)),
-              // down right
-              new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), new Point(100, -100, -100)) //
-                 .setEmission(new Color(BLUE)));
+    @Test
+    void renderMultiColorTest() {
+        Scene scene = new Scene("Multi color").setAmbientLight(new AmbientLight(new Color(51, 51, 51)));
+        scene.geometries //
+                .add(// center
+                        new Sphere(new Point(0, 0, -100), 50),
+                        // up left
+                        new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)) //
+                                .setEmission(new Color(GREEN)),
+                        // down left
+                        new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100)) //
+                                .setEmission(new Color(RED)),
+                        // down right
+                        new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), new Point(100, -100, -100)) //
+                                .setEmission(new Color(BLUE)));
 
-      camera //
-         .setRayTracer(scene, RayTracerType.SIMPLE) //
-         .setResolution(1000, 1000) //
-         .build() //
-         .renderImage() //
-         .printGrid(100, new Color(WHITE)) //
-         .writeToImage("color render test");
-   }*/
+        camera //
+                .setRayTracer(scene, RayTracerType.SIMPLE) //
+                .setResolution(1000, 1000) //
+                .build() //
+                .renderImage() //
+                .printGrid(100, new Color(WHITE)) //
+                .writeToImage("color render test");
+    }
 
     /**
      * Test method to check {@link scene.Scene#Scene(String)}
@@ -106,6 +106,4 @@ public class RenderTests {
         assertThrows(IllegalArgumentException.class, () -> new Scene("renderTestFail.xml"));
     }
 
-
 }
-

@@ -55,7 +55,7 @@ public class Plane extends Geometry {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
         // checks that it is not parallel and the head it not the plane head then
         // uses plane and ray equation to = between them
         double nv = normal.dotProduct(ray.getDirection());
@@ -65,7 +65,7 @@ public class Plane extends Geometry {
         //t=N*(Q-P0)/N*V
         double t = alignZero(normal.dotProduct(q.subtract(head)) / nv);
         if (t > 0) {
-            return List.of(ray.getPoint(t));
+            return List.of(new Intersection(this, ray.getPoint(t)));
         }
         return null;
     }
