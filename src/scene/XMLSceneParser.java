@@ -13,14 +13,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import primitives.Color;
+import primitives.*;
 import lighting.AmbientLight;
 import geometries.Geometries;
 import geometries.Sphere;
 import geometries.Triangle;
 import geometries.Polygon;
-import primitives.Point;
-import primitives.Vector;
 
 /**
  * Class to parse xml file into a scene
@@ -111,6 +109,25 @@ public class XMLSceneParser {
     }
 
     /**
+     * Parses a material
+     *
+     * @param materialStr the xml attribute in string to Parse to a material
+     * @return the material
+     */
+    private static Material parseMaterial(String materialStr) {
+        String[] material = materialStr.split(" ");
+        if (material.length == 1) {
+            return new Material().setDkA(Double.parseDouble(material[0]));
+        } else if (material.length == 3) {
+            double x = Double.parseDouble(material[0]);
+            double y = Double.parseDouble(material[1]);
+            double z = Double.parseDouble(material[2]);
+            return new Material().setD3kA(new Double3(x, y, z));
+        }
+        throw new IllegalArgumentException("Cannot parse vector: " + materialStr);
+    }
+
+    /**
      * Parses a point
      *
      * @param colorStr the xml attribute in string to Parse to a point
@@ -170,22 +187,30 @@ public class XMLSceneParser {
     private static Plane parsePlane(Element geometryElement) {
         String q0Str = geometryElement.getAttribute("p0");
         String normalStr = geometryElement.getAttribute("normal");
+        Plane plane;
         if (!q0Str.isEmpty()) {
             Point p0 = parsePoint(q0Str);
             if (!normalStr.isEmpty()) {
                 Vector normal = parseVector(normalStr);
-                return new Plane(p0, normal);
+                plane = new Plane(p0, normal);
             } else {
                 String p1StrPlane = geometryElement.getAttribute("p1");
                 String p2StrPlane = geometryElement.getAttribute("p2");
                 if (!p1StrPlane.isEmpty() && !p2StrPlane.isEmpty()) {
                     Point p1 = parsePoint(p1StrPlane);
                     Point p2 = parsePoint(p2StrPlane);
-                    return new Plane(p0, p1, p2);
+                    plane = new Plane(p0, p1, p2);
                 } else {
                     throw new IllegalArgumentException("Cannot find all points for plane or normal is empty: " + geometryElement);
                 }
             }
+            String materialStr = geometryElement.getAttribute("material");
+            if (!materialStr.isEmpty())
+                plane.setMaterial(parseMaterial(materialStr));
+            String emissionStr = geometryElement.getAttribute("emission");
+            if (!emissionStr.isEmpty())
+                plane.setEmission(parseColor(emissionStr));
+            return plane;
         } else {
             throw new IllegalArgumentException("Cannot find p0 for plane: " + geometryElement);
         }
@@ -203,7 +228,14 @@ public class XMLSceneParser {
         if (!centerStr.isEmpty() && !radiusStr.isEmpty()) {
             Point center = parsePoint(centerStr);
             double radius = Double.parseDouble(radiusStr);
-            return new Sphere(center, radius);
+            Sphere sphere = new Sphere(center, radius);
+            String materialStr = geometryElement.getAttribute("material");
+            if (!materialStr.isEmpty())
+                sphere.setMaterial(parseMaterial(materialStr));
+            String emissionStr = geometryElement.getAttribute("emission");
+            if (!emissionStr.isEmpty())
+                sphere.setEmission(parseColor(emissionStr));
+            return sphere;
         } else {
             throw new IllegalArgumentException("Cannot find center or radius for sphere: " + geometryElement);
         }
@@ -224,7 +256,14 @@ public class XMLSceneParser {
             polygonVerticesList.add(p);
         }
         if (!polygonVerticesList.isEmpty()) {
-            return new Polygon(polygonVerticesList.toArray(new Point[0]));
+            Polygon polygon = new Polygon(polygonVerticesList.toArray(new Point[0]));
+            String materialStr = geometryElement.getAttribute("material");
+            if (!materialStr.isEmpty())
+                polygon.setMaterial(parseMaterial(materialStr));
+            String emissionStr = geometryElement.getAttribute("emission");
+            if (!emissionStr.isEmpty())
+                polygon.setEmission(parseColor(emissionStr));
+            return polygon;
         }
         throw new IllegalArgumentException("Cannot construct an empty polygon: " + geometryElement);
     }
@@ -243,7 +282,14 @@ public class XMLSceneParser {
             Point p0 = parsePoint(p0Str);
             Point p1 = parsePoint(p1Str);
             Point p2 = parsePoint(p2Str);
-            return new Triangle(p0, p1, p2);
+            Triangle triangle = new Triangle(p0, p1, p2);
+            String materialStr = geometryElement.getAttribute("material");
+            if (!materialStr.isEmpty())
+                triangle.setMaterial(parseMaterial(materialStr));
+            String emissionStr = geometryElement.getAttribute("emission");
+            if (!emissionStr.isEmpty())
+                triangle.setEmission(parseColor(emissionStr));
+            return triangle;
         } else {
             throw new IllegalArgumentException("Cannot find all points for triangle: " + geometryElement);
         }
