@@ -12,7 +12,7 @@ public class SpotLight extends PointLight{
      *
      * @param intensity the intensity of the light
      */
-    protected SpotLight(Color intensity, Point position, Vector direction) {
+    public SpotLight(Color intensity, Point position, Vector direction) {
         super(intensity, position);
         this.direction = direction.normalize();
     }
@@ -28,20 +28,20 @@ public class SpotLight extends PointLight{
     }
 
     @Override
-    public PointLight setkC(double kC) {
-        super.setkC(kC);
+    public PointLight setKc(double kC) {
+        super.setKc(kC);
         return this;
     }
 
     @Override
-    public PointLight setkL(double kL) {
-        super.setkL(kL);
+    public PointLight setKl(double kL) {
+        super.setKl(kL);
         return this;
     }
 
     @Override
-    public PointLight setkQ(double kQ) {
-        super.setkQ(kQ);
+    public PointLight setKq(double kQ) {
+        super.setKq(kQ);
         return this;
     }
 }

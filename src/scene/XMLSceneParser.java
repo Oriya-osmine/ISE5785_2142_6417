@@ -117,12 +117,12 @@ public class XMLSceneParser {
     private static Material parseMaterial(String materialStr) {
         String[] material = materialStr.split(" ");
         if (material.length == 1) {
-            return new Material().setDkA(Double.parseDouble(material[0]));
+            return new Material().setKA(Double.parseDouble(material[0]));
         } else if (material.length == 3) {
             double x = Double.parseDouble(material[0]);
             double y = Double.parseDouble(material[1]);
             double z = Double.parseDouble(material[2]);
-            return new Material().setD3kA(new Double3(x, y, z));
+            return new Material().setKA(new Double3(x, y, z));
         }
         throw new IllegalArgumentException("Cannot parse vector: " + materialStr);
     }

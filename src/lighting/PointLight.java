@@ -11,24 +11,25 @@ public class PointLight extends Light implements LightSource{
      */
     protected Point position;
     /**
-     * The kC of the light
+     * How constant the light intensity remains over distance aka Constant attenuation coefficient
      */
     private double kC = 1;
     /**
-     * The kL of the light
+     * How the light intensity decreases linearly with distance aka Linear attenuation coefficient
      */
     private double kL = 0;
     /**
-     * The kQ of the light
+     * How the light intensity decreases quadratically with distance aka Quadratic attenuation coefficient
      */
-    private double kQ = 9;
+    private double kQ = 0;
+
 
     /**
      * Constructor
      *
      * @param intensity the intensity of the light
      */
-    protected PointLight(Color intensity, Point position) {
+    public PointLight(Color intensity, Point position) {
         super(intensity);
         this.position = position;
     }
@@ -44,17 +45,17 @@ public class PointLight extends Light implements LightSource{
         return point.subtract(position).normalize();
     }
 
-    public PointLight setkC(double kC) {
+    public PointLight setKc(double kC) {
         this.kC = kC;
         return this;
     }
 
-    public PointLight setkL(double kL) {
+    public PointLight setKl(double kL) {
         this.kL = kL;
         return this;
     }
 
-    public PointLight setkQ(double kQ) {
+    public PointLight setKq(double kQ) {
         this.kQ = kQ;
         return this;
     }
