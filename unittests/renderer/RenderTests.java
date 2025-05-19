@@ -100,9 +100,9 @@ class RenderTests {
                 .add(// center
                         new Sphere(new Point(0, 0, -100), 50).setMaterial(new Material().setD3kA(new Double3(0.4))),
                         // up left
-                        new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)).setMaterial(new Material().setD3kA(new Double3(0.8, 0, 0))),
+                        new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)).setMaterial(new Material().setD3kA(new Double3(0, 0.8, 0))),
                         // down left
-                        new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100)).setMaterial(new Material().setD3kA(new Double3(0, 0.8, 0))),
+                        new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100)).setMaterial(new Material().setD3kA(new Double3(0.8, 0, 0))),
                         // down right
                         new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), new Point(100, -100, -100)).setMaterial(new Material().setD3kA(new Double3(0, 0, 0.8))));
 
