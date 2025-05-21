@@ -1,9 +1,14 @@
 package geometries;
 
+import lighting.LightSource;
+import primitives.Material;
 import primitives.Point;
 import primitives.Ray;
+import primitives.Vector;
 
 import java.util.List;
+
+import static primitives.Util.alignZero;
 
 /**
  * Interface for objects that can be intersected by a ray.
@@ -39,11 +44,46 @@ public abstract class Intersectable {
          * the Point of the intersection
          */
         public final Point point;
+        /**
+         * The material of the geometry.
+         */
+        public final Material material;
+        /**
+         * * The direction of the ray.
+         */
+        public Vector direction;
+        /**
+         * The normal vector at the intersection point.
+         */
+        public Vector normal;
+        /**
+         * The dot product of the ray direction and the normal vector.
+         */
+        public double dotProductGeometry;
+        /**
+         * The light source.
+         */
+        public LightSource lightSource;
+        /**
+         * The direction of the light.
+         */
+        public Vector lightDirection;
+        /**
+         * The dot product of the light direction and the normal vector.
+         */
+        public double dotProductLightSource;
 
+        /**
+         * Constructor
+         * @param geometry the intersection geometry
+         * @param point the intersection point
+         */
         public Intersection(Geometry geometry, Point point) {
             this.geometry = geometry;
             this.point = point;
+            this.material = geometry == null ? null : geometry.getMaterial();
         }
+
 
         @Override
         public boolean equals(Object obj) {

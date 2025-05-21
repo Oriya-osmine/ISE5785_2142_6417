@@ -16,8 +16,7 @@ public class Material {
     /**
      * How sharp or blurry the specular reflection is aka Shininess factor
      */
-    int nSH = 0;
-
+    public int nSH = 0;
 
     /**
      * Sets Ambient reflection coefficient based on double3
