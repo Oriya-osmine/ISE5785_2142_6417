@@ -2,8 +2,6 @@ package lighting;
 
 import primitives.*;
 
-import static java.lang.Math.sqrt;
-
 public class PointLight extends Light implements LightSource{
 
     /**

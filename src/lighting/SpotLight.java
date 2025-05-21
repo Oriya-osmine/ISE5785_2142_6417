@@ -20,7 +20,7 @@ public class SpotLight extends PointLight{
     }
 
     public SpotLight setDirection(Vector direction){
-        this.direction = direction;
+        this.direction = direction.normalize();
         return this;
     }
     @Override

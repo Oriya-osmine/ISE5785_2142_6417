@@ -8,8 +8,6 @@ import primitives.Vector;
 
 import java.util.List;
 
-import static primitives.Util.alignZero;
-
 /**
  * Interface for objects that can be intersected by a ray.
  */

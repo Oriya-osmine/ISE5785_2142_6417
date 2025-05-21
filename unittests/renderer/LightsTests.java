@@ -243,4 +243,20 @@ class LightsTests {
          .renderImage() //
          .writeToImage("lightTrianglesSpotSharp");
    }
+
+   /**
+    * Test method to check {@link scene.Scene#Scene(String)}
+    */
+   @Test
+   public void basicRenderXml() {
+      Scene scene = new Scene("ColorAndLights.xml");
+      scene1.geometries.add(sphere);
+      //TC01: build a scene from xml
+      camera1 //
+              .setRayTracer(scene, RayTracerType.SIMPLE) //
+              .setResolution(500, 500) //
+              .build() //
+              .renderImage() //
+              .writeToImage("xml color and lights test");
+   }
 }

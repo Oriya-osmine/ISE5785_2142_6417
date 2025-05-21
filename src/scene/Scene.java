@@ -52,7 +52,8 @@ public class Scene {
      * @return this scene
      */
     public Scene setLights(List<LightSource> lights) {
-        this.lights = lights;
+        if(lights != null)
+            this.lights = lights;
         return this;
     }
 
@@ -86,7 +87,8 @@ public class Scene {
      * @return this scene
      */
     public Scene setGeometries(Geometries geometries) {
-        this.geometries = geometries;
+        if(geometries != null)
+            this.geometries = geometries;
         return this;
     }
 }

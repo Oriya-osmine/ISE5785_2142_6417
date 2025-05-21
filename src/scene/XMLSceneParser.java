@@ -1,6 +1,7 @@
 package scene;
 
 import geometries.Plane;
+import lighting.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -11,10 +12,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import primitives.*;
-import lighting.AmbientLight;
 import geometries.Geometries;
 import geometries.Sphere;
 import geometries.Triangle;
@@ -45,19 +46,34 @@ public class XMLSceneParser {
 
             scene.setGeometries(parseGeometries(sceneElement.getElementsByTagName("geometries")));
 
+            scene.setLights(parseLights(sceneElement.getElementsByTagName("lights")));
+
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
     }
 
+
+    /**
+     * Parses background
+     *
+     * @param background the background to parse
+     * @return the scene background
+     */
     private static Color parseBackground(String background) {
         if (!background.isEmpty()) {
             return parseColor(background);
-        } else {
-            throw new IllegalArgumentException("Cannot parse background it is empty: " + background);
+        }else{
+            return Color.BLACK;
         }
     }
 
+    /**
+     * Parses ambient light
+     *
+     * @param ambientLight the ambient light to parse
+     * @return the scene ambient light
+     */
     private static AmbientLight parseAmbientLight(NodeList ambientLight) {
         if (ambientLight.getLength() > 0) {
             Element ambientLightElement = (Element) ambientLight.item(0);
@@ -68,15 +84,21 @@ public class XMLSceneParser {
                 throw new IllegalArgumentException("Cannot parse ambient-light color is empty: " + ambientLight);
             }
         } else {
-            throw new IllegalArgumentException("Cannot parse ambient-light is empty: " + ambientLight);
+            return AmbientLight.NONE;
         }
     }
 
+    /**
+     * Parses all geometries
+     *
+     * @param geometriesList the geometries Node to parse
+     * @return the scene geometries
+     */
     private static Geometries parseGeometries(NodeList geometriesList) {
+        Geometries geometries = new Geometries();
         if (geometriesList.getLength() > 0) {
             Element geometriesElement = (Element) geometriesList.item(0);
             NodeList geometryNodes = geometriesElement.getChildNodes();
-            Geometries geometries = new Geometries();
 
             for (int i = 0; i < geometryNodes.getLength(); i++) {
                 if (geometryNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -103,28 +125,78 @@ public class XMLSceneParser {
                 }
             }
             return geometries;
-        } else {
-            throw new IllegalArgumentException("no geometries found but the node was defined");
         }
+        return null;
+    }
+
+    /**
+     * Parses all lights
+     *
+     * @param lightsList the lights Node to parse
+     * @return the scene lights
+     */
+    private static List<LightSource> parseLights(NodeList lightsList) {
+        if (lightsList.getLength() > 0) {
+            Element lightsElement = (Element) lightsList.item(0);
+            NodeList lightNodes = lightsElement.getChildNodes();
+            List<LightSource> lights = new LinkedList<>();
+
+            for (int i = 0; i < lightNodes.getLength(); i++) {
+                if (lightNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    Element lightElement = (Element) lightNodes.item(i);
+                    String geometryType = lightElement.getTagName();
+
+                    switch (geometryType) {
+                        case "directional-light":
+                            lights.add(parseDirectionalLight(lightElement));
+                            break;
+                        case "point-light":
+                            lights.add(parsePointLight(lightElement));
+                            break;
+                        case "spot-light":
+                            lights.add(parseSpotLight(lightElement));
+                            break;
+                    }
+                }
+            }
+            return lights;
+        }
+        return null;
     }
 
     /**
      * Parses a material
      *
-     * @param materialStr the xml attribute in string to Parse to a material
+     * @param materialTags the xml tags to Parse to a material
      * @return the material
      */
-    private static Material parseMaterial(String materialStr) {
-        String[] material = materialStr.split(" ");
-        if (material.length == 1) {
-            return new Material().setKA(Double.parseDouble(material[0]));
-        } else if (material.length == 3) {
-            double x = Double.parseDouble(material[0]);
-            double y = Double.parseDouble(material[1]);
-            double z = Double.parseDouble(material[2]);
-            return new Material().setKA(new Double3(x, y, z));
-        }
-        throw new IllegalArgumentException("Cannot parse vector: " + materialStr);
+    private static Material parseMaterial(Element materialTags) {
+        String kAStr = materialTags.getAttribute("kA");
+        String kSStr = materialTags.getAttribute("kS");
+        String kDStr = materialTags.getAttribute("kD");
+        String nSHStr = materialTags.getAttribute("nSH");
+        Material material = new Material();
+        if (!kAStr.isEmpty())
+            if (kAStr.contains(" ")) {
+                material.setKA(parseDouble3(kAStr));
+            } else {
+                material.setKA(Double.parseDouble(kAStr));
+            }
+        if (!kSStr.isEmpty())
+            if (kSStr.contains(" ")) {
+                material.setKS(parseDouble3(kSStr));
+            } else {
+                material.setKS(Double.parseDouble(kSStr));
+            }
+        if (!kDStr.isEmpty())
+            if (kDStr.contains(" ")) {
+                material.setKD(parseDouble3(kDStr));
+            } else {
+                material.setKD(Double.parseDouble(kDStr));
+            }
+        if (!nSHStr.isEmpty())
+            material.setShininess(Integer.parseInt(nSHStr));
+        return material;
     }
 
     /**
@@ -179,6 +251,23 @@ public class XMLSceneParser {
     }
 
     /**
+     * Parses a Double3
+     *
+     * @param double3Str the xml attribute in string to Parse to a Double3
+     * @return the double3
+     */
+    private static Double3 parseDouble3(String double3Str) {
+        String[] coords = double3Str.split(" ");
+        if (coords.length == 3) {
+            double x = Double.parseDouble(coords[0]);
+            double y = Double.parseDouble(coords[1]);
+            double z = Double.parseDouble(coords[2]);
+            return new Double3(x, y, z);
+        }
+        throw new IllegalArgumentException("Cannot parse Double3: " + double3Str);
+    }
+
+    /**
      * Parses an element to a Plane
      *
      * @param geometryElement the xml element to parse
@@ -204,9 +293,7 @@ public class XMLSceneParser {
                     throw new IllegalArgumentException("Cannot find all points for plane or normal is empty: " + geometryElement);
                 }
             }
-            String materialStr = geometryElement.getAttribute("material");
-            if (!materialStr.isEmpty())
-                plane.setMaterial(parseMaterial(materialStr));
+            plane.setMaterial(parseMaterial(geometryElement));
             String emissionStr = geometryElement.getAttribute("emission");
             if (!emissionStr.isEmpty())
                 plane.setEmission(parseColor(emissionStr));
@@ -229,9 +316,7 @@ public class XMLSceneParser {
             Point center = parsePoint(centerStr);
             double radius = Double.parseDouble(radiusStr);
             Sphere sphere = new Sphere(center, radius);
-            String materialStr = geometryElement.getAttribute("material");
-            if (!materialStr.isEmpty())
-                sphere.setMaterial(parseMaterial(materialStr));
+            sphere.setMaterial(parseMaterial(geometryElement));
             String emissionStr = geometryElement.getAttribute("emission");
             if (!emissionStr.isEmpty())
                 sphere.setEmission(parseColor(emissionStr));
@@ -257,9 +342,7 @@ public class XMLSceneParser {
         }
         if (!polygonVerticesList.isEmpty()) {
             Polygon polygon = new Polygon(polygonVerticesList.toArray(new Point[0]));
-            String materialStr = geometryElement.getAttribute("material");
-            if (!materialStr.isEmpty())
-                polygon.setMaterial(parseMaterial(materialStr));
+            polygon.setMaterial(parseMaterial(geometryElement));
             String emissionStr = geometryElement.getAttribute("emission");
             if (!emissionStr.isEmpty())
                 polygon.setEmission(parseColor(emissionStr));
@@ -283,15 +366,88 @@ public class XMLSceneParser {
             Point p1 = parsePoint(p1Str);
             Point p2 = parsePoint(p2Str);
             Triangle triangle = new Triangle(p0, p1, p2);
-            String materialStr = geometryElement.getAttribute("material");
-            if (!materialStr.isEmpty())
-                triangle.setMaterial(parseMaterial(materialStr));
+            triangle.setMaterial(parseMaterial(geometryElement));
             String emissionStr = geometryElement.getAttribute("emission");
             if (!emissionStr.isEmpty())
                 triangle.setEmission(parseColor(emissionStr));
             return triangle;
         } else {
             throw new IllegalArgumentException("Cannot find all points for triangle: " + geometryElement);
+        }
+    }
+
+    /**
+     * Parses an element to a DirectionalLight
+     *
+     * @param lightElement the xml element to parse
+     * @return the DirectionalLight
+     */
+    private static DirectionalLight parseDirectionalLight(Element lightElement) {
+        String intensityStr = lightElement.getAttribute("intensity");
+        String directionStr = lightElement.getAttribute("direction");
+        if (!intensityStr.isEmpty() && !directionStr.isEmpty()) {
+            return new DirectionalLight(parseColor(intensityStr), parseVector(directionStr));
+        } else {
+            throw new IllegalArgumentException("Cannot find all fields for DirectionalLight: " + lightElement);
+        }
+    }
+
+
+    /**
+     * Parses an element to basic PointLight fields
+     *
+     * @param lightElement the xml element to parse
+     */
+    private static void parseBasicPointLight(Element lightElement, PointLight pointLight) {
+        String kCStr = lightElement.getAttribute("kC");
+        String kQStr = lightElement.getAttribute("kQ");
+        String kLStr = lightElement.getAttribute("kL");
+        if (!kCStr.isEmpty())
+            pointLight.setKc(Double.parseDouble(kCStr));
+        if (!kQStr.isEmpty())
+            pointLight.setKq(Double.parseDouble(kQStr));
+        if (!kLStr.isEmpty())
+            pointLight.setKl(Double.parseDouble(kLStr));
+    }
+
+    /**
+     * Parses an element to a PointLight
+     *
+     * @param lightElement the xml element to parse
+     * @return the PointLight
+     */
+    private static PointLight parsePointLight(Element lightElement) {
+        String intensityStr = lightElement.getAttribute("intensity");
+        String positionStr = lightElement.getAttribute("position");
+        if (!intensityStr.isEmpty() && !positionStr.isEmpty()) {
+            PointLight pointLight = new PointLight(parseColor(intensityStr), parsePoint(positionStr));
+            parseBasicPointLight(lightElement, pointLight);
+            return pointLight;
+        } else {
+            throw new IllegalArgumentException("Cannot find all fields for PointLight: " + lightElement);
+        }
+    }
+
+    /**
+     * Parses an element to a SpotLight
+     *
+     * @param lightElement the xml element to parse
+     * @return the SpotLight
+     */
+    private static SpotLight parseSpotLight(Element lightElement) {
+        String intensityStr = lightElement.getAttribute("intensity");
+        String positionStr = lightElement.getAttribute("position");
+        String directionStr = lightElement.getAttribute("direction");
+
+        if (!intensityStr.isEmpty() && !directionStr.isEmpty()) {
+            SpotLight spotLight = new SpotLight(parseColor(intensityStr), parsePoint(positionStr), parseVector(directionStr));
+            parseBasicPointLight(lightElement, spotLight);
+            String narrowBeamStr = lightElement.getAttribute("narrow-beam");
+            if (!narrowBeamStr.isEmpty())
+                spotLight.setNarrowBeam(Double.parseDouble(narrowBeamStr));
+            return spotLight;
+        } else {
+            throw new IllegalArgumentException("Cannot find all fields for PointLight: " + lightElement);
         }
     }
 }
