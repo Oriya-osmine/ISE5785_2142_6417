@@ -1,8 +1,9 @@
 package renderer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import geometries.*;
+import geometries.Geometries;
+import geometries.Plane;
+import geometries.Sphere;
+import geometries.Triangle;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
@@ -10,6 +11,8 @@ import primitives.Vector;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Testing Camera Class
@@ -62,22 +65,22 @@ public class CameraIntersectionsIntegrationTests {
     public void sphereTest() {
         // ============ Tests ==============
         // Test intersection points with the middle ray of HxW with the middle of sphere
-        Sphere sphere = new Sphere( new Point(0, 0, -3),1);
+        Sphere sphere = new Sphere(new Point(0, 0, -3), 1);
         assertEquals(2, rays(camera0Zn1D1, new Geometries(sphere)), "Only middle ray should intersect");
         // Test intersection points with all HxW rays
-        Sphere sphere1 = new Sphere( new Point(0, 0, -2.5),2.5);
+        Sphere sphere1 = new Sphere(new Point(0, 0, -2.5), 2.5);
         Camera camera1 = Camera.getBuilder().setLocation(new Point(0, 0, 0.5))
                 .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
                 .setVpSize(3, 3).setVpDistance(1.0).build();
         assertEquals(18, rays(camera1, new Geometries(sphere1)), "All rays should intersect twice, on enter and on exit");
         // Test intersection points with some HxW rays
-        Sphere sphere2 = new Sphere( new Point(0, 0, -2),2);
+        Sphere sphere2 = new Sphere(new Point(0, 0, -2), 2);
         assertEquals(10, rays(camera1, new Geometries(sphere2)), "Only 5 rays should intersect");
         // Test intersection points with HxW rays inside the sphere
-        Sphere sphere3 = new Sphere( new Point(0, 0, -1),4);
+        Sphere sphere3 = new Sphere(new Point(0, 0, -1), 4);
         assertEquals(9, rays(camera1, new Geometries(sphere3)), "All rays should intersect once");
         // Test no intersection points with sphere behind camera
-        Sphere sphere4 = new Sphere( new Point(0, 0, 3),1);
+        Sphere sphere4 = new Sphere(new Point(0, 0, 3), 1);
         assertEquals(0, rays(camera1, new Geometries(sphere4)), "No rays should intersect");
     }
 

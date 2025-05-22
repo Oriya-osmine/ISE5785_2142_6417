@@ -7,7 +7,7 @@ import primitives.*;
  * A point light emits light in all directions from a specific position in space.
  * The intensity of the light decreases with distance based on attenuation coefficients.
  */
-public class PointLight extends Light implements LightSource{
+public class PointLight extends Light implements LightSource {
 
     /**
      * The location of the light
@@ -30,6 +30,7 @@ public class PointLight extends Light implements LightSource{
     /**
      * Constructor
      *
+     * @param position  the position of the light
      * @param intensity the intensity of the light
      */
     public PointLight(Color intensity, Point position) {
@@ -48,16 +49,34 @@ public class PointLight extends Light implements LightSource{
         return point.subtract(position).normalize();
     }
 
+    /**
+     * Sets the Constant attenuation coefficient of the light
+     *
+     * @param kC the Constant attenuation coefficient
+     * @return this light
+     */
     public PointLight setKc(double kC) {
         this.kC = kC;
         return this;
     }
 
+    /**
+     * Sets the Linear attenuation coefficient of the light
+     *
+     * @param kL the Linear attenuation coefficient
+     * @return this light
+     */
     public PointLight setKl(double kL) {
         this.kL = kL;
         return this;
     }
 
+    /**
+     * Sets the Quadratic attenuation coefficient of the light
+     *
+     * @param kQ the Quadratic attenuation coefficient
+     * @return this light
+     */
     public PointLight setKq(double kQ) {
         this.kQ = kQ;
         return this;

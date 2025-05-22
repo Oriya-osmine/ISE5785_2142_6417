@@ -20,6 +20,11 @@ class Light {
         this.intensity = intensity;
     }
 
+    /**
+     * Gets the light intensity
+     *
+     * @return the light's intensity
+     */
     public Color getIntensity() {
         return intensity;
     }

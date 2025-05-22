@@ -50,6 +50,7 @@ public abstract class Geometry extends Intersectable {
     /**
      * Sets the emission color of the geometry
      *
+     * @param emission the emission
      * @return the geometry
      */
     public Geometry setEmission(Color emission) {

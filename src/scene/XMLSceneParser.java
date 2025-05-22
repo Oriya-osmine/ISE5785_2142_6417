@@ -63,7 +63,7 @@ public class XMLSceneParser {
     private static Color parseBackground(String background) {
         if (!background.isEmpty()) {
             return parseColor(background);
-        }else{
+        } else {
             return Color.BLACK;
         }
     }
@@ -396,6 +396,7 @@ public class XMLSceneParser {
     /**
      * Parses an element to basic PointLight fields
      *
+     * @param pointLight   the light point to apply it to
      * @param lightElement the xml element to parse
      */
     private static void parseBasicPointLight(Element lightElement, PointLight pointLight) {

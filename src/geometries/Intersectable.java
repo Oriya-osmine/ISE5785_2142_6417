@@ -24,8 +24,20 @@ public abstract class Intersectable {
         return list == null ? null : list.stream().map(intersection -> intersection.point).toList();
     }
 
+    /**
+     * Helper function for {@link geometries.Intersectable.Intersection#calculateIntersections(Ray)}
+     *
+     * @param ray the ray that intersect with the objects
+     * @return list of intersections
+     */
     protected abstract List<Intersection> calculateIntersectionsHelper(Ray ray);
 
+    /**
+     * Calculates all intersections
+     *
+     * @param ray the ray that intersect with the objects
+     * @return list of intersections
+     */
     public final List<Intersection> calculateIntersections(Ray ray) {
         return calculateIntersectionsHelper(ray);
     }
@@ -73,8 +85,9 @@ public abstract class Intersectable {
 
         /**
          * Constructor
+         *
          * @param geometry the intersection geometry
-         * @param point the intersection point
+         * @param point    the intersection point
          */
         public Intersection(Geometry geometry, Point point) {
             this.geometry = geometry;
