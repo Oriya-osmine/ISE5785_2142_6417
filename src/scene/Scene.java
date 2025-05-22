@@ -1,6 +1,7 @@
 package scene;
 
 import lighting.LightSource;
+import parseXML.sceneParser;
 import primitives.Color;
 import lighting.AmbientLight;
 import geometries.Geometries;
@@ -40,7 +41,7 @@ public class Scene {
     public Scene(String nameScene) {
         if (nameScene.endsWith(".xml")) {
             this.name = nameScene.substring(0, nameScene.length() - 4); // Remove ".xml"
-            XMLSceneParser.SceneConstructor(nameScene, this);
+            sceneParser.SceneConstructor(nameScene, this);
         } else {
             this.name = nameScene;
         }
