@@ -1,5 +1,9 @@
 package primitives;
 
+/**
+ * Represents the material properties of a geometry, including reflection coefficients
+ * and shininess factor for lighting calculations.
+ */
 public class Material {
     /**
      * How the material reflects ambient light aka Ambient reflection coefficient

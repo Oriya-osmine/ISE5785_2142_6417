@@ -2,6 +2,11 @@ package lighting;
 
 import primitives.*;
 
+/**
+ * Represents a point light source in the scene.
+ * A point light emits light in all directions from a specific position in space.
+ * The intensity of the light decreases with distance based on attenuation coefficients.
+ */
 public class PointLight extends Light implements LightSource{
 
     /**

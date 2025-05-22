@@ -2,6 +2,10 @@ package lighting;
 
 import primitives.*;
 
+/**
+ * Represents a directional light source.
+ * A directional light has a fixed direction and intensity.
+ */
 public class DirectionalLight extends Light implements LightSource {
 
     /**

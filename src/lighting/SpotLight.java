@@ -1,6 +1,11 @@
 package lighting;
 import primitives.*;
 
+/**
+ * Represents a spotlight in the scene.
+ * A spotlight is a type of point light that emits light in a specific direction with a narrow beam.
+ * The intensity of the light is affected by the angle between the light's direction and the direction to the target point.
+ */
 public class SpotLight extends PointLight{
 
     /**
