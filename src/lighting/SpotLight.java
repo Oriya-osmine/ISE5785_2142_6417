@@ -41,6 +41,7 @@ public class SpotLight extends PointLight {
         return this;
     }
 
+
     @Override
     public Color getIntensity(Point p) {
         double additionalFactor = Math.max(0, direction.dotProduct(getL(p)));

@@ -6,6 +6,7 @@ import lighting.LightSource;
 import primitives.Color;
 import primitives.Double3;
 import primitives.Ray;
+import primitives.Point;
 import primitives.Vector;
 import scene.Scene;
 
@@ -26,6 +27,8 @@ public class SimpleRayTracer extends RayTracerBase {
     public SimpleRayTracer(Scene scene) {
         super(scene);
     }
+
+    private static final double DELTA = 0.1;
 
     @Override
     public Color traceRay(Ray ray) {
@@ -87,11 +90,43 @@ public class SimpleRayTracer extends RayTracerBase {
     private Color calcColorLocalEffects(Intersectable.Intersection intersection) {
         Color color = intersection.geometry.getEmission();
         for (LightSource lightSource : scene.lights) {
-            if (!setLightSource(intersection, lightSource)) continue;
-            color = color.add(lightSource.getIntensity(intersection.point).scale(calcDiffusive(intersection).add(calcSpecular(intersection))));
+            if (setLightSource(intersection, lightSource) &&unshaded(intersection) ) {
+
+                color = color.add(lightSource.getIntensity(intersection.point).scale(calcDiffusive(intersection).add(calcSpecular(intersection))));
+            }
+
         }
         return color;
     }
+
+    /**
+     * Checks if an intersection point is not in shadow.
+     *
+     * @param intersection The intersection to check
+     * @return true if the point is not shadowed, false otherwise
+     */
+    private boolean unshaded(Intersection intersection) {
+        Vector pointToLight = intersection.lightDirection.scale(-1.0); // From point to light source
+        Vector epsVector = intersection.normal.scale(intersection.dotProductGeometry < 0 ? DELTA : -DELTA);
+        Point point = intersection.point.add(epsVector);
+        Ray shadowRay = new Ray(point, pointToLight); // Shadow ray
+        List<Intersection> intersections = scene.geometries.calculateIntersections(shadowRay);
+
+        if (intersections == null) {
+            return true; // No intersections, point is not shadowed
+        }
+
+        double lightDistance = intersection.lightSource.getDistance(intersection.point);
+        for (Intersection shadowIntersection : intersections) {
+            if (alignZero(shadowIntersection.point.distance(intersection.point) - lightDistance) <= 0) {
+                return false; // Point is shadowed
+            }
+        }
+
+        return true; // Point is not shadowed
+    }
+
+
 
     /**
      * Calculates the specular lighting effect at an intersection.
