@@ -17,6 +17,8 @@ public class Material {
      * How the light diffuses across the surface aka Diffuse reflection coefficient
      */
     public Double3 kD = Double3.ZERO;
+    public Double3 kT = Double3.ZERO;
+    public Double3 kR = Double3.ZERO;
     /**
      * How sharp or blurry the specular reflection is aka Shininess factor
      */
@@ -74,6 +76,22 @@ public class Material {
      */
     public Material setKD(Double kD) {
         this.kD = new Double3(kD);
+        return this;
+    }
+    public Material setKT(Double3 kT) {
+        this.kT = kT;
+        return this;
+    }
+    public Material setKT(Double kT) {
+        this.kT = new Double3(kT);
+        return this;
+    }
+    public Material setKR(Double3 kR) {
+        this.kR = kR;
+        return this;
+    }
+    public Material setKR(Double kR) {
+        this.kR = new Double3(kR);
         return this;
     }
     /**
