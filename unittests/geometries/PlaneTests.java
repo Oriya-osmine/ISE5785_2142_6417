@@ -139,6 +139,47 @@ class PlaneTests {
         // TC16: Ray is neither orthogonal nor parallel and starts at reference point on the plane
         Ray ray8 = new Ray(new Point(0, 0, 1), new Vector(1, 1, 1));
         assertNull(plane.findIntersections(ray8), "TC16: Expected no intersection (ray starts on plane)");
+
+        //  =============== Find Intersections With Max Distance  ===============
+
+
+            // TC01: Ray starts before plane, max distance is too short to reach plane
+             ray1 = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+            assertNull(plane.findIntersections(ray1, 0.5),
+                    "TC01: Ray should not reach plane with the given distance");
+
+            // TC02: Ray starts before plane, max distance is exactly to the plane
+             ray2 = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+            List<Point> result2 = plane.findIntersections(ray2, 1);
+            assertEquals(1, result2.size(),
+                    "TC02: Ray should have exactly one intersection at max distance");
+            assertEquals(new Point(0, 0, 1), result2.get(0),
+                    "TC02: Intersection point should be at the plane");
+
+            // TC03: Ray starts before plane, max distance extends past the plane
+            Ray ray3 = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+            List<Point> result3 = plane.findIntersections(ray3, 2);
+            assertEquals(1, result3.size(),
+                    "TC03: Ray should have exactly one intersection");
+            assertEquals(new Point(0, 0, 1), result3.get(0),
+                    "TC03: Intersection point should be at the plane");
+
+            // TC04: Ray starts at the plane, moving away from the plane
+             ray4 = new Ray(new Point(0, 0, 1), new Vector(0, 0, 1));
+            assertNull(plane.findIntersections(ray4, 1),
+                    "TC04: Ray starting at plane should have no intersections");
+
+            // TC05: Ray starts after the plane, pointing away from plane
+             ray5 = new Ray(new Point(0, 0, 2), new Vector(0, 0, 1));
+            assertNull(plane.findIntersections(ray5, 3),
+                    "TC05: Ray pointing away from plane should have no intersections");
+
+            // TC06: Ray starts after plane, pointing towards plane but max distance too short
+             ray6 = new Ray(new Point(0, 0, 2), new Vector(0, 0, -1));
+            assertNull(plane.findIntersections(ray6, 0.5),
+                    "TC06: Ray should not reach plane with the given distance");
+
+
     }
 
 }

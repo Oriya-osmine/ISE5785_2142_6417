@@ -45,7 +45,7 @@ public class Tube extends RadicalGeometry {
     }
 
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray,double maxDistance) {
         return null;
     }
 

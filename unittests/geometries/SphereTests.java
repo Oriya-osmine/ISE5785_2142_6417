@@ -42,6 +42,7 @@ class SphereTests {
 
         // ============ Equivalence Partition Tests ============
 
+
         // TC01: Ray is outside the sphere10 and does not intersect
         assertNull(sphere10.findIntersections(new Ray(new Point(0, 3, 2), new Vector(0, 1, -1))),
                 "Ray outside sphere10 should not intersect");
@@ -129,6 +130,40 @@ class SphereTests {
         result = sphere10.findIntersections(new Ray(new Point(0, 1.5, 0), new Vector(0, 0, 1)));
         assertNotNull(result, "Orthogonal ray inside sphere10 should intersect");
         assertEquals(1, result.size());
+
+        // ============ Equivalence Partition Tests with maxDistance ============
+
+        // TC01: Ray starts and ends before the sphere (no intersection)
+        assertNull(sphere10.findIntersections(new Ray(new Point(0, 1, 3), new Vector(0, 0, -1)), 1),
+                "Ray that stops before reaching sphere should not intersect");
+
+        // TC02: Ray starts before the sphere and ends inside (1 point)
+         result = sphere10.findIntersections(new Ray(new Point(0, 1, 3), new Vector(0, 0, -1)), 2.5);
+        assertNotNull(result, "Ray entering sphere should intersect once");
+        assertEquals(1, result.size());
+        assertEquals(new Point(0, 1, 1), result.get(0));
+
+        // TC03: Ray starts and ends inside the sphere (no intersection)
+        assertNull(sphere10.findIntersections(new Ray(new Point(0, 1, 0.5), new Vector(0, 0, -1)), 0.4),
+                "Ray contained entirely within sphere should not intersect");
+
+        // TC04: Ray starts inside sphere (middle) and ends outside (1 point)
+        result = sphere10.findIntersections(new Ray(new Point(0, 1, 0), new Vector(0, 0, 1)), 2);
+        assertNotNull(result, "Ray from center should intersect once");
+        assertEquals(1, result.size());
+        assertEquals(new Point(0, 1, 1), result.get(0));
+
+        // TC05: Ray starts inside sphere (near boundary) and ends outside (1 point)
+        result = sphere10.findIntersections(new Ray(new Point(0, 1, 0.9), new Vector(0, 0, 1)), 1);
+        assertNotNull(result, "Ray from near boundary should intersect once");
+        assertEquals(1, result.size());
+        assertEquals(new Point(0, 1, 1), result.get(0));
+
+        // TC06: Ray starts and ends after the sphere (no intersection)
+        assertNull(sphere10.findIntersections(new Ray(new Point(0, 1, 2), new Vector(0, 0, 1)), 2),
+                "Ray beyond sphere pointing away should not intersect");
+
+
     }
 
 

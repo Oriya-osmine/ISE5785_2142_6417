@@ -69,6 +69,28 @@ class GeometriesTests {
         intersections = geometries.findIntersections(rayHitsAll);
         assertNotNull(intersections, "TC05: Expected intersections with all shapes");
         assertEquals(4, intersections.size(), "TC05: Expected 4 points (Sphere:2, Triangle:1, Plane:1)");
+
+        // =============== Find Intersections With Max Distance ===============
+
+        // TC21: Ray intersects some shapes but max distance limits the results
+        Ray rayWithLimit = new Ray(new Point(0, 0, -1), new Vector(0, 0, 1));
+        intersections = geometries.findIntersections(rayWithLimit, 3.5);
+        assertNotNull(intersections, "TC21: Expected intersections within max distance");
+        assertEquals(1, intersections.size(), "TC21: Expected 1 points ");
+
+        // TC22: Ray doesn't reach any shape due to max distance
+        intersections = geometries.findIntersections(rayWithLimit, 1);
+        assertNull(intersections, "TC22: Expected no intersections within max distance");
+
+        // TC23: Ray reaches exactly to one intersection point
+        intersections = geometries.findIntersections(rayWithLimit, 3);
+        assertNotNull(intersections, "TC23: Expected intersection at exact distance");
+        assertEquals(1, intersections.size(), "TC23: Expected 1 point at max distance");
+
+        // TC24: Ray with distance that includes all intersections
+        intersections = geometries.findIntersections(rayWithLimit, 10);
+        assertNotNull(intersections, "TC24: Expected all possible intersections");
+        assertEquals(4, intersections.size(), "TC24: Expected all 4 intersection points");
     }
 
 }

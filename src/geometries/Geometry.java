@@ -67,5 +67,6 @@ public abstract class Geometry extends Intersectable {
     public abstract Vector getNormal(Point surfacePoint);
 
     @Override
-    public abstract List<Intersection> calculateIntersectionsHelper(Ray ray);
+    protected abstract List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance);
+    ;
 }

@@ -134,5 +134,40 @@ class PolygonTests {
         // TC12: Intersection on the extension of an edge
         Ray rayOnEdgeExtension = new Ray(new Point(2.5, 0, 1), new Vector(0, 0, -1));
         assertNull(polygon.findIntersections(rayOnEdgeExtension),"Ray intersects on extension of a polygon edge");
+
+        // ============ Find Intersections With Distance============
+
+
+            // TC01: Ray starts and ends before the polygon
+            Ray ray = new Ray(new Point(1, 1, 1), new Vector(0, 0, -0.5));
+            assertNull(polygon.findIntersections(ray, 0.2),
+                    "Ray should not intersect when max distance is too short");
+
+            // TC02: Ray starts before the polygon and ends within the polygon
+            ray = new Ray(new Point(1, 1, 1), new Vector(0, 0, -1));
+            assertEquals(List.of(new Point(1, 1, 0)),
+                    polygon.findIntersections(ray, 1.5),
+                    "Ray should intersect when max distance includes the polygon");
+
+            // TC03: Ray starts and ends within the polygon
+            ray = new Ray(new Point(1, 1, -0.2), new Vector(0, 0, -0.2));
+            assertNull(polygon.findIntersections(ray, 0.1),
+                    "Ray should not intersect when it starts and ends inside the polygon");
+
+            // TC04: Ray starts in the polygon (middle) and ends outside
+            ray = new Ray(new Point(1, 1, 0), new Vector(0, 0, -1));
+            assertNull(polygon.findIntersections(ray, 2),
+                    "Ray starting on polygon should not have intersections");
+
+            // TC05: Ray starts in the polygon (near edge) and ends outside
+            ray = new Ray(new Point(2.5, 0.5, 0), new Vector(0, 0, -1));
+            assertNull(polygon.findIntersections(ray, 3),
+                    "Ray starting on polygon should not have intersections");
+
+            // TC06: Ray starts and ends after the polygon
+            ray = new Ray(new Point(1, 1, -1), new Vector(0, 0, -1));
+            assertNull(polygon.findIntersections(ray, 2),
+                    "Ray starting after polygon should not have intersections");
+
     }
 }

@@ -41,12 +41,13 @@ public class Geometries extends Intersectable {
         Collections.addAll(this.geometries, geometries);
     }
 
+
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
+    protected List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
         List<Intersection> intersections = null;
 
         for (Intersectable geometry : geometries) {
-            List<Intersection> geometryIntersections = geometry.calculateIntersectionsHelper(ray);
+            List<Intersection> geometryIntersections = geometry.calculateIntersectionsHelper(ray, maxDistance);
             if (geometryIntersections != null) {
                 if (intersections == null)
                     intersections = new LinkedList<>();
@@ -55,4 +56,5 @@ public class Geometries extends Intersectable {
         }
         return intersections;
     }
+
 }

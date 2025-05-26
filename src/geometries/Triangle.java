@@ -28,7 +28,7 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance ) {
         // Uses Möller–Trumbore algorithm and Cramer’s rule
         // https://cadxfem.org/inf/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
         // H + t * D = (1 - u - v)*p0 + u*p1 + v*p2
@@ -91,7 +91,7 @@ public class Triangle extends Polygon {
         double t = inverseDet * edge2.dotProduct(qVec);
 
         // Use alignZero to check if t is close to zero, ensuring precision handling
-        if (alignZero(t) > 0.0) { // Intersection is in front of the ray
+        if (alignZero(t) > 0.0 && alignZero(t - maxDistance) <= 0.0) { // Intersection is in front of the ray and within maxDistance
             return List.of(new Intersection(this, ray.getPoint(t)));
         }
         // Intersection is behind the ray (or too small to be considered valid)

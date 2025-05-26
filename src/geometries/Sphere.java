@@ -40,7 +40,7 @@ public class Sphere extends RadicalGeometry {
 
 
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray,double maxDistance) {
 
         // Creates a 90 degree triangle with vector from head to center
         // and from direction, then calculates the last edge using dor product
@@ -76,11 +76,19 @@ public class Sphere extends RadicalGeometry {
         double t1 = alignZero(tm + th);
         double t2 = alignZero(tm - th);
 
-        if (t1 > 0 && t2 > 0)
-            return List.of(new Intersection(this, ray.getPoint(t1)), new Intersection(this, ray.getPoint(t2)));
-        else if (t1 > 0)
+        if (t1 > 0 && t2 > 0) {
+            if (t1 <= maxDistance && t2 <= maxDistance)
+                return List.of(new Intersection(this, ray.getPoint(t1)), new Intersection(this, ray.getPoint(t2)));
+            else if (t1 <= maxDistance)
+                return List.of(new Intersection(this, ray.getPoint(t1)));
+            else if (t2 <= maxDistance)
+                return List.of(new Intersection(this, ray.getPoint(t2)));
+            else
+                return null;
+        }
+        else if (t1 > 0 && t1 <= maxDistance)
             return List.of(new Intersection(this, ray.getPoint(t1)));
-        else if (t2 > 0)
+        else if (t2 > 0 && t2 <= maxDistance)
             return List.of(new Intersection(this, ray.getPoint(t2)));
         else
             return null;
