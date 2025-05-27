@@ -1,5 +1,4 @@
 package renderer;
-import lighting.AmbientLight;
 import geometries.Intersectable;
 import geometries.Intersectable.Intersection;
 import lighting.LightSource;
@@ -100,21 +99,15 @@ public class SimpleRayTracer extends RayTracerBase {
             return Color.BLACK;
         }
 
-
         // Add ambient light contribution
         if (scene.ambientlight.getIntensity() != null) {
             color = color.add(scene.ambientlight.getIntensity().scale(intersection.material.kA));
         }
 
-
-
-
         Vector v = intersection.direction;
         Vector n = intersection.normal;
         Point point = intersection.point;
         double nv = alignZero(n.dotProduct(v));
-
-
 
         // Calculate reflection contribution if material has reflection
         Double3 kR = intersection.material.kR;
@@ -204,11 +197,11 @@ private Intersection findClosestIntersection(Ray ray) {
     private Color calcColorLocalEffects(Intersectable.Intersection intersection) {
         Color color = intersection.geometry.getEmission();
         for (LightSource lightSource : scene.lights) {
-            if (setLightSource(intersection, lightSource) &&unshaded(intersection) ) {
-
-                color = color.add(lightSource.getIntensity(intersection.point).scale(calcDiffusive(intersection).add(calcSpecular(intersection))));
+            if (setLightSource(intersection, lightSource)) {
+                Double3 ktr = transparency(intersection);
+                if(!(ktr.product(INITIAL_K)).lowerThan(MIN_CALC_COLOR_K))
+                    color = color.add(lightSource.getIntensity(intersection.point).scale(ktr).scale(calcDiffusive(intersection).add(calcSpecular(intersection))));
             }
-
         }
         return color;
     }
@@ -240,7 +233,35 @@ private Intersection findClosestIntersection(Ray ray) {
         return true; // All intersecting objects are transparent enough
     }
 
+    /**
+     * Calculates the transparency factor (ktr) for a given intersection point.
+     *
+     * @param intersection The intersection to check for shadow transparency.
+     * @return A Double3 representing the accumulated transparency (ktr). If ktr falls below MIN_CALC_COLOR_K, returns Double3.ZERO.
+     */
+    private Double3 transparency(Intersection intersection) {
+        Vector lightDir = intersection.lightDirection.scale(-1.0); // From point to light
+        Vector epsVector = intersection.normal.scale(intersection.dotProductGeometry < 0 ? DELTA : -DELTA);
+        Point shadowRayOrigin = intersection.point.add(epsVector);
+        Ray shadowRay = new Ray(shadowRayOrigin, lightDir); // Shadow ray
 
+        double lightDistance = intersection.lightSource.getDistance(intersection.point);
+        List<Intersection> shadowIntersections = scene.geometries.calculateIntersections(shadowRay, lightDistance);
+
+        Double3 ktr = Double3.ONE;
+        if (shadowIntersections == null) return ktr;
+
+        for (Intersection shadowIntersection : shadowIntersections) {
+            if (shadowIntersection.point.distance(intersection.point) < lightDistance) {
+                ktr = ktr.product(shadowIntersection.material.kT);
+                if (ktr.lowerThan(MIN_CALC_COLOR_K)) {
+                    return Double3.ZERO;
+                }
+            }
+        }
+
+        return ktr;
+    }
 
     /**
      * Calculates the specular lighting effect at an intersection.
