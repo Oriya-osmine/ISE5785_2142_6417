@@ -14,6 +14,8 @@ public class primitivesParser {
         String kAStr = materialTags.getAttribute("kA");
         String kSStr = materialTags.getAttribute("kS");
         String kDStr = materialTags.getAttribute("kD");
+        String kTStr = materialTags.getAttribute("kT");
+        String kRStr = materialTags.getAttribute("kR");
         String nSHStr = materialTags.getAttribute("nSH");
         Material material = new Material();
         if (!kAStr.isEmpty())
@@ -33,6 +35,18 @@ public class primitivesParser {
                 material.setKD(parseDouble3(kDStr));
             } else {
                 material.setKD(Double.parseDouble(kDStr));
+            }
+        if (!kTStr.isEmpty())
+            if (kTStr.contains(" ")) {
+                material.setKT(parseDouble3(kTStr));
+            } else {
+                material.setKT(Double.parseDouble(kTStr));
+            }
+        if (!kRStr.isEmpty())
+            if (kRStr.contains(" ")) {
+                material.setKR(parseDouble3(kRStr));
+            } else {
+                material.setKR(Double.parseDouble(kRStr));
             }
         if (!nSHStr.isEmpty())
             material.setShininess(Integer.parseInt(nSHStr));
