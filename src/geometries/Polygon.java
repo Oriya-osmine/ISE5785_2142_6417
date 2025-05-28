@@ -117,7 +117,7 @@ public class Polygon extends Geometry {
                 return null;
             }
         }
-        return intersections;
+        return List.of(new Intersection(this, intersections.getFirst().point));
     }
 
 }
