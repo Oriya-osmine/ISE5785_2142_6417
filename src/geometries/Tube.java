@@ -45,8 +45,71 @@ public class Tube extends RadicalGeometry {
     }
 
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray,double maxDistance) {
-        return null;
+    public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
+        Vector v = ray.getDirection();
+        Point p0 = ray.getPoint(0);
+        Vector va = this.ray.getDirection();
+        Point pa = this.ray.getPoint(0);
+
+        // Vector between ray origin and tube axis origin
+        Vector deltaP = p0.subtract(pa);
+
+        // Precompute cross products
+        Vector v_cross_va = v.crossProduct(va);
+        Vector deltaP_cross_va = deltaP.crossProduct(va);
+
+        // Quadratic coefficients
+        double a = v_cross_va.lengthSquared();
+
+        // If ray is almost parallel to tube axis
+        if (a < 1e-10) {
+            // Calculate distance from ray to axis
+            double distanceSquared = deltaP_cross_va.lengthSquared() / va.lengthSquared();
+            if (Math.abs(distanceSquared - radius * radius) < 1e-10) {
+                // Ray is on the tube surface
+                return null;
+            }
+            if (distanceSquared > radius * radius) {
+                // Ray is outside the tube
+                return null;
+            }
+            // Ray is inside the tube and parallel - special case
+            return null;
+        }
+
+        // Calculate remaining quadratic coefficients
+        double b = 2 * v_cross_va.dotProduct(deltaP_cross_va);
+        double c = deltaP_cross_va.lengthSquared() - radius * radius * va.lengthSquared();
+
+        // Calculate discriminant
+        double discriminant = b * b - 4 * a * c;
+
+        if (discriminant < 0) {
+            // No real solutions, ray misses the tube
+            return null;
+        }
+
+        // Calculate parameters for intersection points
+        double sqrtDiscriminant = Math.sqrt(discriminant);
+        double t1 = (-b - sqrtDiscriminant) / (2 * a);
+        double t2 = (-b + sqrtDiscriminant) / (2 * a);
+
+        // Create a list to store intersections
+        List<Intersection> intersections = new java.util.LinkedList<>();
+
+        // Check if first intersection is valid
+        if (t1 > 0 && t1 <= maxDistance) {
+            Point intersectionPoint = ray.getPoint(t1);
+            intersections.add(new Intersection(this, intersectionPoint));
+        }
+
+        // Check if second intersection is valid
+        if (t2 > 0 && t2 <= maxDistance) {
+            Point intersectionPoint = ray.getPoint(t2);
+            intersections.add(new Intersection(this, intersectionPoint));
+        }
+
+        return intersections.isEmpty() ? null : intersections;
     }
 
 }
