@@ -96,14 +96,15 @@ class BonusTests {
                          new Point(90, 50, -50),    // Right
                          new Point(57, 70, -50)     // Middle top
                  ).setEmission(new Color(178, 34, 34)).setMaterial(new Material().setKD(0.8).setKS(0.4).setShininess(50)),
-                 new Triangle(
+                 new Polygon(
                          new Point(25, 50, 0),      // Front left
                          new Point(25, 50, -50),    // Back left
-                         new Point(57, 70, -25)     // Middle top
-                 ).setEmission(new Color(178, 34, 34)).setMaterial(new Material().setKD(0.8).setKS(0.4).setShininess(50)),
-                 new Triangle(
+                         new Point(57, 70, -50),    // Back top
+                         new Point(57, 70, 0)       // Front top
+                 ).setEmission(new Color(178, 34, 34)).setMaterial(new Material().setKD(0.8).setKS(0.4).setShininess(50)),new Polygon(
                          new Point(90, 50, 0),      // Front right
-                         new Point(57, 70, -25),    // Middle top
+                         new Point(57, 70, 0),      // Front top
+                         new Point(57, 70, -50),    // Back top
                          new Point(90, 50, -50)     // Back right
                  ).setEmission(new Color(178, 34, 34)).setMaterial(new Material().setKD(0.8).setKS(0.4).setShininess(50)),
 
@@ -168,7 +169,18 @@ class BonusTests {
                          new Point(75, -30, 80),
                          new Point(75, 10, 80),
                          new Point(75, 10, 100)
-                 ).setEmission(new Color(50, 50, 120)).setMaterial(new Material().setKD(0.8).setKS(0.2).setShininess(30))
+                 ).setEmission(new Color(50, 50, 120)).setMaterial(new Material().setKD(0.8).setKS(0.2).setShininess(30)),
+
+
+// Lake (between tree and house)
+                new Polygon(
+                        new Point(-70, -49, -50),
+                        new Point(20, -49, -50),
+                        new Point(10, -49, -120),
+                        new Point(-60, -49, -120)
+                ).setEmission(new Color(28, 107, 160))
+                 .setMaterial(new Material().setKD(0.2).setKS(0.8).setShininess(100).setKR(0.5)) // High reflection coefficient (KR)
+
 
 
 
