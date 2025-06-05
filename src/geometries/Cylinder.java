@@ -76,12 +76,13 @@ public class Cylinder extends Tube {
         // Check for intersections with the base circles
         Point axisOrigin = this.ray.getPoint(0);
         Vector axisDirection = this.ray.getDirection();
+        double rSquared = radius * radius;
 
         // Calculate intersection with bottom base (at axisOrigin)
         double t1 = calculateBaseIntersection(ray, axisOrigin, axisDirection.scale(-1.0));
         if (t1 > 0 && t1 <= maxDistance) {
             Point intersectionPoint = ray.getPoint(t1);
-            if (intersectionPoint.subtract(axisOrigin).lengthSquared() <= radius * radius) {
+            if (intersectionPoint.subtract(axisOrigin).lengthSquared() <= rSquared) {
                 intersections.add(new Intersection(this, intersectionPoint));
             }
         }
@@ -91,7 +92,7 @@ public class Cylinder extends Tube {
         double t2 = calculateBaseIntersection(ray, topCenter, axisDirection);
         if (t2 > 0 && t2 <= maxDistance) {
             Point intersectionPoint = ray.getPoint(t2);
-            if (intersectionPoint.subtract(topCenter).lengthSquared() <= radius * radius) {
+            if (intersectionPoint.subtract(topCenter).lengthSquared() <= rSquared) {
                 intersections.add(new Intersection(this, intersectionPoint));
             }
         }

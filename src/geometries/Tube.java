@@ -4,6 +4,7 @@ import primitives.Ray;
 import primitives.Vector;
 import primitives.Point;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -59,17 +60,19 @@ public class Tube extends RadicalGeometry {
         Vector deltaP_cross_va = deltaP.crossProduct(va);
 
         // Quadratic coefficients
-        double a = v_cross_va.lengthSquared();
-
+        double vls = v_cross_va.lengthSquared();
+        double dpls = deltaP_cross_va.lengthSquared();
+        double vals = va.lengthSquared();
+        double rSquared = radius * radius;
         // If ray is almost parallel to tube axis
-        if (a < 1e-10) {
+        if (vls < 1e-10) {
             // Calculate distance from ray to axis
-            double distanceSquared = deltaP_cross_va.lengthSquared() / va.lengthSquared();
-            if (Math.abs(distanceSquared - radius * radius) < 1e-10) {
+            double distanceSquared = dpls / vals;
+            if (Math.abs(distanceSquared - rSquared) < 1e-10) {
                 // Ray is on the tube surface
                 return null;
             }
-            if (distanceSquared > radius * radius) {
+            if (distanceSquared > rSquared) {
                 // Ray is outside the tube
                 return null;
             }
@@ -79,10 +82,10 @@ public class Tube extends RadicalGeometry {
 
         // Calculate remaining quadratic coefficients
         double b = 2 * v_cross_va.dotProduct(deltaP_cross_va);
-        double c = deltaP_cross_va.lengthSquared() - radius * radius * va.lengthSquared();
+        double c = dpls - rSquared * vals;
 
         // Calculate discriminant
-        double discriminant = b * b - 4 * a * c;
+        double discriminant = b * b - 4 * vls * c;
 
         if (discriminant < 0) {
             // No real solutions, ray misses the tube
@@ -91,11 +94,12 @@ public class Tube extends RadicalGeometry {
 
         // Calculate parameters for intersection points
         double sqrtDiscriminant = Math.sqrt(discriminant);
-        double t1 = (-b - sqrtDiscriminant) / (2 * a);
-        double t2 = (-b + sqrtDiscriminant) / (2 * a);
+        double a2 = 1 / (2 * vls);
+        double t1 = (-b - sqrtDiscriminant) * a2;
+        double t2 = (-b + sqrtDiscriminant) * a2;
 
         // Create a list to store intersections
-        List<Intersection> intersections = new java.util.LinkedList<>();
+        List<Intersection> intersections = new LinkedList<>();
 
         // Check if first intersection is valid
         if (t1 > 0 && t1 <= maxDistance) {
