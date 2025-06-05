@@ -1,12 +1,9 @@
 package renderer;
+
 import geometries.Intersectable;
 import geometries.Intersectable.Intersection;
 import lighting.LightSource;
-import primitives.Color;
-import primitives.Double3;
-import primitives.Ray;
-import primitives.Point;
-import primitives.Vector;
+import primitives.*;
 import scene.Scene;
 
 import java.util.List;
@@ -19,8 +16,17 @@ import static primitives.Util.isZero;
  */
 public class SimpleRayTracer extends RayTracerBase {
 
+    /**
+     * Max recursion level
+     */
     private static final int MAX_CALC_COLOR_LEVEL = 10;
+    /**
+     * Min attenuation
+     */
     private static final double MIN_CALC_COLOR_K = 0.001;
+    /**
+     * Initial attenuation
+     */
     private static final Double3 INITIAL_K = Double3.ONE;
 
 
@@ -59,14 +65,14 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-         * Calculates a single global effect (reflection or transparency) for a secondary ray.
-         *
-         * @param secondaryRay The secondary ray (reflection or transparency)
-         * @param level The recursion level
-         * @param k The accumulated attenuation factor
-         * @param kEffect The attenuation coefficient for this effect (kR or kT)
-         * @return The color contribution from this global effect
-         */
+     * Calculates a single global effect (reflection or transparency) for a secondary ray.
+     *
+     * @param secondaryRay The secondary ray (reflection or transparency)
+     * @param level        The recursion level
+     * @param k            The accumulated attenuation factor
+     * @param kEffect      The attenuation coefficient for this effect (kR or kT)
+     * @return The color contribution from this global effect
+     */
     private Color calcGlobalEffect(Ray secondaryRay, int level, Double3 k, Double3 kEffect) {
         Intersection intersection = findClosestIntersection(secondaryRay);
         if (intersection == null) {
@@ -88,8 +94,8 @@ public class SimpleRayTracer extends RayTracerBase {
      * Calculates the global effects (reflection and transparency) at an intersection.
      *
      * @param intersection The intersection point
-     * @param level The recursion level
-     * @param k The accumulated attenuation factor
+     * @param level        The recursion level
+     * @param k            The accumulated attenuation factor
      * @return The combined color from global effects (transparency and reflection)
      */
     private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
@@ -113,12 +119,11 @@ public class SimpleRayTracer extends RayTracerBase {
         Double3 kR = intersection.material.kR;
         if (!kR.equals(Double3.ZERO)) {
             // r = v - 2(v·n)n
-            Vector r = v.subtract(n.scale(nv*2));
+            Vector r = v.subtract(n.scale(nv * 2));
             // Create slightly offset reflection ray to avoid self-intersection
             Ray reflectedRay = new Ray(point.add(n.scale(nv < 0 ? DELTA : -DELTA)), r);
             color = color.add(calcGlobalEffect(reflectedRay, level, k, kR));
         }
-
 
         // Calculate transparency/refraction contribution if material has transparency
         Double3 kT = intersection.material.kT;
@@ -127,12 +132,18 @@ public class SimpleRayTracer extends RayTracerBase {
             Ray reflectedRay = new Ray(point.add(n.scale(nv > 0 ? DELTA : -DELTA)), v);
             color = color.add(calcGlobalEffect(reflectedRay, level, k, kT));
         }
-       
 
         return color;
     }
 
-
+    /**
+     * Calculates the color of the intersection with the geometry
+     *
+     * @param intersection the intersection + geometry
+     * @param level        the recursion level
+     * @param k            the attenuation
+     * @return the calculated color
+     */
     private Color calcColor(Intersection intersection, int level, Double3 k) {
         Vector n = intersection.geometry.getNormal(intersection.point);
         Vector v = intersection.direction; // Use the direction from the intersection
@@ -142,24 +153,26 @@ public class SimpleRayTracer extends RayTracerBase {
         Color color = calcColorLocalEffects(intersection);
         return 1 == level ? color : color.add(calcGlobalEffects(intersection, level, k));
     }
-/**
- * Finds the closest intersection of a ray with objects in the scene
- *
- * @param ray The ray to trace
- * @return The closest intersection or null if none exists
- */
-private Intersection findClosestIntersection(Ray ray) {
-    try {
-        List<Intersection> intersections = scene.geometries.calculateIntersections(ray);
-        if (intersections == null) {
+
+    /**
+     * Finds the closest intersection of a ray with objects in the scene
+     *
+     * @param ray The ray to trace
+     * @return The closest intersection or null if none exists
+     */
+    private Intersection findClosestIntersection(Ray ray) {
+        try {
+            List<Intersection> intersections = scene.geometries.calculateIntersections(ray);
+            if (intersections == null) {
+                return null;
+            }
+            return ray.findClosestIntersection(intersections);
+        } catch (IllegalArgumentException e) {
+            // Handle zero vector case that can occur during intersection calculations
             return null;
         }
-        return ray.findClosestIntersection(intersections);
-    } catch (IllegalArgumentException e) {
-        // Handle zero vector case that can occur during intersection calculations
-        return null;
     }
-}
+
     /**
      * Sets the light source and related objects in Intersection
      *
@@ -199,7 +212,7 @@ private Intersection findClosestIntersection(Ray ray) {
         for (LightSource lightSource : scene.lights) {
             if (setLightSource(intersection, lightSource)) {
                 Double3 ktr = transparency(intersection);
-                if(!(ktr.product(INITIAL_K)).lowerThan(MIN_CALC_COLOR_K))
+                if (!(ktr.product(INITIAL_K)).lowerThan(MIN_CALC_COLOR_K))
                     color = color.add(lightSource.getIntensity(intersection.point).scale(ktr).scale(calcDiffusive(intersection).add(calcSpecular(intersection))));
             }
         }

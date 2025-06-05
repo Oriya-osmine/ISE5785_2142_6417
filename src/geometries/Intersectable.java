@@ -23,21 +23,41 @@ public abstract class Intersectable {
         var list = calculateIntersections(ray);
         return list == null ? null : list.stream().map(intersection -> intersection.point).toList();
     }
-    public final List<Point> findIntersections(Ray ray,double maxDistance) {
-        var list = calculateIntersections(ray,maxDistance);
+
+    public final List<Point> findIntersections(Ray ray, double maxDistance) {
+        var list = calculateIntersections(ray, maxDistance);
         return list == null ? null : list.stream().map(intersection -> intersection.point).toList();
     }
 
-
+    /**
+     * Calculates all intersections with a ray
+     *
+     * @param ray         the ray to intersect with
+     * @param maxDistance the max distance of the ray
+     * @return list of intersections
+     */
     public final List<Intersection> calculateIntersections(Ray ray, double maxDistance) {
         return calculateIntersectionsHelper(ray, maxDistance);
     }
 
+    /**
+     * Calculates all intersections with a ray
+     *
+     * @param ray the ray to intersect with
+     * @return list of intersections
+     */
     public final List<Intersection> calculateIntersections(Ray ray) {
         return calculateIntersections(ray, Double.POSITIVE_INFINITY);
     }
-    protected abstract List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance);
 
+    /**
+     * helper function to {@link geometries.Intersectable#calculateIntersections(primitives.Ray, double)}
+     *
+     * @param ray         the ray to intersect with
+     * @param maxDistance the max distance of the ray
+     * @return list of intersections
+     */
+    protected abstract List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance);
 
     /**
      * PDS for an intersection

@@ -13,6 +13,9 @@ import java.util.List;
 
 import static parseXML.primitivesParser.*;
 
+/**
+ * Parses lights from xml
+ */
 public class lightsParser {
     /**
      * Parses all lights

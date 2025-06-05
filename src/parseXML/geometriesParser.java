@@ -12,6 +12,9 @@ import java.util.List;
 
 import static parseXML.primitivesParser.*;
 
+/**
+ * Parses geometries from xml
+ */
 public class geometriesParser {
 
     /**
@@ -54,6 +57,7 @@ public class geometriesParser {
         }
         return null;
     }
+
     /**
      * Parses an element to a Plane
      *

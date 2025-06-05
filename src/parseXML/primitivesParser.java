@@ -3,6 +3,9 @@ package parseXML;
 import org.w3c.dom.Element;
 import primitives.*;
 
+/**
+ * Parses primitives from xml
+ */
 public class primitivesParser {
     /**
      * Parses a material
