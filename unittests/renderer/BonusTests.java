@@ -216,7 +216,9 @@ class LivingRoomTests {
             .setDirection(new Point(0, 0, -100), new Vector(0, 1, 0))
             .setVpDistance(200)
             .setVpSize(200, 150)
-            .setRayTracer(scene, RayTracerType.SIMPLE);
+            .setRayTracer(scene, RayTracerType.SIMPLE)
+            .setMultithreading(2)
+            .setDebugPrint(0.1);
     /**
      * Camera positioned to the right side
      */
