@@ -74,9 +74,9 @@ public class Vector extends Point {
      * @return The cross product of their "multiplication"
      */
     public Vector crossProduct(Vector Vmulti) {
-        return new Vector(xyz.d2() * Vmulti.xyz.d3() - xyz.d3() * Vmulti.xyz.d2(),
-                xyz.d3() * Vmulti.xyz.d1() - xyz.d1() * Vmulti.xyz.d3(),
-                xyz.d1() * Vmulti.xyz.d2() - xyz.d2() * Vmulti.xyz.d1());
+        return new Vector(this.xyz.d2() * Vmulti.xyz.d3() - this.xyz.d3() * Vmulti.xyz.d2(),
+                this.xyz.d3() * Vmulti.xyz.d1() - this.xyz.d1() * Vmulti.xyz.d3(),
+                this.xyz.d1() * Vmulti.xyz.d2() - this.xyz.d2() * Vmulti.xyz.d1());
     }
 
     /**
@@ -114,7 +114,7 @@ public class Vector extends Point {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        return (obj instanceof Vector ComapareVec)
-                && super.equals(ComapareVec);
+        return (obj instanceof Vector CompareVec)
+                && super.equals(CompareVec);
     }
 }

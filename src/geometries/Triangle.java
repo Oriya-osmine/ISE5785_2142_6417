@@ -28,7 +28,7 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance ) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
         // Uses Möller–Trumbore algorithm and Cramer’s rule
         // https://cadxfem.org/inf/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
         // H + t * D = (1 - u - v)*p0 + u*p1 + v*p2
@@ -60,6 +60,11 @@ public class Triangle extends Polygon {
         Vector edge1 = vertex1.subtract(vertex0);
         Vector edge2 = vertex2.subtract(vertex0);
 
+        double parallelCos = Math.abs(rayDirection.dotProduct(edge2.normalize()));
+        if (alignZero(parallelCos - 1.0) >= 0) {
+            // Ray and triangle plane are parallel; no intersection
+            return null;
+        }
         // Calculate the determinant
         Vector pVec = rayDirection.crossProduct(edge2);
         double determinant = edge1.dotProduct(pVec);
