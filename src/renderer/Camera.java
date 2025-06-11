@@ -94,16 +94,35 @@ public class Camera implements Cloneable {
     private int nY = 1;
 
     /**
+     * The number of rays to cast per pixel when Depth of Field is enabled.
+     */
+    private int dofRays = 1; // Default to 1 (no DoF)
+
+    /**
+     * The size of the camera's virtual aperture.
+     * The stronger the value the stronger the blur effect is.
+     */
+    private double aperture = 1.5;
+
+    /**
+     * The distance from the camera's origin (p0) to the focal plane.
+     * Objects at this distance will appear in focus, objects closer or farther will be blurred.
+     */
+    private double focalDistance = 500;
+
+    /**
      * Private constructor to avoid accidental construction.
      */
     private Camera() {
     }
+
 
     /**
      * Creates a new camera builder instance
      *
      * @return new builder fo camera
      */
+
     public static Builder getBuilder() {
         return new Builder();
     }
@@ -130,8 +149,7 @@ public class Camera implements Cloneable {
         if (!isZero(xJ)) pij = pij.add(vRight.scale(xJ));
         if (!isZero(yI)) pij = pij.add(vUp.scale(yI));
 
-        Vector dir = pij.subtract(p0);
-        return new Ray(p0, dir);
+        return new Ray(p0, pij.subtract(p0));
     }
 
     /**
@@ -143,8 +161,21 @@ public class Camera implements Cloneable {
      * @param row    the matrix row
      */
     private void castRay(int nX, int nY, int column, int row) {
-        Color color = rayTracer.traceRay(constructRay(nX, nY, column, row));
-        imageWriter.writePixel(column, row, color);
+        if (dofRays == 1) {
+            imageWriter.writePixel(column, row, rayTracer.traceRay(constructRay(nX, nY, column, row)));
+            pixelManager.pixelDone();
+            return;
+        }
+        Point focusPoint = constructRay(nX, nY, column, row).getPoint(focalDistance);
+        Color color = Color.BLACK;
+        double sampling = aperture * 0.5;
+        for (int k = 0; k < dofRays; k++) { // used k instead of i or j to avoid confusion
+            double offsetX = (Math.random() * 2 - 1) * sampling;
+            double offsetY = (Math.random() * 2 - 1) * sampling;
+            Point jitteredOrigin = p0.add(vRight.scale(offsetX)).add(vUp.scale(offsetY));
+            color = color.add(rayTracer.traceRay(new Ray(jitteredOrigin, focusPoint.subtract(jitteredOrigin))));
+        }
+        imageWriter.writePixel(column, row, color.reduce(dofRays));
         pixelManager.pixelDone();
     }
 
@@ -250,6 +281,23 @@ public class Camera implements Cloneable {
          */
         final private Camera camera = new Camera();
 
+        /**
+         * Sets all DOF parameters
+         *
+         * @param samples       the amount of rays
+         * @param aperture      the aperture
+         * @param focalDistance the distance to blur
+         * @return the Builder instance.
+         */
+        public Builder setDepthOfField(int samples, double aperture, double focalDistance) {
+            if (samples < 1) throw new IllegalArgumentException("Number of samples must be at least 1");
+            if (aperture < 0) throw new IllegalArgumentException("Aperture size cannot be negative");
+            if (focalDistance < 0) throw new IllegalArgumentException("Focal distance cannot be negative");
+            camera.dofRays = samples;
+            camera.aperture = aperture;
+            camera.focalDistance = focalDistance;
+            return this;
+        }
 
         /**
          * Set multi-threading <br>
