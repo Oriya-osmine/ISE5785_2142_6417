@@ -7,6 +7,7 @@ import primitives.Vector;
 import scene.Scene;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.stream.IntStream;
 
@@ -16,6 +17,11 @@ import static primitives.Util.isZero;
  * Represents a camera in a 3d space
  */
 public class Camera implements Cloneable {
+    /**
+     * Amount of threads to spare for Java VM threads:<br>
+     * Spare threads if trying to use all the cores
+     */
+    private static final int SPARE_THREADS = 2;
     /**
      * The camera point
      */
@@ -44,21 +50,14 @@ public class Camera implements Cloneable {
      * Distance of the view plane from p0
      */
     private double distance;
-
     /**
      * The center point of the view plane.
      */
     private Point VP_Center;
-
     /**
      * Amount of threads to use fore rendering image by the camera
      */
     private int threadsCount = 1;
-    /**
-     * Amount of threads to spare for Java VM threads:<br>
-     * Spare threads if trying to use all the cores
-     */
-    private static final int SPARE_THREADS = 2;
     /**
      * Debug print interval in seconds (for progress percentage)<br>
      * if it is zero - there is no progress output
@@ -168,15 +167,29 @@ public class Camera implements Cloneable {
         }
         Point focusPoint = constructRay(nX, nY, column, row).getPoint(focalDistance);
         Color color = Color.BLACK;
+        List<Point> jitteredOrigins = jitteredPoints();
+        for (Point jitteredOrigin : jitteredOrigins) {
+            color = color.add(rayTracer.traceRay(new Ray(jitteredOrigin, focusPoint.subtract(jitteredOrigin))));
+        }
+        imageWriter.writePixel(column, row, color.reduce(dofRays));
+        pixelManager.pixelDone();
+    }
+
+    /**
+     * Creates a list of jittered points
+     *
+     * @return the list
+     */
+    private List<Point> jitteredPoints() {
+        List<Point> jitteredOrigins = new LinkedList<>();
         double sampling = aperture * 0.5;
         for (int k = 0; k < dofRays; k++) { // used k instead of i or j to avoid confusion
             double offsetX = (Math.random() * 2 - 1) * sampling;
             double offsetY = (Math.random() * 2 - 1) * sampling;
             Point jitteredOrigin = p0.add(vRight.scale(offsetX)).add(vUp.scale(offsetY));
-            color = color.add(rayTracer.traceRay(new Ray(jitteredOrigin, focusPoint.subtract(jitteredOrigin))));
+            jitteredOrigins.add(jitteredOrigin);
         }
-        imageWriter.writePixel(column, row, color.reduce(dofRays));
-        pixelManager.pixelDone();
+        return jitteredOrigins;
     }
 
     /**
@@ -282,20 +295,56 @@ public class Camera implements Cloneable {
         final private Camera camera = new Camera();
 
         /**
-         * Sets all DOF parameters
+         * Sets all DOF parameters ( Rays, aperture & focal distance)
          *
-         * @param samples       the amount of rays
+         * @param dofRays       the amount of rays
          * @param aperture      the aperture
          * @param focalDistance the distance to blur
          * @return the Builder instance.
          */
-        public Builder setDepthOfField(int samples, double aperture, double focalDistance) {
-            if (samples < 1) throw new IllegalArgumentException("Number of samples must be at least 1");
+        public Builder setDepthOfField(int dofRays, double aperture, double focalDistance) {
+            if (dofRays < 1) throw new IllegalArgumentException("Number of dofRays must be at least 1");
             if (aperture < 0) throw new IllegalArgumentException("Aperture size cannot be negative");
             if (focalDistance < 0) throw new IllegalArgumentException("Focal distance cannot be negative");
-            camera.dofRays = samples;
+            camera.dofRays = dofRays;
             camera.aperture = aperture;
             camera.focalDistance = focalDistance;
+            return this;
+        }
+
+        /**
+         * Sets the focal Distance of depth of field
+         *
+         * @param focalDistance the distance to blur
+         * @return the Builder instance.
+         */
+        public Builder setFocalDistance(double focalDistance) {
+            if (focalDistance < 0) throw new IllegalArgumentException("Focal distance cannot be negative");
+            camera.focalDistance = focalDistance;
+            return this;
+        }
+
+        /**
+         * Sets the aperture of depth of field
+         *
+         * @param aperture the aperture
+         * @return the Builder instance.
+         */
+        public Builder setAperture(double aperture) {
+            if (aperture < 0) throw new IllegalArgumentException("Aperture size cannot be negative");
+            camera.aperture = aperture;
+            return this;
+        }
+
+        /**
+         * Sets the amount of depth of field rays
+         *
+         * @param dofRays the amount of rays
+         * @return the Builder instance.
+         */
+        public Builder setDofRays(int dofRays) {
+            if (dofRays < 1) throw new IllegalArgumentException("Number of dofRays must be at least 1");
+            camera.dofRays = dofRays;
             return this;
         }
 

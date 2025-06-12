@@ -43,10 +43,6 @@ class Minip1Tests {
     void trianglesSphere() {
 
 
-
-
-
-
         //Low 3D table and Coffee
         scene.geometries
                 .add(
@@ -137,7 +133,7 @@ class Minip1Tests {
                 );
 
 
-                    //pergola
+        //pergola
         scene.geometries
                 .add(
                         new Polygon(
@@ -200,13 +196,10 @@ class Minip1Tests {
                                 new Point(30, 0, 1000),
                                 new Point(30, 0, 955)
                         ).setEmission(new Color(56, 28, 8)).setMaterial(new Material().setKD(0.9).setKS(0.2).setShininess(5))
-                        );
+                );
 
 
-
-
-
-                        //pergola
+        //pergola
         scene.geometries
                 .add(
                         new Polygon(
@@ -238,7 +231,7 @@ class Minip1Tests {
                                 new Point(-100, 0, 550),
                                 new Point(0, -5, 550),
                                 new Point(0, -5, 560)
-                        ).setEmission(new Color(42, 34, 15)).setMaterial(new Material().setKD(0.9).setKS(0.2).setShininess(5)),new Polygon(
+                        ).setEmission(new Color(42, 34, 15)).setMaterial(new Material().setKD(0.9).setKS(0.2).setShininess(5)), new Polygon(
                                 new Point(0, -2, 625),
                                 new Point(0, -2, 615),
                                 new Point(100, 3, 615),
@@ -307,7 +300,7 @@ class Minip1Tests {
                         ).setEmission(new Color(40, 32, 16)).setMaterial(new Material().setKD(0.9).setKS(0.2).setShininess(5))
                 );
 
-                // Mountains and sky
+        // Mountains and sky
         scene.geometries
                 .add(
                         new Triangle(
@@ -370,7 +363,6 @@ class Minip1Tests {
                                 new Point(0, 50, 350)
                         ).setEmission(new Color(70, 62, 54))
                                 .setMaterial(new Material().setKD(0.9).setKS(0.2).setShininess(5)),
-
 
 
                         new Polygon(
@@ -588,7 +580,7 @@ class Minip1Tests {
                                 .setMaterial(new Material().setKD(0.5).setKS(0.3).setShininess(20)),
 
 
-                            //sky
+                        //sky
                         new Polygon(
                                 new Point(200, 100, 100),
                                 new Point(200, 96, 100),
@@ -832,9 +824,9 @@ class Minip1Tests {
         for (int i = 0; i < 10; i++) {
             double zTop = 1000 - i * 45;
             double zBottom = 1000 - (i + 1) * 45;
-            int r = 34 + (int)(i * 4);    // Gradually increasing red component
-            int g = 70 + (int)(i * 5);   // Gradually increasing green component
-            int bbb = 34 + (int)(i * 4);    // Gradually increasing blue component
+            int r = 34 + (i * 4);    // Gradually increasing red component
+            int g = 70 + (i * 5);   // Gradually increasing green component
+            int bbb = 34 + (i * 4);    // Gradually increasing blue component
             scene.geometries.add(
                     new Polygon(
                             new Point(-200, -4, zTop),
@@ -845,7 +837,6 @@ class Minip1Tests {
                             .setMaterial(new Material().setKD(0.8).setKS(0.1).setShininess(10))
             );
         }
-
 
 
         //laps
@@ -953,10 +944,6 @@ class Minip1Tests {
         );
 
 
-
-
-
-
         scene.lights.add(new SpotLight(new Color(255, 244, 199), new Point(-60, 12, 540), new Vector(0.2, -1, 0.3))
                 .setKl(0.001).setKq(0.0002).setNarrowBeam(15));
         scene.lights.add(new SpotLight(new Color(255, 244, 199), new Point(-30, 9, 540), new Vector(0.1, -1, 0.2))
@@ -968,7 +955,6 @@ class Minip1Tests {
 
         // Additional ambient light for better overall illumination
         scene.setAmbientLight(new AmbientLight(new Color(0.2, 0.2, 0.2)));
-
 
 
         // Add warm lights for the pathway
@@ -1002,41 +988,47 @@ class Minip1Tests {
                 .setKl(0.0001).setKq(0.00001));
 
 
-
-
-
-        camera//
+        /*camera//
                 .setResolution(1600, 1200) //
+                .setMultithreading(10)
+                .setDebugPrint(0.1)
                 .build() //
                 .renderImage()
-                .writeToImage("3DSceneRendering1");
-
+                .writeToImage("3DSceneRendering1");*/
 
 
         camera//
-                .setDepthOfField(15,2,350)
-                .setResolution(1600, 1200) //
+                .setDepthOfField(40, 2, 350)
+                .setResolution(800, 600) //
+                .setMultithreading(10)
+                .setDebugPrint(0.1)
                 .build() //
                 .renderImage()
                 .writeToImage("3DSceneRendering2");
-        camera//
-                .setDepthOfField(10,0.7,370)
+        /*camera//
+                .setDepthOfField(30, 0.7, 370)
                 .setResolution(1600, 1200) //
+                .setMultithreading(10)
+                .setDebugPrint(0.1)
                 .build() //
                 .renderImage()
                 .writeToImage("3DSceneRendering3");
         camera//
-                .setDepthOfField(20,3,330)
+                .setDepthOfField(30, 3, 330)
                 .setResolution(1600, 1200) //
+                .setMultithreading(10)
+                .setDebugPrint(0.1)
                 .build() //
                 .renderImage()
                 .writeToImage("3DSceneRendering4");
         camera//
-                .setDepthOfField(7,0.9,550)
+                .setDepthOfField(30, 0.9, 550)
                 .setResolution(1600, 1200) //
+                .setMultithreading(10)
+                .setDebugPrint(0.1)
                 .build() //
                 .renderImage()
-                .writeToImage("3DSceneRendering5");
+                .writeToImage("3DSceneRendering5");*/
 
 
     }
