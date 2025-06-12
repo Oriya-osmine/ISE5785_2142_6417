@@ -770,20 +770,5 @@ class LivingRoomTests {
                 .writeToImage("IwantBounus1");
 
 
-        cameraRightView.setResolution(800, 600) //
-                .build() //
-                .renderImage() //
-                .writeToImage("IwantBounus2");
-
-        cameraLeftView.setResolution(800, 600) //
-                .build() //
-                .renderImage() //
-                .writeToImage("IwantBounus3");
-
-
-        cameraHighAngle.setResolution(800, 600) //
-                .build() //
-                .renderImage() //
-                .writeToImage("IwantBounus4");
     }
 }

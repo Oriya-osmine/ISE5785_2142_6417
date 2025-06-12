@@ -23,7 +23,13 @@ public abstract class Intersectable {
         var list = calculateIntersections(ray);
         return list == null ? null : list.stream().map(intersection -> intersection.point).toList();
     }
-
+    /**
+     * Finds all intersection points between the given ray and the object within a maximum distance.
+     *
+     * @param ray The ray to intersect with the object.
+     * @param maxDistance The maximum distance for intersection points.
+     * @return A list of intersection points within the maximum distance.
+     */
     public final List<Point> findIntersections(Ray ray, double maxDistance) {
         var list = calculateIntersections(ray, maxDistance);
         return list == null ? null : list.stream().map(intersection -> intersection.point).toList();

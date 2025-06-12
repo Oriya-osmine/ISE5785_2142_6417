@@ -30,25 +30,45 @@ public class Cylinder extends Tube {
     }
 
     @Override
-    public Vector getNormal(Point surfacePoint) {
+    public Vector getNormal(Point p) {
+        // Assume these fields exist:
+        // private Ray ray;        // axisRay: origin and direction (normalized)
+        // private double height;
+        // private double radius;
         Point axisOrigin = ray.getPoint(0);
-        Vector axisDirection = ray.getDirection();
+        Vector axisDirection = ray.getDirection(); // must be normalized
 
-        // Compute the projection of the surface point onto the cylinder's axis
-        double projectionLength = axisDirection.dotProduct(surfacePoint.subtract(axisOrigin));
-        // Check if the point is on one of the bases
-        if (projectionLength <= 0) {
-            return axisDirection.scale(-1.0); // Bottom base normal
-        }
-        if (projectionLength >= height) {
-            return axisDirection; // Top base normal
-        }
+        // Vector from base to point
+        Vector v = p.subtract(axisOrigin);
+        // Projection length onto axis
+        double t = v.dotProduct(axisDirection);
 
-        // Point is on the curved surface
-        Point projectedPoint = axisOrigin.add(axisDirection.scale(projectionLength));
-        // Duplicate code but faster than calling super
-        return surfacePoint.subtract(projectedPoint).normalize();
+        double EPS = 1e-10;
+        // Bottom cap
+        if (t <= EPS) {
+            // return normal pointing outward
+            return axisDirection.scale(-1.0);
+        }
+        // Top cap
+        if (Math.abs(t - height) <= EPS) {
+            return axisDirection;
+        }
+        // Side surface
+        Vector proj = axisDirection.scale(t);
+        Vector side = v.subtract(proj);
+        // If side is (near) zero, p lies exactly on axis: pick any perpendicular direction
+        if (side.lengthSquared() <= EPS) {
+            // Try cross with X axis
+            Vector ortho = axisDirection.crossProduct(new Vector(1, 0, 0));
+            if (ortho.lengthSquared() <= EPS) {
+                // axisDirection was parallel to (1,0,0); cross with Y axis
+                ortho = axisDirection.crossProduct(new Vector(0, 1, 0));
+            }
+            return ortho.normalize();
+        }
+        return side.normalize();
     }
+
     @Override
     public List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
         // First, find intersections with the curved surface using Tube's method
