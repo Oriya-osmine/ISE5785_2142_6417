@@ -37,6 +37,32 @@ public class Point {
     public Point(Double3 xyz) {
         this.xyz = xyz;
     }
+    /**
+         * Returns the x-coordinate of the point.
+         *
+         * @return the x-coordinate value
+         */
+        public double getX() {
+            return xyz.d1();
+        }
+
+        /**
+         * Returns the y-coordinate of the point.
+         *
+         * @return the y-coordinate value
+         */
+        public double getY() {
+            return xyz.d2();
+        }
+
+        /**
+         * Returns the z-coordinate of the point.
+         *
+         * @return the z-coordinate value
+         */
+        public double getZ() {
+            return xyz.d3();
+        }
 
     /**
      * Subtracts the provided {@link Point} from the current point to create a new {@link Vector}.

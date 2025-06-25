@@ -21,6 +21,9 @@ public class Scene {
      * The scene background color
      */
     public Color background = Color.BLACK;
+
+
+
     /**
      * The scene ambient light
      */
@@ -92,4 +95,7 @@ public class Scene {
             this.geometries = geometries;
         return this;
     }
+
+
+
 }

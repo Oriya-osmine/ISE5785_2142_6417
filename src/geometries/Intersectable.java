@@ -7,7 +7,7 @@ import primitives.Ray;
 import primitives.Vector;
 
 import java.util.List;
-
+import voxel.AABB;
 /**
  * Interface for objects that can be intersected by a ray.
  */
@@ -64,6 +64,14 @@ public abstract class Intersectable {
      * @return list of intersections
      */
     protected abstract List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance);
+
+    /**
+     * Returns the axis-aligned bounding box (AABB) of the geometry.
+     * Used for acceleration structures like BVH (Bounding Volume Hierarchy).
+     *
+     * @return the AABB that contains this geometry
+     */
+    public abstract AABB getBoundingBox();
 
     /**
      * PDS for an intersection

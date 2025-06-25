@@ -1,4 +1,5 @@
 package renderer;
+import geometries.Intersectable;
 import primitives.Color;
 import scene.Scene ;
 import primitives.Ray;

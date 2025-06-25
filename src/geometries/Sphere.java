@@ -7,6 +7,7 @@ import primitives.Vector;
 import static primitives.Util.*;
 
 import java.util.List;
+import voxel.AABB;
 
 /**
  * Represents a sphere in 3D space defined by a center point and a radius.
@@ -93,5 +94,20 @@ public class Sphere extends RadicalGeometry {
         else
             return null;
 
+    }
+    @Override
+    public AABB getBoundingBox() {
+        double r = this.radius;
+        Point min = new Point(
+                center.getX() - r,
+                center.getY() - r,
+                center.getZ() - r
+        );
+        Point max = new Point(
+                center.getX() + r,
+                center.getY() + r,
+                center.getZ() + r
+        );
+        return new AABB(min, max);
     }
 }

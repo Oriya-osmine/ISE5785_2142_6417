@@ -8,6 +8,7 @@ import java.util.List;
 
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
+import voxel.AABB;
 
 /**
  * Represents a 2D plane in 3D space
@@ -77,6 +78,15 @@ public class Plane extends Geometry {
      */
     public Vector getNormal() {
         return normal;
+    }
+
+    @Override
+    public AABB getBoundingBox() {
+        // מישור אינסופי: נחזיר תיבה "מספקת" עם ערכים קטנים וגדולים מאוד
+        double M = Double.MAX_VALUE / 2; // חצי ערך מקסימלי כדי להימנע ממשחקים עם INF
+        Point min = new Point(-M, -M, -M);
+        Point max = new Point( M,  M,  M);
+        return new AABB(min, max);
     }
 
 }

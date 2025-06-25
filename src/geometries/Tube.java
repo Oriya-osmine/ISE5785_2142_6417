@@ -6,6 +6,7 @@ import primitives.Point;
 
 import java.util.LinkedList;
 import java.util.List;
+import voxel.AABB;
 
 /**
  * Represents a Tube in a 3D space
@@ -114,6 +115,16 @@ public class Tube extends RadicalGeometry {
         }
 
         return intersections.isEmpty() ? null : intersections;
+    }
+
+    @Override
+    public AABB getBoundingBox() {
+        double R = this.radius;
+        double M = Double.MAX_VALUE / 2;
+
+        Point min = new Point(-M, -M, -M).subtract(new Vector(R, R, R));
+        Point max = new Point( M,  M,  M).add   (new Vector(R, R, R));
+        return new AABB(min, max);
     }
 
 }

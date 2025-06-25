@@ -4,6 +4,7 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 import java.util.List;
+import voxel.AABB;
 
 /**
  * Represents a cylinder in a 3D space
@@ -140,6 +141,24 @@ public class Cylinder extends Tube {
         // Calculate t value for intersection with base plane
         double numerator = baseNormal.dotProduct(baseCenter.subtract(rayOrigin));
         return numerator / denominator;
+    }
+    @Override
+    public AABB getBoundingBox() {
+        Point baseCenter = ray.getPoint(0);
+        Point topCenter  = baseCenter.add(ray.getDirection().scale(height));
+
+        double r = this.radius;
+
+        double minX = Math.min(baseCenter.getX(), topCenter.getX()) - r;
+        double maxX = Math.max(baseCenter.getX(), topCenter.getX()) + r;
+        double minY = Math.min(baseCenter.getY(), topCenter.getY()) - r;
+        double maxY = Math.max(baseCenter.getY(), topCenter.getY()) + r;
+        double minZ = Math.min(baseCenter.getZ(), topCenter.getZ()) - r;
+        double maxZ = Math.max(baseCenter.getZ(), topCenter.getZ()) + r;
+
+        Point min = new Point(minX, minY, minZ);
+        Point max = new Point(maxX, maxY, maxZ);
+        return new AABB(min, max);
     }
 
 

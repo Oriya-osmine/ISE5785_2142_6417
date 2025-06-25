@@ -7,6 +7,7 @@ import java.util.List;
 import static primitives.Util.*;
 
 import primitives.*;
+import voxel.AABB;
 
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
@@ -118,6 +119,25 @@ public class Polygon extends Geometry {
             }
         }
         return List.of(new Intersection(this, intersections.getFirst().point));
+    }
+
+    @Override
+    public AABB getBoundingBox() {
+        double minX = Double.POSITIVE_INFINITY, minY = Double.POSITIVE_INFINITY, minZ = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY, maxY = Double.NEGATIVE_INFINITY, maxZ = Double.NEGATIVE_INFINITY;
+
+        for (Point p : vertices) {
+            minX = Math.min(minX, p.getX());
+            minY = Math.min(minY, p.getY());
+            minZ = Math.min(minZ, p.getZ());
+            maxX = Math.max(maxX, p.getX());
+            maxY = Math.max(maxY, p.getY());
+            maxZ = Math.max(maxZ, p.getZ());
+        }
+
+        Point min = new Point(minX, minY, minZ);
+        Point max = new Point(maxX, maxY, maxZ);
+        return new AABB(min, max);
     }
 
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
+import voxel.AABB;
 
 /**
  * Represents a triangle in a 3D space
@@ -102,5 +103,11 @@ public class Triangle extends Polygon {
         // Intersection is behind the ray (or too small to be considered valid)
         return null;
     }
+    @Override
+    public AABB getBoundingBox() {
+        // פשוט delegating ל-Polygon
+        return super.getBoundingBox();
+    }
+
 
 }

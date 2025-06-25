@@ -1,7 +1,7 @@
 package geometries;
 
 import primitives.*;
-
+import voxel.AABB;
 import java.util.List;
 
 /**
@@ -68,5 +68,9 @@ public abstract class Geometry extends Intersectable {
 
     @Override
     protected abstract List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance);
+
+
+
+
     ;
 }

@@ -2,6 +2,7 @@ package geometries;
 
 import primitives.Point;
 import primitives.Ray;
+import voxel.AABB;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -41,6 +42,15 @@ public class Geometries extends Intersectable {
         Collections.addAll(this.geometries, geometries);
     }
 
+    /**
+     * Returns the list of geometries in this collection.
+     *
+     * @return list of geometries
+     */
+    public List<Intersectable> getGeometries() {
+        return geometries;
+    }
+
 
     @Override
     protected List<Intersection> calculateIntersectionsHelper(Ray ray, double maxDistance) {
@@ -55,6 +65,20 @@ public class Geometries extends Intersectable {
             }
         }
         return intersections;
+    }
+    @Override
+    public AABB getBoundingBox() {
+        if (geometries.isEmpty()) {
+            return null; // או AABB ריק שתבחר איך לייצג אותו
+        }
+
+        AABB boundingBox = geometries.get(0).getBoundingBox();
+
+        for (int i = 1; i < geometries.size(); i++) {
+            boundingBox = boundingBox.union(geometries.get(i).getBoundingBox());
+        }
+
+        return boundingBox;
     }
 
 }
