@@ -995,13 +995,13 @@ class Minip1TestsWithVoxel {
 
 
         camera//
-                .setDepthOfField(30, 0.8, 350)
+                .setDepthOfField(10, 0.8, 350)
                 .setResolution(1600, 1200) //
                 .setRayTracer(scene, RayTracerType.VOXEL)
                 .setMultithreading(-1)
                 .build() //
                 .renderImage()
-                .writeToImage("aVOXEL_Improved");
+                .writeToImage("aVOXEL");
 
         /*camera//
                 .setDepthOfField(10, 0.8, 350)

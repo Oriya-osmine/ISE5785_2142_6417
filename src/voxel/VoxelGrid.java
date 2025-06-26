@@ -155,7 +155,7 @@ public class VoxelGrid {
      * @param maxDistance maximum distance from ray origin to consider
      * @return a list of intersections, or an empty list if none found
      */
-    public List<Intersection> findAllIntersections(Ray ray, double maxDistance) {
+    public List<Intersection> findIntersections(Ray ray, double maxDistance) {
 
         List<Intersection> allHits = new LinkedList<>();
 

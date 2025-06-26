@@ -11,6 +11,7 @@ import scene.Scene;
 import voxel.AABB;
 import voxel.VoxelGrid;
 import primitives.Point;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -98,6 +99,36 @@ public class VoxelRayTracer extends RayTracerBase {
     }
 
     /**
+     * Calculates the transparency factor (ktr) for a given intersection point.
+     *
+     * @param intersection The intersection to check for shadow transparency.
+     * @return A Double3 representing the accumulated transparency (ktr). If ktr falls below MIN_CALC_COLOR_K, returns Double3.ZERO.
+     */
+    protected Double3 transparency(Intersection intersection) {
+        Vector lightDir = intersection.lightDirection.scale(-1.0); // From point to light
+        Vector epsVector = intersection.normal.scale(intersection.dotProductGeometry < 0 ? DELTA : -DELTA);
+        Point shadowRayOrigin = intersection.point.add(epsVector);
+        Ray shadowRay = new Ray(shadowRayOrigin, lightDir); // Shadow ray
+
+        double lightDistance = intersection.lightSource.getDistance(intersection.point);
+        List<Intersection> shadowIntersections = voxelGrid.findIntersections(shadowRay, lightDistance);
+
+        Double3 ktr = Double3.ONE;
+        if (shadowIntersections == null) return ktr;
+
+        for (Intersection shadowIntersection : shadowIntersections) {
+            if (shadowIntersection.point.distance(intersection.point) < lightDistance) {
+                ktr = ktr.product(shadowIntersection.material.kT);
+                if (ktr.lowerThan(MIN_CALC_COLOR_K)) {
+                    return Double3.ZERO;
+                }
+            }
+        }
+
+        return ktr;
+    }
+
+    /**
      * Finds the closest intersection of a ray with unbounded geometries.
      *
      * @param ray The ray to find intersections for.
@@ -120,32 +151,6 @@ public class VoxelRayTracer extends RayTracerBase {
             }
         }
         return closest;
-    }
-
-    /**
-     * Calculates the transparency factor for a given intersection.
-     *
-     * @param intersection The intersection to calculate transparency for.
-     * @return The transparency factor as a Double3 object.
-     */
-    protected Double3 transparency(Intersection intersection) {
-        final double EPSILON = 0.001; // Small offset to avoid self-intersection
-
-        Vector dir = intersection.lightDirection.scale(-1.0); // Light direction
-        Point offsetPoint = intersection.point.add(dir.normalize().scale(EPSILON)); // Offset the ray origin slightly
-        Ray tRay = new Ray(offsetPoint, dir); // Transparency ray
-        double maxDist = intersection.lightSource.getDistance(tRay.getPoint(0)); // Maximum distance to the light source
-
-        // Find all intersections along the transparency ray
-        List<Intersection> intersections = voxelGrid.findAllIntersections(tRay, maxDist);
-        if (intersections == null) return Double3.ONE;
-
-        Double3 ktr = Double3.ONE; // Transparency factor
-        for (Intersection inter : intersections) {
-            ktr = ktr.product(inter.material.kT); // Accumulate transparency factors
-            if (ktr.lowerThan(0.001)) return Double3.ZERO; // Stop if transparency is negligible
-        }
-        return ktr;
     }
 
 }
