@@ -151,51 +151,53 @@ public class VoxelGrid {
      * @return a list of intersections, or an empty list if none found
      */
     public List<Intersection> findAllIntersections(Ray ray, double maxDistance) {
+
         List<Intersection> allHits = new LinkedList<>();
 
-        if (!bounds.hasIntersection(ray)) return allHits;
+        // The ray does not intersect with the grid, so return an empty list
+        if (!bounds.hasIntersection(ray)) {
+            return allHits;
+        }
 
         Point origin = ray.getPoint(0);
         Vector dir = ray.getDirection();
 
-
-        // The clamp is done in case the ray is outside the box but still intersects with it
-
+        // Calculate the initial voxel indices (ix, iy, iz) where the ray starts
+        // Clamp is used to make sure that if we are outside the grid we will start inside it
         int ix = clamp(toGridX(origin.getX()), 0, nx - 1);
         int iy = clamp(toGridY(origin.getY()), 0, ny - 1);
         int iz = clamp(toGridZ(origin.getZ()), 0, nz - 1);
 
-
-        // Which way are we moving on each axis
+        // Which direction we are moving within the grid
         int stepX = dir.getX() >= 0 ? 1 : -1;
         int stepY = dir.getY() >= 0 ? 1 : -1;
         int stepZ = dir.getZ() >= 0 ? 1 : -1;
 
-        // Gets the potential next voxels on each axis
+        // Calculate the world coordinates of the next voxel boundary the ray will hit along each axis
+        // We use bounds.getMin() as "0,0,0" for the grid
         double nextX = voxelBoundary(bounds.getMin().getX(), ix, stepX, voxelSizeX);
         double nextY = voxelBoundary(bounds.getMin().getY(), iy, stepY, voxelSizeY);
         double nextZ = voxelBoundary(bounds.getMin().getZ(), iz, stepZ, voxelSizeZ);
 
-        // Calculates the distance to the next voxel on each axis
+        // Calculate the 't' of ray which will hit the 'next' voxel
         double tMaxX = safeDivide(nextX - origin.getX(), dir.getX());
         double tMaxY = safeDivide(nextY - origin.getY(), dir.getY());
         double tMaxZ = safeDivide(nextZ - origin.getZ(), dir.getZ());
 
-        // The t needed for the ray to move one voxel
-        // this is mainly used if we have set a max distance and want to make sure we don't cross it
+        // the 't' the size of a voxel so that we can "move" it each time, used for max Distance
         double tDeltaX = voxelSizeX / Math.abs(dir.getX());
         double tDeltaY = voxelSizeY / Math.abs(dir.getY());
         double tDeltaZ = voxelSizeZ / Math.abs(dir.getZ());
 
-
+        // Make sure we do not calculate the same intersection twice
         Set<Intersectable> tested = new HashSet<>();
 
         while (ix >= 0 && ix < nx && iy >= 0 && iy < ny && iz >= 0 && iz < nz) {
-            VoxelIndex index = new VoxelIndex(ix, iy, iz);
-            List<Intersectable> cell = grid.get(index);
 
-            if (cell != null) {
-                for (Intersectable obj : cell) {
+            List<Intersectable> voxel = grid.get(new VoxelIndex(ix, iy, iz));
+
+            if (voxel != null) {
+                for (Intersectable obj : voxel) {
                     if (tested.add(obj)) {
                         List<Intersection> hits = obj.calculateIntersections(ray, maxDistance);
                         if (hits != null) {
@@ -205,24 +207,30 @@ public class VoxelGrid {
                 }
             }
 
+            // Get the 't' value of the next voxel the ray will hit
             double nextT = Math.min(tMaxX, Math.min(tMaxY, tMaxZ));
-            if (nextT > maxDistance) break;
 
+
+            if (nextT > maxDistance) {
+                break;
+            }
+
+            // Where do we move next
             if (tMaxX < tMaxY) {
                 if (tMaxX < tMaxZ) {
-                    ix += stepX;
-                    tMaxX += tDeltaX;
+                    ix += stepX;      // Move to the next voxel in X direction
+                    tMaxX += tDeltaX; // Update tMaxX to the next X boundary
                 } else {
-                    iz += stepZ;
-                    tMaxZ += tDeltaZ;
+                    iz += stepZ;      // Move to the next voxel in Z direction
+                    tMaxZ += tDeltaZ; // Update tMaxZ to the next Z boundary
                 }
             } else {
                 if (tMaxY < tMaxZ) {
-                    iy += stepY;
-                    tMaxY += tDeltaY;
+                    iy += stepY;      // Move to the next voxel in Y direction
+                    tMaxY += tDeltaY; // Update tMaxY to the next Y boundary
                 } else {
-                    iz += stepZ;
-                    tMaxZ += tDeltaZ;
+                    iz += stepZ;      // Move to the next voxel in Z direction
+                    tMaxZ += tDeltaZ; // Update tMaxZ to the next Z boundary
                 }
             }
         }
@@ -282,6 +290,9 @@ public class VoxelGrid {
      * @return the boundary coordinate of the voxel
      */
     private double voxelBoundary(double start, int index, int step, double size) {
+        // if we are moving to -, do not add the current voxel to the calculation (+1)
+        // else, do the same but add the current voxel (+1)
+        // then calculate the distance from start
         return start + (step > 0 ? (index + 1) : index) * size;
     }
 
