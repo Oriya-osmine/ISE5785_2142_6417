@@ -120,7 +120,12 @@ public class VoxelGrid {
                     }
                 }
             }
+            double nextT = Math.min(tMaxX, Math.min(tMaxY, tMaxZ));
 
+            // if nextT > closestDist it means we definitely found the closest intersection no need to continue
+            if (closest != null && nextT > closestDist) {
+                break; // Exit the main DDA loop early
+            }
             if (tMaxX < tMaxY) {
                 if (tMaxX < tMaxZ) {
                     ix += stepX;
