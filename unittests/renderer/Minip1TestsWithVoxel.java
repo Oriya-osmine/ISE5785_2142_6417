@@ -11,15 +11,13 @@ import org.junit.jupiter.api.Test;
 import primitives.*;
 import scene.Scene;
 
-import static java.awt.Color.*;
-
 /**
  * Testing basic shadows
  *
  * @author Dan Zilberstein
  */
 
-class Minip1Tests {
+class Minip1TestsWithVoxel {
 
     /**
      * Scene of the tests
@@ -32,8 +30,7 @@ class Minip1Tests {
             .setLocation(new Point(0, 50, 1000)) // מיקום המצלמה מול האובייקטים
             .setDirection(new Point(0, 0, 0), new Vector(0, 1, 0)) // כיוון המבט למרכז הסצנה
             .setVpDistance(1000)
-            .setVpSize(400, 200)
-            .setRayTracer(scene, RayTracerType.SIMPLE);
+            .setVpSize(400, 200);
 
 
     /**
@@ -998,24 +995,23 @@ class Minip1Tests {
 
 
         camera//
-                //.setDepthOfField(10, 0.8, 350)
-                .setResolution(800, 600) //
-                .setMultithreading(-2)
-                .setDebugPrint(0.1)
-                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .setDepthOfField(30, 0.8, 350)
+                .setResolution(1600, 1200) //
+                .setRayTracer(scene, RayTracerType.VOXEL)
+                .setMultithreading(-1)
                 .build() //
                 .renderImage()
-                .writeToImage("a");
+                .writeToImage("aVOXEL_Improved");
 
-        camera//
-                //.setDepthOfField(10, 0.8, 350)
+        /*camera//
+                .setDepthOfField(10, 0.8, 350)
                 .setResolution(800, 600) //
-                .setMultithreading(-2)
+                .setMultithreading(-1)
                 .setDebugPrint(0.1)
-                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .setRayTracer(scene, RayTracerType.VOXEL)
                 .build() //
                 .renderImage()
-                .writeToImage("b");
+                .writeToImage("bVOXEL");*/
         /*camera//
                 .setDepthOfField(30, 0.7, 370)
                 .setResolution(1600, 1200) //
