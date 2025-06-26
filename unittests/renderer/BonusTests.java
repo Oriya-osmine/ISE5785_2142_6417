@@ -763,27 +763,36 @@ class LivingRoomTests {
 
 
         camera.setResolution(800, 600)
+                .setMultithreading(-2)
+                .setRayTracer(scene, RayTracerType.VOXEL)
+                .build() //
+                .renderImage() //
+                .writeToImage("IwantBounus10");
+        camera.setResolution(800, 600)
+                .setMultithreading(-2)
                 .setRayTracer(scene, RayTracerType.SIMPLE)
                 .build() //
                 .renderImage() //
-                .writeToImage("IwantBounus1");
-
+                .writeToImage("IwantBounus11");
+/*
         cameraHighAngle.setResolution(800, 600)
-                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .setRayTracer(scene, RayTracerType.VOXEL)
                 .build() //
                 .renderImage() //
                 .writeToImage("IwantBounus2");
 
         cameraLeftView.setResolution(800, 600)
-                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .setRayTracer(scene, RayTracerType.VOXEL)
                 .build() //
                 .renderImage() //
                 .writeToImage("IwantBounus3");
         cameraRightView.setResolution(800, 600)
-                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .setRayTracer(scene, RayTracerType.VOXEL)
                 .build() //
                 .renderImage() //
                 .writeToImage("IwantBounus4");
+
+ */
 
 
     }

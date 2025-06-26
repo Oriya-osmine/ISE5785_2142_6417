@@ -10,7 +10,7 @@ import primitives.Vector;
 import scene.Scene;
 import voxel.AABB;
 import voxel.VoxelGrid;
-
+import primitives.Point;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -129,8 +129,11 @@ public class VoxelRayTracer extends RayTracerBase {
      * @return The transparency factor as a Double3 object.
      */
     protected Double3 transparency(Intersection intersection) {
+        final double EPSILON = 0.001; // Small offset to avoid self-intersection
+
         Vector dir = intersection.lightDirection.scale(-1.0); // Light direction
-        Ray tRay = new Ray(intersection.point, dir); // Transparency ray
+        Point offsetPoint = intersection.point.add(dir.normalize().scale(EPSILON)); // Offset the ray origin slightly
+        Ray tRay = new Ray(offsetPoint, dir); // Transparency ray
         double maxDist = intersection.lightSource.getDistance(tRay.getPoint(0)); // Maximum distance to the light source
 
         // Find all intersections along the transparency ray
@@ -144,4 +147,5 @@ public class VoxelRayTracer extends RayTracerBase {
         }
         return ktr;
     }
+
 }

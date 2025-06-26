@@ -998,13 +998,24 @@ class Minip1Tests {
 
 
         camera//
-                .setDepthOfField(40, 2, 350)
+                .setDepthOfField(10, 0.8, 350)
                 .setResolution(800, 600) //
-                .setMultithreading(10)
+                .setMultithreading(-2)
                 .setDebugPrint(0.1)
+                .setRayTracer(scene, RayTracerType.VOXEL)
                 .build() //
                 .renderImage()
-                .writeToImage("3DSceneRendering2");
+                .writeToImage("3DSceneRendering4");
+
+        camera//
+                .setDepthOfField(10, 0.8, 350)
+                .setResolution(800, 600) //
+                .setMultithreading(-2)
+                .setDebugPrint(0.1)
+                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .build() //
+                .renderImage()
+                .writeToImage("3DSceneRendering6");
         /*camera//
                 .setDepthOfField(30, 0.7, 370)
                 .setResolution(1600, 1200) //

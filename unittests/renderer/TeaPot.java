@@ -33,7 +33,8 @@ class TeapotTest {
                 .build() //
                 .renderImage() //
                 .printGrid(50, new Color(YELLOW)) //
-                .writeToImage("teapot1");
+                .writeToImage("teapot3");
+
     }
 
 
@@ -59,7 +60,7 @@ class TeapotTest {
         return Camera.getBuilder() //
                 .setResolution(1000, 1000) //
                 // .setResolution(1, 1) //
-                .setRayTracer(scene, RayTracerType.SIMPLE) //
+                .setRayTracer(scene, RayTracerType.VOXEL) //
                 .setLocation(new Point(0, 0, -1000)).setDirection(Point.ZERO, Vector.AXIS_Y) //
                 .setVpDistance(1000).setVpSize(200, 200) //
                 // .setMultithreading(-3) // fail - paging file size
