@@ -13,19 +13,17 @@ import static primitives.Util.isZero;
  */
 public class Ray {
     /**
+     * align zero is not good enough
+     */
+    private static final double DELTA = 1E-10;
+    /**
      * The starting point of the ray, representing its origin in 3D space.
      */
     final private Point head;
-
     /**
      * The direction vector of the ray, always normalized to ensure accurate and consistent computations.
      */
     final private Vector direction;
-
-    /**
-     * align zero is not good enough
-     */
-    private static final double DELTA = 1E-10;
 
 
     /**
@@ -47,7 +45,7 @@ public class Ray {
      * @return t times the vector + the head of ray
      */
     public Point getPoint(double t) {
-        if (isZero(alignZero(t)) || t < DELTA)
+        if (isZero(alignZero(t)) || (t < DELTA && t > -DELTA))
             return head;
         return head.add(direction.scale(t));
     }

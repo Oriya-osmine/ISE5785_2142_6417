@@ -27,7 +27,7 @@ class RayTests {
 
         // =============== Boundary Values Tests ==================
         // TC10: Zero
-        assertEquals(new Point(1, 2, 2), test.getPoint(0));
+        assertEquals(new Point(1, 2, 3), test.getPoint(0));
     }
 
     /**
