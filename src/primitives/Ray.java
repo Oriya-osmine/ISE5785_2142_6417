@@ -4,7 +4,8 @@ import geometries.Intersectable.Intersection;
 
 import java.util.List;
 
-import static primitives.Util.*;
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Represents a ray in 3D space, defined by a starting point (head) and a direction vector.
@@ -20,6 +21,12 @@ public class Ray {
      * The direction vector of the ray, always normalized to ensure accurate and consistent computations.
      */
     final private Vector direction;
+
+    /**
+     * align zero is not good enough
+     */
+    private static final double DELTA = 1E-10;
+
 
     /**
      * Constructs a new Ray with the specified head and direction.
@@ -40,7 +47,7 @@ public class Ray {
      * @return t times the vector + the head of ray
      */
     public Point getPoint(double t) {
-        if (isZero(t))
+        if (isZero(alignZero(t)) || t < DELTA)
             return head;
         return head.add(direction.scale(t));
     }

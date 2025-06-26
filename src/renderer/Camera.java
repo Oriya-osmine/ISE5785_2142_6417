@@ -500,6 +500,8 @@ public class Camera implements Cloneable {
         public Builder setRayTracer(Scene scene, RayTracerType type) {
             if (type == RayTracerType.SIMPLE) {
                 camera.rayTracer = new SimpleRayTracer(scene);
+            } else if (type == RayTracerType.VOXEL) {
+                camera.rayTracer = new VoxelRayTracer(scene);
             } else {
                 camera.rayTracer = null;
             }

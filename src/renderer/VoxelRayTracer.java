@@ -1,4 +1,4 @@
-package voxel;
+package renderer;
 
 
 import geometries.Intersectable;
@@ -10,11 +10,9 @@ import primitives.Vector;
 import scene.Scene;
 import voxel.AABB;
 import voxel.VoxelGrid;
-import renderer.RayTracerBase;
+
 import java.util.LinkedList;
 import java.util.List;
-import geometries.Geometries;
-import scene.Scene;
 
 /**
  * A ray tracer that uses a voxel grid for spatial acceleration.
@@ -24,9 +22,18 @@ import scene.Scene;
 
 public class VoxelRayTracer extends RayTracerBase {
 
-    private static final int VOXELS_PER_OBJECT = 4; // Number of voxels per object for optimal grid size calculation
-    private final VoxelGrid voxelGrid; // The voxel grid used for spatial acceleration
-    private final List<Intersectable> unboundedGeometries; // List of geometries without bounding boxes
+    /**
+     * Number of voxels per object for optimal grid size calculation
+     */
+    private static final int VOXELS_PER_OBJECT = 4;
+    /**
+     * The voxel grid
+     */
+    private final VoxelGrid voxelGrid;
+    /**
+     * List of geometries without bounding boxes (infinite geometries)
+     */
+    private final List<Intersectable> unboundedGeometries;
 
 
     /**
@@ -67,8 +74,8 @@ public class VoxelRayTracer extends RayTracerBase {
     public Color traceRay(Ray ray) {
         Intersection intersection = findClosestIntersection(ray);
         return (intersection == null)
-                ? scene.background    // no hit → background color
-                : calcColor(intersection, ray);  // hit → shading, reflection, refraction וכו'
+                ? scene.background
+                : calcColor(intersection, ray);
     }
 
     /**
