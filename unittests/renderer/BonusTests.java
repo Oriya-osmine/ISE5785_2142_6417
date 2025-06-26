@@ -216,8 +216,6 @@ class LivingRoomTests {
             .setDirection(new Point(0, 0, -100), new Vector(0, 1, 0))
             .setVpDistance(200)
             .setVpSize(200, 150)
-            .setRayTracer(scene, RayTracerType.SIMPLE)
-            .setMultithreading(2)
             .setDebugPrint(0.1);
     /**
      * Camera positioned to the right side
@@ -765,9 +763,27 @@ class LivingRoomTests {
 
 
         camera.setResolution(800, 600)
+                .setRayTracer(scene, RayTracerType.SIMPLE)
                 .build() //
                 .renderImage() //
                 .writeToImage("IwantBounus1");
+
+        cameraHighAngle.setResolution(800, 600)
+                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .build() //
+                .renderImage() //
+                .writeToImage("IwantBounus2");
+
+        cameraLeftView.setResolution(800, 600)
+                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .build() //
+                .renderImage() //
+                .writeToImage("IwantBounus3");
+        cameraRightView.setResolution(800, 600)
+                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .build() //
+                .renderImage() //
+                .writeToImage("IwantBounus4");
 
 
     }
